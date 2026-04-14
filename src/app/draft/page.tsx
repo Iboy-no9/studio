@@ -240,38 +240,68 @@ export default function EliteDraftAuction() {
             <div 
               key={currentPlayerId}
               className={cn(
-                "relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2.5rem] p-1 border-[6px] border-white/10 shadow-2xl flex flex-col transition-all group overflow-hidden",
+                "relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[1rem] p-0 shadow-2xl flex flex-col transition-all group overflow-hidden border border-white/20",
                 lastAction === 'SOLD' ? "animate-card-spin" : lastAction === 'SKIPPED' ? "animate-in fade-in slide-in-from-right-20 duration-1000" : "animate-in fade-in zoom-in-95 slide-in-from-bottom-12 duration-1000"
               )}
             >
-              <div className="absolute top-8 left-8 z-30">
-                <div className="text-7xl font-black text-[#00ffd0] leading-none drop-shadow-[0_0_20px_rgba(0,255,208,0.5)] italic tracking-tighter">
-                  {currentPlayer.rating}
+              {/* Card Background Branding */}
+              <div className="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center select-none overflow-hidden">
+                <div className="text-[14rem] font-black text-white rotate-[-25deg] scale-150 flex flex-col leading-none">
+                  <span>WPL</span>
+                  <span className="ml-20">WPL</span>
+                  <span>WPL</span>
                 </div>
-                <div className="text-2xl font-black text-white/90 uppercase ml-1 tracking-tighter border-t-2 border-white/20 pt-1 mt-1 italic">
+              </div>
+
+              {/* Rating and Position Header */}
+              <div className="absolute top-8 left-8 z-30 flex flex-col items-start">
+                <div className="flex items-center gap-3">
+                  <div className="text-[5.5rem] font-black text-[#00ffd0] leading-none drop-shadow-[0_0_15px_rgba(0,255,208,0.4)] italic tracking-tighter">
+                    {currentPlayer.rating}
+                  </div>
+                  <div className="w-10 h-10 mb-6 opacity-80">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white">
+                      <circle cx="12" cy="12" r="10"/><path d="m6.7 6.7 10.6 10.6"/><path d="m6.7 17.3 10.6-10.6"/><path d="M12 2v20"/><path d="M2 12h20"/><path d="m12 12 5.5 5.5"/><path d="m12 12-5.5 5.5"/><path d="m12 12 5.5-5.5"/><path d="m12 12-5.5-5.5"/>
+                    </svg>
+                  </div>
+                </div>
+                <div className="h-px w-16 bg-white/20 mb-1" />
+                <div className="text-2xl font-black text-white/90 uppercase tracking-tighter italic">
                   {currentPlayer.position === 'Forward' ? 'ST' : currentPlayer.position === 'Midfielder' ? 'CMF' : currentPlayer.position === 'Defender' ? 'DEF' : 'GKP'}
                 </div>
               </div>
 
-              <div className="absolute inset-0 z-10">
-                <img src={currentPlayer.imageUrl} alt={currentPlayer.name} className="w-full h-full object-cover object-center transform scale-[1.15] translate-y-6 group-hover:scale-[1.2] transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#000428] via-transparent to-transparent opacity-95" />
-                <div className="absolute inset-0 bg-gradient-to-b from-[#001246]/40 via-transparent to-transparent opacity-40" />
+              {/* Main Player Image */}
+              <div className="absolute inset-0 z-10 flex items-center justify-center overflow-hidden">
+                <img 
+                  src={currentPlayer.imageUrl} 
+                  alt={currentPlayer.name} 
+                  className="w-full h-full object-cover object-top transform scale-[1.1] translate-y-2 group-hover:scale-[1.15] transition-transform duration-700" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#000428] via-[#000428]/20 to-transparent opacity-90" />
               </div>
 
-              <div className="absolute bottom-14 left-0 right-0 z-30 text-center flex flex-col items-center px-4">
-                 <div className="bg-primary/20 backdrop-blur-xl px-4 py-1 rounded-full border border-primary/30 mb-3 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
-                    <div className="text-[10px] font-black text-primary tracking-[0.4em] italic uppercase drop-shadow-md leading-none">{currentPlayer.nationality}</div>
+              {/* Bottom Details Section */}
+              <div className="absolute bottom-10 left-0 right-0 z-30 flex flex-col items-center px-4">
+                 {/* Nationality Badge */}
+                 <div className="bg-[#00ffd0]/10 backdrop-blur-md px-5 py-0.5 rounded-full border border-[#00ffd0]/30 mb-2">
+                    <div className="text-[10px] font-black text-[#00ffd0] tracking-[0.4em] italic uppercase leading-none">{currentPlayer.nationality}</div>
                  </div>
-                 <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_15px_rgba(0,0,0,1)] truncate w-full px-2">
+                 
+                 {/* Name */}
+                 <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_15px_rgba(0,0,0,1)] truncate w-full px-2 text-center leading-tight">
                    {currentPlayer.name}
                  </h1>
+
+                 {/* Stars */}
+                 <div className="mt-3 flex gap-1.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-secondary text-secondary drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]" />
+                    ))}
+                 </div>
               </div>
 
-              <div className="absolute bottom-6 inset-x-0 z-30 flex justify-center gap-1.5 opacity-80">
-                 {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-secondary text-secondary drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]" />)}
-              </div>
-
+              {/* Sold/Skipped Overlays */}
               {status === 'SOLD' && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md animate-in fade-in duration-500">
                   <div className="text-center animate-sold flex flex-col items-center p-6">
