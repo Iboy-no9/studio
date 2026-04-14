@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { TEAMS, PLAYERS, Player, Team } from '@/lib/auction-data';
 import { Badge } from '@/components/ui/badge';
@@ -19,11 +19,15 @@ interface SoldPlayer {
 }
 
 export default function EliteDraftAuction() {
-  const [currentPlayerIdx, setCurrentPlayerIdx] = useState(0);
+  // Queue management
+  const [mainQueue, setMainQueue] = useState<string[]>(PLAYERS.map(p => p.id));
+  const [skippedQueue, setSkippedQueue] = useState<string[]>([]);
+  const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(PLAYERS[0].id);
+  const [lotsProcessedCount, setLotsProcessedCount] = useState(0);
+
   const [currentBid, setCurrentBid] = useState(0);
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [soldPlayers, setSoldPlayers] = useState<SoldPlayer[]>([]);
-  const [skippedPlayerIds, setSkippedPlayerIds] = useState<string[]>([]);
   const [teamBudgets, setTeamBudgets] = useState<Record<string, number>>(
     TEAMS.reduce((acc, team) => ({ ...acc, [team.id]: team.budget }), {})
   );
@@ -33,41 +37,55 @@ export default function EliteDraftAuction() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showFinishedOverlay, setShowFinishedOverlay] = useState(false);
 
-  const currentPlayer = PLAYERS[currentPlayerIdx];
+  const currentPlayer = useMemo(() => 
+    PLAYERS.find(p => p.id === currentPlayerId) || null
+  , [currentPlayerId]);
+
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
   
-  const hasMoreInSequence = currentPlayerIdx < PLAYERS.length - 1;
-  const hasSkippedRemaining = skippedPlayerIds.length > 0;
-  const isLastPlayer = !hasMoreInSequence && !hasSkippedRemaining;
+  const hasMoreInMain = mainQueue.length > 0;
+  const hasSkippedRemaining = skippedQueue.length > 0;
+  const isLastPlayer = !hasMoreInMain && !hasSkippedRemaining;
 
   const handleNextPlayer = useCallback(() => {
-    if (hasMoreInSequence) {
-      setCurrentPlayerIdx(prev => prev + 1);
-      setCurrentBid(0);
+    // Reset auction state for next lot
+    setCurrentBid(0);
+    setSelectedTeamId(null);
+    setTimer(10);
+    setLotsProcessedCount(prev => prev + 1);
+
+    if (mainQueue.length > 0) {
+      const nextId = mainQueue[0];
+      setMainQueue(prev => prev.slice(1));
+      setCurrentPlayerId(nextId);
       setStatus('IDLE');
-      setTimer(10);
-      setSelectedTeamId(null);
-    } else if (hasSkippedRemaining) {
-      const nextId = skippedPlayerIds[0];
-      const nextIdx = PLAYERS.findIndex(p => p.id === nextId);
-      setSkippedPlayerIds(prev => prev.slice(1));
-      setCurrentPlayerIdx(nextIdx);
-      setCurrentBid(0);
+    } else if (skippedQueue.length > 0) {
+      const nextId = skippedQueue[0];
+      setSkippedQueue(prev => prev.slice(1));
+      setCurrentPlayerId(nextId);
       setStatus('IDLE');
-      setTimer(10);
-      setSelectedTeamId(null);
+    } else {
+      // No players left anywhere
+      setCurrentPlayerId(null);
+      setStatus('FINISHED');
+      setShowFinishedOverlay(true);
     }
-  }, [hasMoreInSequence, hasSkippedRemaining, skippedPlayerIds]);
+  }, [mainQueue, skippedQueue]);
+
+  // Initial setup: pop the first player from main queue
+  useEffect(() => {
+    if (mainQueue.length === PLAYERS.length && currentPlayerId === PLAYERS[0].id) {
+       setMainQueue(prev => prev.slice(1));
+    }
+  }, []);
 
   const handleSkip = useCallback(() => {
-    if (status === 'BIDDING' || status === 'IDLE') {
-      if (!skippedPlayerIds.includes(currentPlayer.id)) {
-        setSkippedPlayerIds(prev => [...prev, currentPlayer.id]);
-      }
+    if ((status === 'BIDDING' || status === 'IDLE') && currentPlayerId) {
+      setSkippedQueue(prev => [...prev, currentPlayerId]);
       setStatus('SKIPPED');
       setTimer(5);
     }
-  }, [status, currentPlayer.id, skippedPlayerIds]);
+  }, [status, currentPlayerId]);
 
   const handleBid = useCallback((increment: number) => {
     if (status !== 'BIDDING' && status !== 'IDLE') return;
@@ -92,7 +110,7 @@ export default function EliteDraftAuction() {
   }, [currentBid, selectedTeamId, status, teamBudgets]);
 
   const handleSold = useCallback(() => {
-    if ((status !== 'BIDDING' && status !== 'IDLE') || !selectedTeamId) return;
+    if ((status !== 'BIDDING' && status !== 'IDLE') || !selectedTeamId || !currentPlayer) return;
 
     const finalPrice = currentBid === 0 ? 10 : currentBid;
 
@@ -109,7 +127,6 @@ export default function EliteDraftAuction() {
     };
 
     setSoldPlayers(prev => [soldPlayer, ...prev]);
-    setSkippedPlayerIds(prev => prev.filter(id => id !== currentPlayer.id));
     
     setTeamBudgets(prev => ({
       ...prev,
@@ -161,7 +178,7 @@ export default function EliteDraftAuction() {
   }, [errorMsg]);
 
   const unsoldPlayers = PLAYERS.filter(p => 
-    !soldPlayers.some(s => s.player.id === p.id) && p.id !== currentPlayer.id
+    !soldPlayers.some(s => s.player.id === p.id) && p.id !== currentPlayerId
   );
 
   return (
@@ -265,7 +282,7 @@ export default function EliteDraftAuction() {
           <div className="flex items-center gap-10">
             <div className="text-right">
                <span className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">Current Lot</span>
-               <div className="text-xl font-black text-white italic">#{currentPlayerIdx + 1} <span className="text-xs text-muted-foreground not-italic ml-1">/ {PLAYERS.length}</span></div>
+               <div className="text-xl font-black text-white italic">#{lotsProcessedCount + 1} <span className="text-xs text-muted-foreground not-italic ml-1">/ {PLAYERS.length}</span></div>
             </div>
             
             <Button 
@@ -281,91 +298,93 @@ export default function EliteDraftAuction() {
 
         {/* Card and Bidding Controls */}
         <div className="flex-1 flex gap-12 items-center justify-center">
-          {/* Legendary Player Card */}
-          <div className="relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2rem] p-1 border-[4px] border-white/10 shadow-2xl flex flex-col transition-all duration-700 hover:scale-[1.02] group">
-            <div className="absolute top-6 left-6 z-20">
-              <div className="text-6xl font-black text-[#00ffd0] leading-none drop-shadow-2xl italic tracking-tighter">
-                {currentPlayer.rating}
-              </div>
-              <div className="text-xl font-black text-white/80 uppercase ml-1 tracking-tighter border-t border-white/20 pt-1 mt-1">
-                {currentPlayer.position === 'Forward' ? 'ST' : 
-                 currentPlayer.position === 'Midfielder' ? 'CM' :
-                 currentPlayer.position === 'Defender' ? 'CB' : 'GK'}
-              </div>
-            </div>
-
-            <div className="absolute inset-0 z-10">
-              <img 
-                src={currentPlayer.imageUrl} 
-                alt={currentPlayer.name} 
-                className="w-full h-full object-cover object-center transform scale-[1.1] translate-y-4"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#000428] via-transparent to-transparent opacity-90" />
-            </div>
-
-            <div className="absolute bottom-12 left-0 right-0 z-20 text-center flex flex-col items-center px-4">
-               <div className="text-[10px] font-black text-primary tracking-[0.4em] mb-2 italic uppercase drop-shadow-md">{currentPlayer.nationality}</div>
-               <h1 className="text-3xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] truncate w-full">
-                 {currentPlayer.name}
-               </h1>
-            </div>
-
-            <div className="absolute bottom-6 inset-x-0 z-20 flex justify-center gap-1">
-               {[...Array(5)].map((_, i) => (
-                 <Star key={i} className="w-3 h-3 fill-secondary text-secondary drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]" />
-               ))}
-            </div>
-
-            {/* Overlays */}
-            {status === 'SOLD' && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
-                <div className="text-center animate-sold flex flex-col items-center p-6">
-                   <div className="text-7xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SOLD!</div>
-                   <div className="text-sm mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-2 px-6 rounded-full border border-primary/40 shadow-xl max-w-full truncate">
-                      To {TEAMS.find(t => t.id === selectedTeamId)?.name}
-                   </div>
-                   {!isLastPlayer ? (
-                     <Button 
-                      variant="secondary" 
-                      className="mt-8 font-black uppercase tracking-widest px-8 h-12 rounded-xl shadow-2xl"
-                      onClick={handleNextPlayer}
-                     >
-                       {hasMoreInSequence ? "Draft Next (N)" : "Re-auction Skipped (N)"}
-                     </Button>
-                   ) : (
-                     <div className="mt-8 p-3 bg-secondary/20 border border-secondary/40 rounded-xl text-secondary text-[10px] font-black uppercase tracking-widest animate-pulse">
-                        Final Lot Completed
-                     </div>
-                   )}
+          {currentPlayer ? (
+            <div className="relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2rem] p-1 border-[4px] border-white/10 shadow-2xl flex flex-col transition-all duration-700 hover:scale-[1.02] group">
+              <div className="absolute top-6 left-6 z-20">
+                <div className="text-6xl font-black text-[#00ffd0] leading-none drop-shadow-2xl italic tracking-tighter">
+                  {currentPlayer.rating}
+                </div>
+                <div className="text-xl font-black text-white/80 uppercase ml-1 tracking-tighter border-t border-white/20 pt-1 mt-1">
+                  {currentPlayer.position === 'Forward' ? 'ST' : 
+                   currentPlayer.position === 'Midfielder' ? 'CM' :
+                   currentPlayer.position === 'Defender' ? 'CB' : 'GK'}
                 </div>
               </div>
-            )}
 
-            {status === 'SKIPPED' && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
-                <div className="text-center animate-sold flex flex-col items-center p-6">
-                   <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
-                   <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Lot Unsold</div>
-                   {!isLastPlayer ? (
-                     <Button 
-                      variant="outline" 
-                      className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-8 h-12 rounded-xl"
-                      onClick={handleNextPlayer}
-                     >
-                        {hasMoreInSequence ? "Draft Next (N)" : "Re-auction Skipped (N)"}
-                     </Button>
-                   ) : (
-                     <div className="mt-8 p-3 bg-destructive/20 border border-destructive/40 rounded-xl text-destructive text-[10px] font-black uppercase tracking-widest animate-pulse">
-                        Final Lot Completed
-                     </div>
-                   )}
-                </div>
+              <div className="absolute inset-0 z-10">
+                <img 
+                  src={currentPlayer.imageUrl} 
+                  alt={currentPlayer.name} 
+                  className="w-full h-full object-cover object-center transform scale-[1.1] translate-y-4"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#000428] via-transparent to-transparent opacity-90" />
               </div>
-            )}
-          </div>
+
+              <div className="absolute bottom-12 left-0 right-0 z-20 text-center flex flex-col items-center px-4">
+                 <div className="text-[10px] font-black text-primary tracking-[0.4em] mb-2 italic uppercase drop-shadow-md">{currentPlayer.nationality}</div>
+                 <h1 className="text-3xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] truncate w-full">
+                   {currentPlayer.name}
+                 </h1>
+              </div>
+
+              <div className="absolute bottom-6 inset-x-0 z-20 flex justify-center gap-1">
+                 {[...Array(5)].map((_, i) => (
+                   <Star key={i} className="w-3 h-3 fill-secondary text-secondary drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]" />
+                 ))}
+              </div>
+
+              {/* Overlays */}
+              {status === 'SOLD' && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
+                  <div className="text-center animate-sold flex flex-col items-center p-6">
+                     <div className="text-7xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SOLD!</div>
+                     <div className="text-sm mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-2 px-6 rounded-full border border-primary/40 shadow-xl max-w-full truncate">
+                        To {TEAMS.find(t => t.id === selectedTeamId)?.name}
+                     </div>
+                     {!isLastPlayer && (
+                       <Button 
+                        variant="secondary" 
+                        className="mt-8 font-black uppercase tracking-widest px-8 h-12 rounded-xl shadow-2xl"
+                        onClick={handleNextPlayer}
+                       >
+                         Draft Next (N)
+                       </Button>
+                     )}
+                  </div>
+                </div>
+              )}
+
+              {status === 'SKIPPED' && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
+                  <div className="text-center animate-sold flex flex-col items-center p-6">
+                     <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
+                     <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Lot Unsold</div>
+                     {!isLastPlayer && (
+                       <Button 
+                        variant="outline" 
+                        className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-8 h-12 rounded-xl"
+                        onClick={handleNextPlayer}
+                       >
+                          Draft Next (N)
+                       </Button>
+                     )}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+             <div className="text-center p-12 bg-white/5 backdrop-blur-3xl rounded-[2rem] border-2 border-dashed border-white/10">
+                <Trophy className="w-20 h-20 text-secondary mx-auto mb-6 opacity-20" />
+                <h2 className="text-2xl font-black uppercase tracking-widest opacity-50 italic">Draft Process Ready</h2>
+                <p className="text-muted-foreground text-sm mt-2">All players have been processed or drafted.</p>
+             </div>
+          )}
 
           {/* Bidding Controls */}
-          <div className="flex-1 flex flex-col justify-center items-center gap-8 max-w-sm">
+          <div className={cn(
+            "flex-1 flex flex-col justify-center items-center gap-8 max-w-sm transition-opacity duration-500",
+            !currentPlayer && "opacity-20 pointer-events-none"
+          )}>
               <div className="text-center">
                 <div className="text-[10px] text-muted-foreground uppercase tracking-[0.4em] font-black mb-2 opacity-60">Current Offer</div>
                 <div className={cn(
@@ -438,7 +457,7 @@ export default function EliteDraftAuction() {
                    </div>
                    <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md flex flex-col items-center">
                       <div className="text-muted-foreground text-[9px] font-black uppercase tracking-[0.3em] mb-1">Skipped/Unsold</div>
-                      <div className="text-3xl font-black text-destructive italic tabular-nums leading-none">{skippedPlayerIds.length}</div>
+                      <div className="text-3xl font-black text-destructive italic tabular-nums leading-none">{skippedQueue.length}</div>
                    </div>
                 </div>
 
@@ -578,7 +597,7 @@ export default function EliteDraftAuction() {
                     key={player.id} 
                     className={cn(
                       "bg-card/20 backdrop-blur-sm p-2.5 rounded-lg border border-white/5 flex items-center gap-3 transition-all",
-                      skippedPlayerIds.includes(player.id) ? "opacity-100 border-destructive/20 bg-destructive/5" : "opacity-70 hover:opacity-100 hover:bg-muted/30"
+                      skippedQueue.includes(player.id) || currentPlayerId === player.id ? "opacity-100 border-destructive/20 bg-destructive/5" : "opacity-70 hover:opacity-100 hover:bg-muted/30"
                     )}
                   >
                     <div className="w-10 h-10 rounded-full bg-muted overflow-hidden shrink-0 border border-white/10 shadow-md">
@@ -587,7 +606,7 @@ export default function EliteDraftAuction() {
                     <div className="flex-1 min-w-0">
                        <div className="flex items-center gap-2">
                          <div className="font-black text-xs truncate uppercase tracking-tight">{player.name}</div>
-                         {skippedPlayerIds.includes(player.id) && (
+                         {(skippedQueue.includes(player.id) || (currentPlayerId === player.id && !mainQueue.includes(player.id) && !soldPlayers.some(s => s.player.id === player.id))) && (
                            <Badge variant="destructive" className="text-[7px] py-0 px-1 font-black uppercase tracking-tighter h-3.5">Skipped</Badge>
                          )}
                        </div>
