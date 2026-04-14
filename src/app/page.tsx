@@ -38,7 +38,7 @@ export default function EliteDraftAuction() {
     if (currentPlayerIdx < PLAYERS.length - 1) {
       setCurrentPlayerIdx(prev => prev + 1);
       setCurrentBid(0);
-      setStatus('BIDDING');
+      setStatus('IDLE');
       setTimer(10);
       setSelectedTeamId(null);
     } else {
@@ -75,22 +75,30 @@ export default function EliteDraftAuction() {
   }, [currentBid, selectedTeamId, status, teamBudgets]);
 
   const handleSold = useCallback(() => {
-    if (status !== 'BIDDING' || !selectedTeamId || currentBid === 0) return;
+    if ((status !== 'BIDDING' && status !== 'IDLE') || !selectedTeamId) return;
+
+    // Default to base price of 10 if no bids have been placed
+    const finalPrice = currentBid === 0 ? 10 : currentBid;
+
+    if (teamBudgets[selectedTeamId] < finalPrice) {
+      setErrorMsg("Budget Exceeded!");
+      return;
+    }
 
     const team = TEAMS.find(t => t.id === selectedTeamId)!;
     const soldPlayer: SoldPlayer = {
       player: currentPlayer,
       team: team,
-      price: currentBid
+      price: finalPrice
     };
 
     setSoldPlayers(prev => [soldPlayer, ...prev]);
     setTeamBudgets(prev => ({
       ...prev,
-      [selectedTeamId]: prev[selectedTeamId] - currentBid
+      [selectedTeamId]: prev[selectedTeamId] - finalPrice
     }));
     setStatus('SOLD');
-  }, [currentBid, currentPlayer, selectedTeamId, status]);
+  }, [currentBid, currentPlayer, selectedTeamId, status, teamBudgets]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -285,7 +293,7 @@ export default function EliteDraftAuction() {
                   variant="secondary" 
                   className="h-20 text-2xl font-black uppercase tracking-tighter shadow-2xl glow-accent border-none rounded-2xl"
                   onClick={handleSold}
-                  disabled={status !== 'BIDDING' || !selectedTeamId}
+                  disabled={(status !== 'BIDDING' && status !== 'IDLE') || !selectedTeamId}
                 >
                   Confirm Signing
                 </Button>
