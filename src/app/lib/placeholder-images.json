@@ -1,0 +1,29 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "player-1",
+      "description": "Professional Football Player 1",
+      "imageUrl": "https://picsum.photos/seed/101/400/500",
+      "imageHint": "football player"
+    },
+    {
+      "id": "player-2",
+      "description": "Professional Football Player 2",
+      "imageUrl": "https://picsum.photos/seed/102/400/500",
+      "imageHint": "soccer player"
+    },
+    {
+      "id": "player-3",
+      "description": "Professional Football Player 3",
+      "imageUrl": "https://picsum.photos/seed/103/400/500",
+      "imageHint": "athlete"
+    },
+    {
+      "id": "team-logo-1",
+      "description": "Team Logo 1",
+      "imageUrl": "https://picsum.photos/seed/logo1/100/100",
+      "imageHint": "sports logo"
+    }
+  ]
+}
