@@ -59,18 +59,6 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute bottom-12 left-12 flex gap-8 z-10 opacity-30">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-black uppercase tracking-widest">Resolution</span>
-          <span className="text-xl font-black italic tracking-tighter">4K ULTRA HD</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-[10px] font-black uppercase tracking-widest">Network</span>
-          <span className="text-xl font-black italic tracking-tighter">ED SPORTS</span>
-        </div>
-      </div>
-
       <div className="absolute top-1/2 -right-24 -translate-y-1/2 rotate-90 text-[10rem] font-black text-white/[0.02] select-none tracking-tighter uppercase whitespace-nowrap">
         LEAGUE CHAMPIONS 2024
       </div>
