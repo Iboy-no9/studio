@@ -340,13 +340,6 @@ export default function EliteDraftAuction() {
                      <div className="text-sm mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-2 px-6 rounded-full border border-primary/40 shadow-xl max-w-full truncate">
                         To {TEAMS.find(t => t.id === selectedTeamId)?.name}
                      </div>
-                     <Button 
-                      variant="secondary" 
-                      className="mt-8 font-black uppercase tracking-widest px-8 h-12 rounded-xl shadow-2xl"
-                      onClick={handleNextPlayer}
-                     >
-                       Continue (N)
-                     </Button>
                   </div>
                 </div>
               )}
@@ -356,13 +349,6 @@ export default function EliteDraftAuction() {
                   <div className="text-center animate-sold flex flex-col items-center p-6">
                      <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
                      <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Moving to end of pool</div>
-                     <Button 
-                      variant="outline" 
-                      className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-8 h-12 rounded-xl"
-                      onClick={handleNextPlayer}
-                     >
-                        Continue (N)
-                     </Button>
                   </div>
                 </div>
               )}
