@@ -176,14 +176,14 @@ export default function EliteDraftAuction() {
         </div>
 
         <div className="flex-1 flex gap-10 items-center justify-center">
-          {/* THE ICONIC CARD */}
-          <div className="relative aspect-[3/4.2] w-[450px] legendary-card-bg rounded-[2.5rem] p-1 border-[6px] border-white/20 shadow-2xl flex flex-col transition-all duration-500 hover:scale-[1.02]">
+          {/* THE ICONIC CARD - RESIZED TO 360px */}
+          <div className="relative aspect-[3/4.2] w-[360px] legendary-card-bg rounded-[2rem] p-1 border-[4px] border-white/20 shadow-2xl flex flex-col transition-all duration-500 hover:scale-[1.02]">
             {/* Top Section: Rating & Position */}
-            <div className="absolute top-8 left-8 z-20">
-              <div className="text-7xl font-black text-[#00ffd0] leading-none drop-shadow-md italic">
+            <div className="absolute top-6 left-6 z-20">
+              <div className="text-6xl font-black text-[#00ffd0] leading-none drop-shadow-md italic">
                 {currentPlayer.rating}
               </div>
-              <div className="text-3xl font-bold text-white uppercase ml-1 tracking-tighter">
+              <div className="text-2xl font-bold text-white uppercase ml-1 tracking-tighter">
                 {currentPlayer.position === 'Forward' ? 'SS' : 
                  currentPlayer.position === 'Midfielder' ? 'AMF' :
                  currentPlayer.position === 'Defender' ? 'CB' : 'GK'}
@@ -191,8 +191,8 @@ export default function EliteDraftAuction() {
             </div>
 
             {/* Club Logo Overlay */}
-            <div className="absolute top-28 left-8 z-20 w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
-               <img src={TEAMS[currentPlayerIdx % TEAMS.length].logoUrl} alt="Logo" className="w-12 h-12 object-contain" />
+            <div className="absolute top-24 left-6 z-20 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+               <img src={TEAMS[currentPlayerIdx % TEAMS.length].logoUrl} alt="Logo" className="w-10 h-10 object-contain" />
             </div>
 
             {/* Main Player Image */}
@@ -206,26 +206,26 @@ export default function EliteDraftAuction() {
             </div>
 
             {/* Bottom Info Overlay */}
-            <div className="absolute bottom-14 left-0 right-0 z-20 text-center flex flex-col items-center">
-               <div className="text-lg font-medium text-white/80 tracking-widest mb-1 italic">01.01.2024</div>
-               <h1 className="text-5xl font-black text-white uppercase italic tracking-tighter drop-shadow-lg px-4 truncate max-w-full">
+            <div className="absolute bottom-12 left-0 right-0 z-20 text-center flex flex-col items-center">
+               <div className="text-sm font-medium text-white/80 tracking-widest mb-1 italic">01.01.2024</div>
+               <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter drop-shadow-lg px-4 truncate max-w-full">
                  {currentPlayer.name}
                </h1>
             </div>
 
             {/* Star Footer */}
-            <div className="absolute bottom-6 inset-x-0 z-20 flex justify-center gap-1">
+            <div className="absolute bottom-5 inset-x-0 z-20 flex justify-center gap-1">
                {[...Array(5)].map((_, i) => (
-                 <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400 drop-shadow-glow" />
+                 <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400 drop-shadow-glow" />
                ))}
             </div>
 
             {/* SOLD Overlay */}
             {status === 'SOLD' && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-[2.2rem] animate-in fade-in duration-300">
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-300">
                 <div className="text-center animate-sold">
-                   <div className="text-8xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] uppercase">SOLD!</div>
-                   <div className="text-2xl mt-4 font-bold text-white uppercase tracking-widest bg-black/50 py-2 px-6 rounded-full inline-block border border-white/20">
+                   <div className="text-7xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] uppercase">SOLD!</div>
+                   <div className="text-xl mt-3 font-bold text-white uppercase tracking-widest bg-black/50 py-2 px-6 rounded-full inline-block border border-white/20">
                       To {TEAMS.find(t => t.id === selectedTeamId)?.name}
                    </div>
                 </div>
@@ -234,27 +234,27 @@ export default function EliteDraftAuction() {
           </div>
 
           {/* Bidding Controls Side */}
-          <div className="flex-1 flex flex-col justify-center items-center gap-8 max-w-md">
+          <div className="flex-1 flex flex-col justify-center items-center gap-6 max-w-sm">
               <div className="text-center">
-                <div className="text-sm text-muted-foreground uppercase tracking-[0.3em] font-bold mb-4">Current Valuation</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-[0.3em] font-bold mb-2">Current Valuation</div>
                 <div className={cn(
-                  "text-[8rem] font-black tracking-tighter leading-none text-primary transition-all duration-200 tabular-nums drop-shadow-[0_0_15px_rgba(74,176,237,0.4)]",
+                  "text-[6rem] font-black tracking-tighter leading-none text-primary transition-all duration-200 tabular-nums drop-shadow-[0_0_15px_rgba(74,176,237,0.4)]",
                   bidAnimating && "animate-bid"
                 )}>
                   ₹{currentBid > 0 ? currentBid.toLocaleString() : currentPlayer.basePrice.toLocaleString()}
                 </div>
               </div>
 
-              <div className="w-full flex flex-col gap-4">
-                <div className="grid grid-cols-3 gap-3">
-                  <Button variant="outline" className="h-14 text-lg font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(100)}>+100</Button>
-                  <Button variant="outline" className="h-14 text-lg font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(500)}>+500</Button>
-                  <Button variant="outline" className="h-14 text-lg font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(1000)}>+1000</Button>
+              <div className="w-full flex flex-col gap-3">
+                <div className="grid grid-cols-3 gap-2">
+                  <Button variant="outline" className="h-12 text-md font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(100)}>+100</Button>
+                  <Button variant="outline" className="h-12 text-md font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(500)}>+500</Button>
+                  <Button variant="outline" className="h-12 text-md font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(1000)}>+1000</Button>
                 </div>
                 
                 <Button 
                   variant="secondary" 
-                  className="h-20 text-3xl font-black uppercase tracking-tighter shadow-2xl shadow-secondary/20 glow-accent"
+                  className="h-16 text-2xl font-black uppercase tracking-tighter shadow-2xl shadow-secondary/20 glow-accent"
                   onClick={handleSold}
                   disabled={status !== 'BIDDING' || !selectedTeamId}
                 >
@@ -264,7 +264,7 @@ export default function EliteDraftAuction() {
                 {status === 'SOLD' && (
                   <Button 
                     variant="ghost" 
-                    className="h-14 text-xl font-bold uppercase tracking-widest border border-white/5"
+                    className="h-12 text-lg font-bold uppercase tracking-widest border border-white/5"
                     onClick={handleNextPlayer}
                   >
                     Draft Next Player (N)
