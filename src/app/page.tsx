@@ -295,7 +295,10 @@ export default function EliteDraftAuction() {
         {/* Card and Bidding Controls */}
         <div className="flex-1 flex gap-12 items-center justify-center">
           {currentPlayer ? (
-            <div className="relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2rem] p-1 border-[4px] border-white/10 shadow-2xl flex flex-col transition-all duration-700 hover:scale-[1.02] group">
+            <div 
+              key={currentPlayerId}
+              className="relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2rem] p-1 border-[4px] border-white/10 shadow-2xl flex flex-col transition-all duration-700 hover:scale-[1.02] group animate-in fade-in zoom-in-95 slide-in-from-bottom-12 duration-1000"
+            >
               <div className="absolute top-6 left-6 z-20">
                 <div className="text-6xl font-black text-[#00ffd0] leading-none drop-shadow-2xl italic tracking-tighter">
                   {currentPlayer.rating}
@@ -374,8 +377,8 @@ export default function EliteDraftAuction() {
 
           {/* Bidding Controls */}
           <div className={cn(
-            "flex-1 flex flex-col justify-center items-center gap-8 max-w-sm transition-opacity duration-500",
-            (!currentPlayer || status === 'SOLD' || status === 'SKIPPED') && "opacity-20 pointer-events-none"
+            "flex-1 flex flex-col justify-center items-center gap-8 max-w-sm transition-all duration-500",
+            (!currentPlayer || status === 'SOLD' || status === 'SKIPPED') && "opacity-20 pointer-events-none translate-x-4"
           )}>
               <div className="text-center">
                 <div className="text-[10px] text-muted-foreground uppercase tracking-[0.4em] font-black mb-2 opacity-60">Current Offer</div>
