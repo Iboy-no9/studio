@@ -36,7 +36,7 @@ export default function LandingPage() {
           <Trophy className="w-14 h-14 text-secondary drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]" />
           <div className="flex flex-col items-start text-left">
              <span className="text-sm font-black tracking-[0.4em] text-primary uppercase leading-none">Welfare</span>
-             <span className="text-sm font-black tracking-[0.4em] text-white uppercase leading-none mt-1.5 opacity-50">Diia Presents</span>
+             <span className="text-sm font-black tracking-[0.4em] text-white uppercase leading-none mt-1.5 opacity-50">DIIA Presents</span>
           </div>
         </div>
 
@@ -46,7 +46,7 @@ export default function LandingPage() {
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground uppercase tracking-[0.2em] font-medium mb-12 max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
-          Experience the ultimate football auction presented by Welfare DIIA. Compete in a real-time auction, build your dream team, and battle it out with 6 teams and 60 players.
+          The ultimate football auction is here — 6 teams, 60 players, one battle. Presented by Welfare DIIA.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 items-center animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
