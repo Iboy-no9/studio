@@ -1,20 +1,25 @@
 
+/**
+ * @fileOverview Defines the data structures and initial data for the auction.
+ * Modify this file to add/remove players or change franchise details.
+ */
+
 export interface Player {
-  id: string;
-  name: string;
-  basePrice: number;
-  position: string;
-  rating: number;
-  nationality: string;
-  imageUrl: string;
+  id: string;         // Unique identifier (e.g., 'p1')
+  name: string;       // Full display name
+  basePrice: number;  // Starting auction price
+  position: string;   // 'Forward', 'Midfielder', 'Defender', 'Goalkeeper'
+  rating: number;     // Skill level (e.g., 90)
+  nationality: string;// 3-letter code (e.g., 'ARG')
+  imageUrl: string;   // Link to player photo
 }
 
 export interface Team {
-  id: string;
-  name: string;
-  budget: number;
-  logoUrl: string;
-  color: string;
+  id: string;         // Unique identifier (e.g., 't1')
+  name: string;       // Franchise name
+  budget: number;     // Starting auction budget
+  logoUrl: string;    // Link to franchise logo
+  color: string;      // UI accent color (Hex)
 }
 
 export const TEAMS: Team[] = [
