@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -8,6 +9,15 @@ import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TEAMS } from '@/lib/auction-data';
 import { cn } from '@/lib/utils';
+
+const TEAM_TRANSITIONS = [
+  "animate-in fade-in slide-in-from-left-20 duration-1000 ease-out",   // Real Madrid
+  "animate-in fade-in zoom-in-95 duration-1000 ease-out",            // FC Barcelona
+  "animate-in fade-in slide-in-from-right-20 duration-1000 ease-out",  // Arsenal FC
+  "animate-in fade-in slide-in-from-bottom-20 duration-1000 ease-out",// Manchester City
+  "animate-in fade-in zoom-in-110 duration-1000 ease-out",           // Liverpool FC
+  "animate-in fade-in slide-in-from-top-20 duration-1000 ease-out",    // Bayern Munich
+];
 
 export default function LandingPage() {
   const [showIntro, setShowIntro] = useState(true);
@@ -29,6 +39,8 @@ export default function LandingPage() {
 
   if (showIntro) {
     const currentTeam = TEAMS[activeTeamIndex];
+    const currentTransition = TEAM_TRANSITIONS[activeTeamIndex];
+
     return (
       <div className="relative h-screen w-full flex flex-col items-center justify-start pt-12 bg-[#000411] text-white overflow-hidden font-body">
         {bgImage && (
@@ -47,7 +59,7 @@ export default function LandingPage() {
 
         <div className="relative z-10 flex flex-col items-center text-center px-6 w-full max-w-7xl h-full">
           {/* Header/Logo Section */}
-          <div className="flex flex-col items-center mb-12 animate-in fade-in slide-in-from-top-4 duration-700 shrink-0">
+          <div key={`header-${currentTeam.id}`} className={cn("flex flex-col items-center mb-12 shrink-0", currentTransition)}>
              <div className="w-28 h-28 bg-white/5 backdrop-blur-3xl rounded-full p-2.5 border-2 border-primary/20 shadow-[0_0_60px_rgba(0,212,255,0.2)] mb-4 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary/10" />
                 <img 
@@ -62,7 +74,7 @@ export default function LandingPage() {
           </div>
 
           {/* Epic Podium Layout */}
-          <div key={currentTeam.id} className="flex flex-col md:flex-row items-end justify-center gap-6 w-full max-w-4xl px-4 animate-in fade-in zoom-in duration-700 mt-20 mb-20">
+          <div key={`cards-${currentTeam.id}`} className={cn("flex flex-col md:flex-row items-end justify-center gap-6 w-full max-w-4xl px-4 mt-20 mb-20", currentTransition)}>
              
              {/* Captain Card */}
              <div className="flex-1 w-full md:w-auto epic-card-frame p-4 flex flex-col items-center transition-all duration-300 relative group overflow-hidden h-[340px]">
