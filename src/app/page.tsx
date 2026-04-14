@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X, LogOut } from 'lucide-react';
+import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X, LogOut, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -34,6 +34,7 @@ export default function EliteDraftAuction() {
 
   const currentPlayer = PLAYERS[currentPlayerIdx];
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
+  const isLastPlayer = currentPlayerIdx === PLAYERS.length - 1;
 
   const handleNextPlayer = useCallback(() => {
     if (currentPlayerIdx < PLAYERS.length - 1) {
@@ -42,9 +43,6 @@ export default function EliteDraftAuction() {
       setStatus('IDLE');
       setTimer(10);
       setSelectedTeamId(null);
-    } else {
-      setStatus('FINISHED');
-      setShowFinishedOverlay(true);
     }
   }, [currentPlayerIdx]);
 
@@ -113,7 +111,7 @@ export default function EliteDraftAuction() {
       if (e.key === '3') handleBid(100);
       if (e.key === 'Enter') handleSold();
       if (e.key === 'n' || e.key === 'N') {
-        if (status === 'SOLD' || status === 'SKIPPED') handleNextPlayer();
+        if ((status === 'SOLD' || status === 'SKIPPED') && !isLastPlayer) handleNextPlayer();
       }
       if (e.key === 's' || e.key === 'S') {
         if (status === 'BIDDING' || status === 'IDLE') handleSkip();
@@ -124,7 +122,7 @@ export default function EliteDraftAuction() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleBid, handleSold, handleNextPlayer, handleSkip, status, showFinishedOverlay]);
+  }, [handleBid, handleSold, handleNextPlayer, handleSkip, status, showFinishedOverlay, isLastPlayer]);
 
   useEffect(() => {
     if (status === 'BIDDING' && timer > 0) {
@@ -233,10 +231,10 @@ export default function EliteDraftAuction() {
             
             <Button 
               variant="outline" 
-              className="h-10 px-4 border-white/10 bg-white/5 hover:bg-destructive hover:text-white hover:border-destructive transition-all rounded-xl font-black text-[10px] uppercase tracking-widest"
+              className="h-10 px-4 border-primary/50 bg-primary/10 hover:bg-primary hover:text-black transition-all rounded-xl font-black text-[10px] uppercase tracking-widest shadow-[0_0_15px_rgba(0,212,255,0.2)]"
               onClick={handleFinishAuction}
             >
-              <LogOut className="w-3.5 h-3.5 mr-2" />
+              <CheckCircle2 className="w-3.5 h-3.5 mr-2" />
               Finish Draft
             </Button>
           </div>
@@ -287,13 +285,19 @@ export default function EliteDraftAuction() {
                    <div className="text-sm mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-2 px-6 rounded-full border border-primary/40 shadow-xl max-w-full truncate">
                       To {TEAMS.find(t => t.id === selectedTeamId)?.name}
                    </div>
-                   <Button 
-                    variant="secondary" 
-                    className="mt-8 font-black uppercase tracking-widest px-8 h-12 rounded-xl shadow-2xl"
-                    onClick={handleNextPlayer}
-                   >
-                     Draft Next (N)
-                   </Button>
+                   {!isLastPlayer ? (
+                     <Button 
+                      variant="secondary" 
+                      className="mt-8 font-black uppercase tracking-widest px-8 h-12 rounded-xl shadow-2xl"
+                      onClick={handleNextPlayer}
+                     >
+                       Draft Next (N)
+                     </Button>
+                   ) : (
+                     <div className="mt-8 p-3 bg-secondary/20 border border-secondary/40 rounded-xl text-secondary text-[10px] font-black uppercase tracking-widest animate-pulse">
+                        Final Lot Completed
+                     </div>
+                   )}
                 </div>
               </div>
             )}
@@ -303,13 +307,19 @@ export default function EliteDraftAuction() {
                 <div className="text-center animate-sold flex flex-col items-center">
                    <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
                    <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Lot Unsold</div>
-                   <Button 
-                    variant="outline" 
-                    className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-8 h-12 rounded-xl"
-                    onClick={handleNextPlayer}
-                   >
-                     Draft Next (N)
-                   </Button>
+                   {!isLastPlayer ? (
+                     <Button 
+                      variant="outline" 
+                      className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-8 h-12 rounded-xl"
+                      onClick={handleNextPlayer}
+                     >
+                       Draft Next (N)
+                     </Button>
+                   ) : (
+                     <div className="mt-8 p-3 bg-destructive/20 border border-destructive/40 rounded-xl text-destructive text-[10px] font-black uppercase tracking-widest animate-pulse">
+                        Final Lot Completed
+                     </div>
+                   )}
                 </div>
               </div>
             )}
