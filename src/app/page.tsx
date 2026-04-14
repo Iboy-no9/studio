@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -30,6 +31,7 @@ export default function EliteDraftAuction() {
     TEAMS.reduce((acc, team) => ({ ...acc, [team.id]: team.budget }), {})
   );
   const [status, setStatus] = useState<'IDLE' | 'BIDDING' | 'SOLD' | 'SKIPPED' | 'FINISHED'>('IDLE');
+  const [lastAction, setLastAction] = useState<'SOLD' | 'SKIPPED' | 'INITIAL'>('INITIAL');
   const [timer, setTimer] = useState(10);
   const [bidAnimating, setBidAnimating] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -42,6 +44,10 @@ export default function EliteDraftAuction() {
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
 
   const handleNextPlayer = useCallback(() => {
+    // Record the action that triggered the transition for the next animation
+    const triggerAction = status === 'SOLD' ? 'SOLD' : (status === 'SKIPPED' ? 'SKIPPED' : 'INITIAL');
+    setLastAction(triggerAction);
+
     // Reset bidding state
     setCurrentBid(0);
     setSelectedTeamId(null);
@@ -49,7 +55,7 @@ export default function EliteDraftAuction() {
 
     const isSigned = (id: string) => soldPlayers.some(s => s.player.id === id);
     
-    // 1. Try to find the next player in the original list who hasn't been signed and hasn't been seen in THIS round
+    // Find next player who hasn't been signed and hasn't been seen in THIS round
     const currentIdx = PLAYERS.findIndex(p => p.id === currentPlayerId);
     let nextPlayer = PLAYERS.slice(currentIdx + 1).find(p => !isSigned(p.id) && !skippedInRoundIds.includes(p.id));
 
@@ -59,21 +65,21 @@ export default function EliteDraftAuction() {
       return;
     }
 
-    // 2. If we reached the end of the list, check if we have skipped players to re-auction
+    // Re-auction skipped players if any
     if (skippedInRoundIds.length > 0) {
       const nextId = skippedInRoundIds[0];
-      setSkippedInRoundIds([]); // Reset round skips as we are starting the "skipped round"
+      setSkippedInRoundIds(prev => prev.slice(1)); // Remove the one we are about to show
       setCurrentPlayerId(nextId);
       setStatus('IDLE');
     } else {
-      // 3. Absolutely no players left to show
-      if (soldPlayers.length === PLAYERS.length) {
+      // End of draft
+      if (soldPlayers.length === PLAYERS.length || (skippedInRoundIds.length === 0 && !nextPlayer)) {
         setCurrentPlayerId(null);
         setStatus('FINISHED');
         setShowFinishedOverlay(true);
       }
     }
-  }, [currentPlayerId, soldPlayers, skippedInRoundIds]);
+  }, [currentPlayerId, soldPlayers, skippedInRoundIds, status]);
 
   const handleSkip = useCallback(() => {
     if ((status === 'BIDDING' || status === 'IDLE') && currentPlayerId) {
@@ -158,7 +164,7 @@ export default function EliteDraftAuction() {
   }, [handleBid, handleSold, handleNextPlayer, handleSkip, status]);
 
   useEffect(() => {
-    if ((status === 'BIDDING' || status === 'SOLD' || status === 'SKIPPED') && timer > 0) {
+    if ((status === 'SOLD' || status === 'SKIPPED') && timer > 0) {
       const interval = setInterval(() => setTimer(t => t - 1), 1000);
       return () => clearInterval(interval);
     } else if (timer === 0 && (status === 'SOLD' || status === 'SKIPPED')) {
@@ -297,7 +303,14 @@ export default function EliteDraftAuction() {
           {currentPlayer ? (
             <div 
               key={currentPlayerId}
-              className="relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2rem] p-1 border-[4px] border-white/10 shadow-2xl flex flex-col transition-all duration-700 hover:scale-[1.02] group animate-in fade-in zoom-in-95 slide-in-from-bottom-12 duration-1000"
+              className={cn(
+                "relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2rem] p-1 border-[4px] border-white/10 shadow-2xl flex flex-col transition-all group",
+                lastAction === 'SOLD' 
+                  ? "animate-in fade-in slide-in-from-top-20 duration-1000 fill-mode-forwards" 
+                  : lastAction === 'SKIPPED'
+                  ? "animate-in fade-in slide-in-from-right-20 duration-1000 fill-mode-forwards"
+                  : "animate-in fade-in zoom-in-95 slide-in-from-bottom-12 duration-1000 fill-mode-forwards"
+              )}
             >
               <div className="absolute top-6 left-6 z-20">
                 <div className="text-6xl font-black text-[#00ffd0] leading-none drop-shadow-2xl italic tracking-tighter">
@@ -584,7 +597,11 @@ export default function EliteDraftAuction() {
                            <Badge variant="destructive" className="text-[7px] py-0 px-1 font-black uppercase tracking-tighter h-3.5">Skipped</Badge>
                          )}
                        </div>
-                       <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">{player.position}</div>
+                       <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">
+                        {player.position === 'Forward' ? 'ST' : 
+                         player.position === 'Midfielder' ? 'CMF' :
+                         player.position === 'Defender' ? 'DEF' : 'GK'}
+                       </div>
                     </div>
                     <div className="text-[10px] font-black text-primary bg-primary/10 px-2 py-1 rounded-md border border-primary/20">
                       {player.rating}
