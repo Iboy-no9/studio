@@ -47,7 +47,7 @@ export default function LandingPage() {
     if (showIntro) {
       const interval = setInterval(() => {
         setActiveTeamIndex((prev) => (prev + 1) % TEAMS.length);
-      }, 7000); // 7 seconds interval to allow the full 2s animation sequence + 5s viewing time
+      }, 4000); // Changed from 7000 to 4000 for a faster 4s interval
       return () => clearInterval(interval);
     }
   }, [showIntro]);
