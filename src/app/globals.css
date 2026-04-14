@@ -73,6 +73,47 @@
   z-index: 1;
 }
 
+/* Epic Card Styles */
+.epic-card-frame {
+  @apply relative overflow-hidden border-[4px] border-[#d4af37] shadow-[0_0_40px_rgba(0,255,0,0.3)];
+  background: linear-gradient(180deg, #000 0%, #051a05 100%);
+  border-radius: 2.5rem;
+}
+
+.epic-neon-hex {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at center, rgba(0, 255, 0, 0.15) 0%, transparent 70%),
+    linear-gradient(30deg, #00ff00 12%, transparent 12.5%, transparent 87%, #00ff00 87.5%, #00ff00),
+    linear-gradient(150deg, #00ff00 12%, transparent 12.5%, transparent 87%, #00ff00 87.5%, #00ff00),
+    linear-gradient(30deg, #00ff00 12%, transparent 12.5%, transparent 87%, #00ff00 87.5%, #00ff00),
+    linear-gradient(150deg, #00ff00 12%, transparent 12.5%, transparent 87%, #00ff00 87.5%, #00ff00),
+    linear-gradient(60deg, #00ff0077 25%, transparent 25.5%, transparent 75%, #00ff0077 75%, #00ff0077),
+    linear-gradient(60deg, #00ff0077 25%, transparent 25.5%, transparent 75%, #00ff0077 75%, #00ff0077);
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+  opacity: 0.2;
+  filter: blur(1px);
+  z-index: 1;
+}
+
+.epic-bottom-podium {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, #111, #000);
+  border-top: 2px solid #d4af37;
+  clip-path: polygon(0% 100%, 15% 0%, 85% 0%, 100% 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 40;
+}
+
 @keyframes bid-pop {
   0% { transform: scale(1); }
   50% { transform: scale(1.08); }
