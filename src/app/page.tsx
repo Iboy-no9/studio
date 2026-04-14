@@ -62,53 +62,53 @@ export default function LandingPage() {
              </h2>
           </div>
 
-          {/* Cards Section - Moved Down and Sized Down */}
+          {/* Cards Section - Manager is now the Highlighted Centerpiece */}
           <div key={currentTeam.id} className="flex flex-col md:flex-row items-end justify-center gap-4 w-full max-w-5xl px-4 animate-in fade-in zoom-in duration-700 mt-12">
              
-             {/* Manager Card */}
+             {/* Captain Card */}
              <div className="flex-1 w-full md:w-auto legendary-card-bg border border-white/10 p-4 rounded-[2rem] flex flex-col items-center transition-all duration-300 shadow-xl relative">
                 <div className="absolute top-4 left-4 z-20">
-                   <div className="bg-primary px-1.5 py-0.5 rounded-[4px] text-[7px] font-black text-black uppercase tracking-widest shadow-lg">MGR</div>
+                   <div className="bg-secondary/80 px-1.5 py-0.5 rounded-[4px] text-[7px] font-black text-black uppercase tracking-widest shadow-lg">CPT</div>
                 </div>
                 <div className="w-full aspect-square max-w-[130px] rounded-xl bg-black/40 flex items-center justify-center mb-4 border border-white/10 overflow-hidden relative shadow-inner">
-                   <Image 
-                     src={currentTeam.managerImageUrl} 
-                     alt={currentTeam.manager} 
-                     fill 
-                     className="object-cover" 
-                     data-ai-hint="portrait manager"
-                   />
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                </div>
-                <span className="text-[8px] font-black tracking-[0.3em] text-primary uppercase mb-1 opacity-80">MANAGER</span>
-                <span className="text-lg font-black uppercase italic text-white tracking-tight text-center">{currentTeam.manager}</span>
-             </div>
-
-             {/* Captain Card (Elevated and Star of the Show) */}
-             <div className="flex-[1.1] w-full md:w-auto legendary-card-bg border-2 border-secondary/40 p-6 rounded-[2.5rem] flex flex-col items-center transform scale-100 md:scale-105 md:-translate-y-10 shadow-[0_30px_80px_rgba(0,0,0,0.8)] z-20 relative">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-black px-6 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] shadow-[0_0_25px_rgba(255,215,0,0.4)] border border-white/20 whitespace-nowrap z-30 animate-pulse">
-                   FRANCHISE STAR
-                </div>
-                <div className="absolute top-6 left-6 z-20">
-                   <div className="bg-secondary px-2 py-0.5 rounded-[4px] text-[8px] font-black text-black uppercase tracking-widest shadow-lg">CPT</div>
-                </div>
-                <div className="w-full aspect-square max-w-[170px] rounded-[2rem] bg-black/40 flex items-center justify-center mb-6 border border-secondary/20 overflow-hidden relative shadow-2xl">
                    <Image 
                      src={currentTeam.captainImageUrl} 
                      alt={currentTeam.captain} 
                      fill 
-                     className="object-cover scale-110" 
+                     className="object-cover" 
                      data-ai-hint="footballer captain"
+                   />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                </div>
+                <span className="text-[8px] font-black tracking-[0.3em] text-secondary uppercase mb-1 opacity-80">CAPTAIN</span>
+                <span className="text-lg font-black uppercase italic text-white tracking-tight text-center">{currentTeam.captain}</span>
+             </div>
+
+             {/* Manager Card (Elevated and Star of the Show) */}
+             <div className="flex-[1.1] w-full md:w-auto legendary-card-bg border-2 border-primary/40 p-6 rounded-[2.5rem] flex flex-col items-center transform scale-100 md:scale-105 md:-translate-y-10 shadow-[0_30px_80px_rgba(0,0,0,0.8)] z-20 relative">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-black px-6 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] shadow-[0_0_25px_rgba(0,212,255,0.4)] border border-white/20 whitespace-nowrap z-30 animate-pulse">
+                   ELITE TACTICIAN
+                </div>
+                <div className="absolute top-6 left-6 z-20">
+                   <div className="bg-primary px-2 py-0.5 rounded-[4px] text-[8px] font-black text-black uppercase tracking-widest shadow-lg">MGR</div>
+                </div>
+                <div className="w-full aspect-square max-w-[170px] rounded-[2rem] bg-black/40 flex items-center justify-center mb-6 border border-primary/20 overflow-hidden relative shadow-2xl">
+                   <Image 
+                     src={currentTeam.managerImageUrl} 
+                     alt={currentTeam.manager} 
+                     fill 
+                     className="object-cover scale-110" 
+                     data-ai-hint="portrait manager"
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                    <div className="absolute top-3 right-3">
-                     <Zap className="w-6 h-6 text-secondary fill-secondary drop-shadow-[0_0_10px_rgba(255,215,0,0.6)]" />
+                     <Shield className="w-6 h-6 text-primary fill-primary drop-shadow-[0_0_10px_rgba(0,212,255,0.6)]" />
                    </div>
                 </div>
-                <span className="text-[9px] font-black tracking-[0.4em] text-secondary uppercase mb-1 drop-shadow-md">CAPTAIN</span>
-                <span className="text-2xl font-black uppercase italic text-white tracking-tighter text-center leading-none">{currentTeam.captain}</span>
+                <span className="text-[9px] font-black tracking-[0.4em] text-primary uppercase mb-1 drop-shadow-md">MANAGER</span>
+                <span className="text-2xl font-black uppercase italic text-white tracking-tighter text-center leading-none">{currentTeam.manager}</span>
                 <div className="mt-3 flex gap-1">
-                   {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-secondary text-secondary" />)}
+                   {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-primary text-primary" />)}
                 </div>
              </div>
 
