@@ -53,7 +53,7 @@ export default function LandingPage() {
           <Link href="/draft">
             <Button className="h-20 px-12 text-xl font-black uppercase tracking-[0.2em] rounded-2xl bg-primary text-black hover:scale-105 hover:bg-primary/90 transition-all shadow-[0_0_50px_rgba(0,212,255,0.3)] group">
               <Play className="w-6 h-6 mr-4 fill-current group-hover:scale-110 transition-transform" />
-              Start Draft
+              Start Auction
             </Button>
           </Link>
         </div>
