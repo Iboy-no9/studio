@@ -73,7 +73,7 @@ export const TEAMS: Team[] = [
 ];
 
 export const PLAYERS: Player[] = [
-  { id: 'p1', name: 'Lionel Messi', basePrice: 10, position: 'Forward', rating: 98, nationality: 'ARG', imageUrl: 'https://picsum.photos/seed/p1/400/500' },
+  { id: 'p1', name: 'Aflah CP', basePrice: 10, position: 'Midfielder', rating: 90, nationality: 'FLH', imageUrl: 'https://picsum.photos/seed/p1/400/500' },
   { id: 'p2', name: 'Cristiano Ronaldo', basePrice: 10, position: 'Forward', rating: 96, nationality: 'POR', imageUrl: 'https://picsum.photos/seed/p2/400/500' },
   { id: 'p3', name: 'Kylian Mbappe', basePrice: 10, position: 'Forward', rating: 97, nationality: 'FRA', imageUrl: 'https://picsum.photos/seed/p3/400/500' },
   { id: 'p4', name: 'Erling Haaland', basePrice: 10, position: 'Forward', rating: 96, nationality: 'NOR', imageUrl: 'https://picsum.photos/seed/p4/400/500' },

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -68,7 +67,6 @@ export default function EliteDraftAuction() {
       setStatus('IDLE');
     } else {
       // 3. Absolutely no players left to show
-      // We don't auto-finish anymore, just stay on the last player or empty state
       if (soldPlayers.length === PLAYERS.length) {
         setCurrentPlayerId(null);
         setStatus('FINISHED');
@@ -304,8 +302,8 @@ export default function EliteDraftAuction() {
                 </div>
                 <div className="text-xl font-black text-white/80 uppercase ml-1 tracking-tighter border-t border-white/20 pt-1 mt-1">
                   {currentPlayer.position === 'Forward' ? 'ST' : 
-                   currentPlayer.position === 'Midfielder' ? 'CM' :
-                   currentPlayer.position === 'Defender' ? 'CB' : 'GK'}
+                   currentPlayer.position === 'Midfielder' ? 'CMF' :
+                   currentPlayer.position === 'Defender' ? 'DEF' : 'GK'}
                 </div>
               </div>
 
@@ -454,7 +452,7 @@ export default function EliteDraftAuction() {
                 </div>
 
                 {/* Team Roster Breakdown */}
-                <div className="w-full flex-1 min-h-0 flex flex-col px-4">
+                <div className="w-full flex-1 min-0 flex flex-col px-4">
                    <h3 className="text-left text-xs font-black uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3 px-2 shrink-0">
                      <LayoutDashboard className="w-4 h-4" />
                      Franchise Squads
