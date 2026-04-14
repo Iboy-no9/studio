@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -294,7 +293,7 @@ export default function EliteDraftAuction() {
               onClick={handleFinishAuction}
             >
               <CheckCircle2 className="w-3.5 h-3.5 mr-2" />
-              Finish Draft
+              Finish Auction
             </Button>
           </div>
         </div>
@@ -350,7 +349,7 @@ export default function EliteDraftAuction() {
               {status === 'SOLD' && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
                   <div className="text-center animate-sold flex flex-col items-center p-6">
-                     <div className="text-7xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SOLD!</div>
+                     <div className="text-7xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,212,255,0.8)] uppercase">SOLD!</div>
                      <div className="text-sm mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-2 px-6 rounded-full border border-primary/40 shadow-xl max-w-full truncate">
                         To {TEAMS.find(t => t.id === selectedTeamId)?.name}
                      </div>
@@ -361,7 +360,7 @@ export default function EliteDraftAuction() {
               {status === 'SKIPPED' && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
                   <div className="text-center animate-sold flex flex-col items-center p-6">
-                     <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
+                     <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,212,255,0.8)] uppercase">SKIPPED</div>
                      <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Moving to next player</div>
                   </div>
                 </div>
@@ -370,7 +369,7 @@ export default function EliteDraftAuction() {
           ) : (
              <div className="text-center p-12 bg-white/5 backdrop-blur-3xl rounded-[2rem] border-2 border-dashed border-white/10">
                 <Trophy className="w-20 h-20 text-secondary mx-auto mb-6 opacity-20" />
-                <h2 className="text-2xl font-black uppercase tracking-widest opacity-50 italic">Draft Process Complete</h2>
+                <h2 className="text-2xl font-black uppercase tracking-widest opacity-50 italic">Auction Process Complete</h2>
                 <p className="text-muted-foreground text-sm mt-2">All players have been processed or drafted.</p>
              </div>
           )}
@@ -433,7 +432,7 @@ export default function EliteDraftAuction() {
                     <Trophy className="w-14 h-14 text-secondary drop-shadow-[0_0_50px_rgba(255,215,0,0.6)]" />
                     <Star className="absolute -top-2 -right-2 w-5 h-5 text-primary animate-pulse" />
                   </div>
-                  <h2 className="text-3xl font-black tracking-tighter italic text-white uppercase leading-none">DRAFT SUMMARY</h2>
+                  <h2 className="text-3xl font-black tracking-tighter italic text-white uppercase leading-none">AUCTION SUMMARY</h2>
                 </div>
                 <div className="grid grid-cols-3 gap-4 w-full mb-8 shrink-0 px-4">
                    <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md flex flex-col items-center">
@@ -510,7 +509,7 @@ export default function EliteDraftAuction() {
                   </Button>
                   <Button variant="default" size="lg" className="h-14 px-14 text-xs font-black rounded-xl uppercase tracking-[0.2em] glow-primary bg-primary text-black hover:scale-105 transition-all" onClick={() => window.location.reload()}>
                      <RotateCcw className="w-5 h-5 mr-3" />
-                     Reset Draft
+                     Reset Auction
                   </Button>
                 </div>
               </div>
@@ -519,7 +518,7 @@ export default function EliteDraftAuction() {
         {!showFinishedOverlay && status === 'FINISHED' && (
           <div className="absolute bottom-6 right-6 z-[102] animate-in fade-in slide-in-from-bottom-4">
              <Button variant="secondary" className="h-14 px-8 text-sm font-black rounded-xl uppercase tracking-widest shadow-2xl" onClick={() => setShowFinishedOverlay(true)}>
-                View Draft Summary
+                View Auction Summary
              </Button>
           </div>
         )}
