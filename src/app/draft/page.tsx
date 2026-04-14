@@ -72,7 +72,7 @@ export default function EliteDraftAuction() {
       setCurrentPlayerId(nextId);
       setStatus('IDLE');
     } else {
-      // End of draft
+      // End of auction
       if (soldPlayers.length === PLAYERS.length || (skippedInRoundIds.length === 0 && !nextPlayer)) {
         setCurrentPlayerId(null);
         setStatus('FINISHED');
@@ -95,11 +95,13 @@ export default function EliteDraftAuction() {
   const handleBid = useCallback((increment: number) => {
     if (status !== 'BIDDING' && status !== 'IDLE') return;
 
-    const newBid = (currentBid === 0 ? 10 : currentBid) + increment;
+    // Start from player's base price or current bid
+    const startPrice = currentBid === 0 ? (currentPlayer?.basePrice || 10) : currentBid;
+    const newBid = startPrice + increment;
 
     // Only check budget if a team is already selected
     if (selectedTeamId && teamBudgets[selectedTeamId] < newBid) {
-      setErrorMsg("Budget Exceeded!");
+      setErrorMsg("Budget Exceeded for " + TEAMS.find(t => t.id === selectedTeamId)?.name);
       return;
     }
 
@@ -109,13 +111,20 @@ export default function EliteDraftAuction() {
     setBidAnimating(true);
     setTimeout(() => setBidAnimating(false), 200);
     setErrorMsg(null);
-  }, [currentBid, selectedTeamId, status, teamBudgets]);
+  }, [currentBid, selectedTeamId, status, teamBudgets, currentPlayer]);
 
   const handleSold = useCallback(() => {
-    if ((status !== 'BIDDING' && status !== 'IDLE') || !selectedTeamId || !currentPlayer) return;
+    if ((status !== 'BIDDING' && status !== 'IDLE') || !currentPlayer) return;
 
-    const finalPrice = currentBid === 0 ? 10 : currentBid;
+    // Check if a team is selected
+    if (!selectedTeamId) {
+      setErrorMsg("Please select a Franchise to sign the player!");
+      return;
+    }
 
+    const finalPrice = currentBid === 0 ? (currentPlayer.basePrice || 10) : currentBid;
+
+    // Final budget check
     if (teamBudgets[selectedTeamId] < finalPrice) {
       setErrorMsg("Budget Exceeded!");
       return;
@@ -382,7 +391,7 @@ export default function EliteDraftAuction() {
                   "text-[6rem] font-black tracking-tighter leading-none text-primary transition-all duration-150 tabular-nums drop-shadow-[0_0_30px_rgba(0,212,255,0.3)]",
                   bidAnimating && "animate-bid"
                 )}>
-                  ₹{currentBid > 0 ? currentBid.toLocaleString() : "10"}
+                  ₹{currentBid > 0 ? currentBid.toLocaleString() : (currentPlayer?.basePrice || "10")}
                 </div>
               </div>
 
@@ -395,9 +404,11 @@ export default function EliteDraftAuction() {
                 
                 <Button 
                   variant="secondary" 
-                  className="h-16 text-xl font-black uppercase tracking-tighter shadow-2xl glow-accent border-none rounded-2xl"
+                  className={cn(
+                    "h-16 text-xl font-black uppercase tracking-tighter shadow-2xl transition-all duration-300 rounded-2xl border-none",
+                    selectedTeamId ? "glow-accent bg-secondary text-black" : "bg-muted text-white/30"
+                  )}
                   onClick={handleSold}
-                  disabled={(status !== 'BIDDING' && status !== 'IDLE') || !selectedTeamId}
                 >
                   SIGN PLAYER
                 </Button>
