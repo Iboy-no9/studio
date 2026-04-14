@@ -1,10 +1,9 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Trophy, Play, ChevronRight, User, Star, Shield } from 'lucide-react';
+import { Trophy, Play, ChevronRight, User, Star, Shield, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TEAMS } from '@/lib/auction-data';
@@ -15,7 +14,6 @@ export default function LandingPage() {
   const [activeTeamIndex, setActiveTeamIndex] = useState(0);
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
 
-  // Loop through teams every 3 seconds during intro
   useEffect(() => {
     if (showIntro) {
       const interval = setInterval(() => {
@@ -29,12 +27,10 @@ export default function LandingPage() {
     setShowIntro(false);
   };
 
-  // Intro Sequence Screen
   if (showIntro) {
     const currentTeam = TEAMS[activeTeamIndex];
     return (
       <div className="relative h-screen w-full flex flex-col items-center justify-center bg-[#000411] text-white overflow-hidden font-body">
-        {/* Background with Stadium */}
         {bgImage && (
           <div className="absolute inset-0 z-0">
             <Image 
@@ -71,12 +67,11 @@ export default function LandingPage() {
                {currentTeam.name}
              </h2>
 
-             {/* Podium Layout for Roles */}
              <div className="flex flex-col md:flex-row items-end justify-center gap-6 w-full max-w-6xl px-4">
                 
-                {/* Manager Card (Left) */}
-                <div className="flex-1 w-full md:w-auto bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-[2rem] flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1 mb-4 md:mb-0">
-                   <div className="w-full aspect-[4/5] max-w-[200px] rounded-2xl bg-primary/10 flex items-center justify-center mb-6 border-2 border-primary/30 group-hover/card:scale-105 transition-transform overflow-hidden relative shadow-2xl">
+                {/* Manager Card */}
+                <div className="flex-1 w-full md:w-auto legendary-card-bg border-2 border-white/10 p-5 rounded-[2rem] flex flex-col items-center group/card hover:border-primary/50 transition-all duration-300 transform hover:-translate-y-1 mb-4 md:mb-0 shadow-2xl relative overflow-hidden">
+                   <div className="w-full aspect-[4/5] max-w-[180px] rounded-2xl bg-black/20 flex items-center justify-center mb-5 border border-white/10 group-hover/card:scale-105 transition-transform overflow-hidden relative shadow-inner">
                       <Image 
                         src={currentTeam.managerImageUrl} 
                         alt={currentTeam.manager} 
@@ -84,14 +79,19 @@ export default function LandingPage() {
                         className="object-cover" 
                         data-ai-hint="portrait manager"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                    </div>
-                   <span className="text-[9px] font-black tracking-[0.4em] text-primary uppercase mb-1">MANAGER</span>
-                   <span className="text-lg font-black uppercase italic text-white tracking-tight text-center">{currentTeam.manager}</span>
+                   <div className="absolute top-4 left-4 z-20">
+                      <div className="bg-primary/20 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-black text-primary border border-primary/30 uppercase tracking-widest">MGR</div>
+                   </div>
+                   <span className="text-[8px] font-black tracking-[0.4em] text-primary/80 uppercase mb-1">MANAGER</span>
+                   <span className="text-base font-black uppercase italic text-white tracking-tight text-center truncate w-full">{currentTeam.manager}</span>
                 </div>
 
-                {/* Captain Card (Center - Elevated) */}
-                <div className="flex-[1.2] w-full md:w-auto bg-[#001246]/60 backdrop-blur-xl border-4 border-primary/40 p-10 rounded-[2.5rem] flex flex-col items-center transform scale-100 md:scale-110 md:-translate-y-8 shadow-[0_40px_80px_rgba(0,0,0,0.8)] z-20 hover:scale-[1.02] md:hover:scale-[1.12] transition-all duration-500">
-                   <div className="w-full aspect-[4/5] max-w-[260px] rounded-[2rem] bg-secondary/10 flex items-center justify-center mb-8 border-4 border-secondary/40 overflow-hidden relative shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+                {/* Captain Card (Elevated/Premium) */}
+                <div className="flex-[1.2] w-full md:w-auto legendary-card-bg border-4 border-secondary/40 p-8 rounded-[2.5rem] flex flex-col items-center transform scale-100 md:scale-110 md:-translate-y-8 shadow-[0_40px_80px_rgba(0,0,0,0.8)] z-20 hover:scale-[1.02] md:hover:scale-[1.12] transition-all duration-500 relative overflow-hidden group/star">
+                   <div className="absolute inset-0 bg-secondary/5 group-hover/star:bg-secondary/10 transition-colors pointer-events-none" />
+                   <div className="w-full aspect-[4/5] max-w-[240px] rounded-[2rem] bg-black/30 flex items-center justify-center mb-6 border-2 border-secondary/20 overflow-hidden relative shadow-2xl group-hover/star:scale-[1.03] transition-transform">
                       <Image 
                         src={currentTeam.captainImageUrl} 
                         alt={currentTeam.captain} 
@@ -99,16 +99,25 @@ export default function LandingPage() {
                         className="object-cover scale-110" 
                         data-ai-hint="footballer captain"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                      <div className="absolute top-4 right-4 animate-bounce">
+                        <Zap className="w-6 h-6 text-secondary fill-secondary drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]" />
+                      </div>
                    </div>
-                   <span className="text-[10px] font-black tracking-[0.5em] text-secondary uppercase mb-2">CAPTAIN</span>
-                   <span className="text-3xl font-black uppercase italic text-white tracking-tight text-center drop-shadow-lg">{currentTeam.captain}</span>
-                   <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-secondary text-black px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl border-2 border-white/20 whitespace-nowrap">FRANCHISE STAR</div>
+                   <div className="absolute top-6 left-6 z-20">
+                      <div className="bg-secondary/20 backdrop-blur-md px-3 py-1 rounded text-[10px] font-black text-secondary border border-secondary/30 uppercase tracking-widest">CPT</div>
+                   </div>
+                   <span className="text-[10px] font-black tracking-[0.5em] text-secondary uppercase mb-2 drop-shadow-md">CAPTAIN</span>
+                   <span className="text-3xl font-black uppercase italic text-white tracking-tighter text-center drop-shadow-2xl leading-none">{currentTeam.captain}</span>
+                   <div className="mt-4 flex gap-1">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-secondary text-secondary" />)}
+                   </div>
+                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-black px-6 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] shadow-2xl border-2 border-white/20 whitespace-nowrap z-30">FRANCHISE STAR</div>
                 </div>
 
-                {/* GK Card (Right) */}
-                <div className="flex-1 w-full md:w-auto bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-[2rem] flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1">
-                   <div className="w-full aspect-[4/5] max-w-[200px] rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 border-2 border-secondary/30 group-hover/card:scale-105 transition-transform overflow-hidden relative shadow-2xl">
+                {/* GK Card */}
+                <div className="flex-1 w-full md:w-auto legendary-card-bg border-2 border-white/10 p-5 rounded-[2rem] flex flex-col items-center group/card hover:border-secondary/50 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl relative overflow-hidden">
+                   <div className="w-full aspect-[4/5] max-w-[180px] rounded-2xl bg-black/20 flex items-center justify-center mb-5 border border-white/10 group-hover/card:scale-105 transition-transform overflow-hidden relative shadow-inner">
                       <Image 
                         src={currentTeam.gkImageUrl} 
                         alt={currentTeam.gk} 
@@ -116,9 +125,13 @@ export default function LandingPage() {
                         className="object-cover" 
                         data-ai-hint="goalkeeper portrait"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                    </div>
-                   <span className="text-[9px] font-black tracking-[0.4em] text-secondary uppercase mb-1">GOALKEEPER</span>
-                   <span className="text-lg font-black uppercase italic text-white tracking-tight text-center">{currentTeam.gk}</span>
+                   <div className="absolute top-4 left-4 z-20">
+                      <div className="bg-secondary/10 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-black text-secondary border border-secondary/30 uppercase tracking-widest">GKP</div>
+                   </div>
+                   <span className="text-[8px] font-black tracking-[0.4em] text-secondary/80 uppercase mb-1">GOALKEEPER</span>
+                   <span className="text-base font-black uppercase italic text-white tracking-tight text-center truncate w-full">{currentTeam.gk}</span>
                 </div>
 
              </div>
@@ -153,11 +166,8 @@ export default function LandingPage() {
     );
   }
 
-  // Main Landing Content
   return (
     <div className="relative h-screen w-full flex flex-col items-center justify-center bg-[#000411] text-white overflow-hidden font-body">
-      
-      {/* Background with Stadium */}
       {bgImage && (
         <div className="absolute inset-0 z-0">
           <Image 
@@ -173,7 +183,6 @@ export default function LandingPage() {
         </div>
       )}
 
-      {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl">
         <div className="flex items-center gap-4 mb-8 animate-in fade-in slide-in-from-top-8 duration-700">
           <Trophy className="w-14 h-14 text-secondary drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]" />
