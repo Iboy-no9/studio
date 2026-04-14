@@ -402,7 +402,7 @@ export default function EliteDraftAuction() {
                   onClick={handleSold}
                   disabled={(status !== 'BIDDING' && status !== 'IDLE') || !selectedTeamId}
                 >
-                  Confirm Signing
+                  SIGN PLAYER
                 </Button>
 
                 <div className="flex gap-3">
