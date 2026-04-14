@@ -3,7 +3,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'EliteDraft Auction | Professional Football Player Auction',
+  title: 'WPL Auction | Professional Player Auction',
   description: 'Pro-level sports auction dashboard for live events.',
 };
 

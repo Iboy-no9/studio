@@ -41,12 +41,12 @@ export default function LandingPage() {
         </div>
 
         <h1 className="text-7xl md:text-9xl font-black italic tracking-tighter uppercase leading-[0.85] mb-8 animate-in fade-in zoom-in-95 duration-1000">
-          ELITE<span className="text-primary drop-shadow-[0_0_30px_rgba(0,212,255,0.4)]">DRAFT</span><br />
-          <span className="text-white">AUCTION</span>
+          WPL<br />
+          <span className="text-primary drop-shadow-[0_0_30px_rgba(0,212,255,0.4)]">AUCTION</span>
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground uppercase tracking-[0.2em] font-medium mb-12 max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
-          The ultimate professional football player draft experience. Build your dream squad with real-time bidding.
+          The ultimate professional player draft experience. Build your dream squad with real-time bidding.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 items-center animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
