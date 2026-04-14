@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Trophy, Play, ChevronRight } from 'lucide-react';
+import { Trophy, Play, ChevronRight, User, Star, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TEAMS } from '@/lib/auction-data';
@@ -49,17 +49,17 @@ export default function LandingPage() {
           </div>
         )}
 
-        <div className="relative z-10 flex flex-col items-center text-center px-6 w-full max-w-4xl">
-          <div className="flex items-center gap-4 mb-12 animate-pulse">
+        <div className="relative z-10 flex flex-col items-center text-center px-6 w-full max-w-6xl">
+          <div className="flex items-center gap-4 mb-10 animate-pulse">
             <Trophy className="w-10 h-10 text-secondary" />
             <div className="flex flex-col items-start text-left">
-               <span className="text-[10px] font-black tracking-[0.4em] text-primary uppercase">Welfare DIIA Presents</span>
-               <span className="text-lg font-black tracking-[0.2em] text-white uppercase">WPL AUCTION 2024</span>
+               <span className="text-[10px] font-black tracking-[0.4em] text-primary uppercase leading-tight">Welfare DIIA Presents</span>
+               <span className="text-xl font-black tracking-[0.2em] text-white uppercase leading-tight">WPL AUCTION 2024</span>
             </div>
           </div>
 
-          <div key={currentTeam.id} className="flex flex-col items-center animate-in fade-in zoom-in duration-700">
-             <div className="w-64 h-64 md:w-80 md:h-80 bg-white/5 backdrop-blur-3xl rounded-full p-12 border-4 border-primary/20 shadow-[0_0_100px_rgba(0,212,255,0.2)] mb-8 flex items-center justify-center relative overflow-hidden group">
+          <div key={currentTeam.id} className="flex flex-col items-center animate-in fade-in zoom-in duration-700 w-full">
+             <div className="w-48 h-48 md:w-56 md:h-56 bg-white/5 backdrop-blur-3xl rounded-full p-8 border-4 border-primary/20 shadow-[0_0_100px_rgba(0,212,255,0.2)] mb-6 flex items-center justify-center relative overflow-hidden group">
                 <div className="absolute inset-0 bg-primary/5" />
                 <img 
                   src={currentTeam.logoUrl} 
@@ -67,13 +67,43 @@ export default function LandingPage() {
                   className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]" 
                 />
              </div>
-             <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+             <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter uppercase text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] mb-12">
                {currentTeam.name}
              </h2>
-             <div className="h-1 w-32 bg-primary mt-6 rounded-full shadow-[0_0_15px_rgba(0,212,255,1)]" />
+
+             {/* Three Card Layout for Roles */}
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+                {/* Manager Card */}
+                <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1">
+                   <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center mb-4 border border-primary/30 group-hover/card:scale-110 transition-transform">
+                      <User className="text-primary w-6 h-6" />
+                   </div>
+                   <span className="text-[10px] font-black tracking-[0.3em] text-muted-foreground uppercase mb-1">MANAGER</span>
+                   <span className="text-lg font-black uppercase italic text-white tracking-tight">{currentTeam.manager}</span>
+                </div>
+
+                {/* Captain Card */}
+                <div className="bg-primary/10 backdrop-blur-lg border-2 border-primary/30 p-8 rounded-[2rem] flex flex-col items-center transform scale-110 shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-20 hover:scale-[1.12] transition-all duration-300">
+                   <div className="w-14 h-14 rounded-2xl bg-secondary/20 flex items-center justify-center mb-4 border border-secondary/30">
+                      <Star className="text-secondary w-7 h-7 fill-secondary" />
+                   </div>
+                   <span className="text-[10px] font-black tracking-[0.3em] text-primary uppercase mb-1">CAPTAIN</span>
+                   <span className="text-xl font-black uppercase italic text-white tracking-tight">{currentTeam.captain}</span>
+                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-black px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg">KEY PLAYER</div>
+                </div>
+
+                {/* GK Card */}
+                <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1">
+                   <div className="w-12 h-12 rounded-2xl bg-secondary/20 flex items-center justify-center mb-4 border border-secondary/30 group-hover/card:scale-110 transition-transform">
+                      <Shield className="text-secondary w-6 h-6" />
+                   </div>
+                   <span className="text-[10px] font-black tracking-[0.3em] text-muted-foreground uppercase mb-1">GOALKEEPER</span>
+                   <span className="text-lg font-black uppercase italic text-white tracking-tight">{currentTeam.gk}</span>
+                </div>
+             </div>
           </div>
 
-          <div className="mt-20 flex flex-col items-center gap-6">
+          <div className="mt-16 flex flex-col items-center gap-6">
             <Button 
               onClick={handleEnter}
               className="h-16 px-12 text-sm font-black uppercase tracking-[0.3em] rounded-2xl bg-white text-black hover:bg-primary hover:text-white transition-all group shadow-2xl"

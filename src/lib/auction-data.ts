@@ -25,6 +25,9 @@ export interface Team {
   budget: number;      // The total starting budget (e.g., 10000)
   logoUrl: string;     // A link to the team's logo
   color: string;       // A hex code for the team's primary UI accent
+  manager: string;     // The team manager's name
+  captain: string;     // The team captain's name
+  gk: string;          // The team's primary goalkeeper
 }
 
 export const TEAMS: Team[] = [
@@ -33,42 +36,60 @@ export const TEAMS: Team[] = [
     name: 'Real Madrid', 
     budget: 10000, 
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/250px-Real_Madrid_CF.svg.png', 
-    color: '#4AB0ED' 
+    color: '#4AB0ED',
+    manager: 'Ancelotti',
+    captain: 'Luka Modrić',
+    gk: 'Thibaut Courtois'
   },
   { 
     id: 't2', 
     name: 'FC Barcelona', 
     budget: 10000, 
     logoUrl: 'https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/1280px-FC_Barcelona_%28crest%29.svg.png', 
-    color: '#FCD34D' 
+    color: '#FCD34D',
+    manager: 'Hansi Flick',
+    captain: 'Ter Stegen',
+    gk: 'Ter Stegen'
   },
   { 
     id: 't3', 
     name: 'Arsenal FC', 
     budget: 10000, 
     logoUrl: 'https://upload.wikimedia.org/wikipedia/sco/thumb/5/53/Arsenal_FC.svg/1920px-Arsenal_FC.svg.png', 
-    color: '#F87171' 
+    color: '#F87171',
+    manager: 'Mikel Arteta',
+    captain: 'Martin Ødegaard',
+    gk: 'David Raya'
   },
   { 
     id: 't4', 
     name: 'Manchester City', 
     budget: 10000, 
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/1280px-Manchester_City_FC_badge.svg.png', 
-    color: '#10B981' 
+    color: '#10B981',
+    manager: 'Pep Guardiola',
+    captain: 'Kyle Walker',
+    gk: 'Ederson'
   },
   { 
     id: 't5', 
     name: 'Liverpool FC', 
     budget: 10000, 
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/250px-Liverpool_FC.svg.png', 
-    color: '#8B5CF6' 
+    color: '#8B5CF6',
+    manager: 'Arne Slot',
+    captain: 'Virgil van Dijk',
+    gk: 'Alisson Becker'
   },
   { 
     id: 't6', 
     name: 'FC Bayern Munich', 
     budget: 10000, 
     logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/1280px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png', 
-    color: '#EC4899' 
+    color: '#EC4899',
+    manager: 'Vincent Kompany',
+    captain: 'Manuel Neuer',
+    gk: 'Manuel Neuer'
   },
 ];
 
