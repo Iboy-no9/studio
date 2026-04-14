@@ -119,7 +119,7 @@ export const TEAMS: Team[] = [
     budget: 0, 
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/1280px-Manchester_United_FC_crest.svg.png', 
     color: '#DA291C',
-    manager: 'Haseeb USD',
+    manager: 'Shahin USd',
     managerImageUrl: 'https://picsum.photos/seed/mun_mgr/200/200',
     captain: 'Jishar Sir',
     captainImageUrl: 'https://picsum.photos/seed/mun_cpt/200/200',
