@@ -4,23 +4,23 @@
 
 @layer base {
   :root {
-    --background: 200 16% 9%;
+    --background: 225 100% 4%;
     --foreground: 0 0% 98%;
-    --card: 200 16% 12%;
+    --card: 225 60% 7%;
     --card-foreground: 0 0% 98%;
-    --primary: 202 83% 61%;
-    --primary-foreground: 200 16% 9%;
-    --secondary: 171 96% 69%;
-    --secondary-foreground: 200 16% 9%;
-    --muted: 200 16% 20%;
-    --muted-foreground: 200 16% 70%;
-    --accent: 171 96% 69%;
-    --accent-foreground: 200 16% 9%;
+    --primary: 195 100% 50%;
+    --primary-foreground: 225 100% 4%;
+    --secondary: 45 100% 50%;
+    --secondary-foreground: 225 100% 4%;
+    --muted: 225 30% 12%;
+    --muted-foreground: 225 15% 70%;
+    --accent: 195 100% 50%;
+    --accent-foreground: 225 100% 4%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 200 16% 20%;
-    --input: 200 16% 20%;
-    --ring: 202 83% 61%;
+    --border: 225 30% 18%;
+    --input: 225 30% 18%;
+    --ring: 195 100% 50%;
     --radius: 1rem;
   }
 }
@@ -35,15 +35,15 @@
 }
 
 .glow-primary {
-  box-shadow: 0 0 20px rgba(74, 176, 237, 0.3);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
 }
 
 .glow-accent {
-  box-shadow: 0 0 25px rgba(98, 252, 229, 0.4);
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.4);
 }
 
 .legendary-card-bg {
-  background: linear-gradient(135deg, #ff007a 0%, #7000ff 50%, #2e004d 100%);
+  background: linear-gradient(135deg, #001246 0%, #004e92 50%, #000428 100%);
   position: relative;
   overflow: hidden;
 }
@@ -52,31 +52,35 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
-                    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.05) 10px, rgba(255, 255, 255, 0.05) 20px);
+  background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
+                    repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255, 255, 255, 0.03) 15px, rgba(255, 255, 255, 0.03) 30px);
   pointer-events: none;
 }
 
 @keyframes bid-pop {
   0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+  50% { transform: scale(1.08); }
   100% { transform: scale(1); }
 }
 
 .animate-bid {
-  animation: bid-pop 0.2s ease-out;
+  animation: bid-pop 0.15s ease-out;
 }
 
 @keyframes sold-flash {
-  0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
-  70% { opacity: 1; transform: scale(1.2) rotate(5deg); }
+  0% { opacity: 0; transform: scale(0.6) rotate(-15deg); }
+  70% { opacity: 1; transform: scale(1.15) rotate(5deg); }
   100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
 .animate-sold {
-  animation: sold-flash 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: sold-flash 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 .text-outline {
-  -webkit-text-stroke: 1px rgba(0,0,0,0.5);
+  -webkit-text-stroke: 1px rgba(0,0,0,0.6);
+}
+
+.ucl-gradient {
+  background: radial-gradient(circle at center, transparent 0%, hsl(var(--background)) 100%);
 }
