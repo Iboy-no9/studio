@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X } from 'lucide-react';
+import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -30,7 +30,7 @@ export default function EliteDraftAuction() {
   const [timer, setTimer] = useState(10);
   const [bidAnimating, setBidAnimating] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [showFinishedOverlay, setShowFinishedOverlay] = useState(true);
+  const [showFinishedOverlay, setShowFinishedOverlay] = useState(false);
 
   const currentPlayer = PLAYERS[currentPlayerIdx];
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
@@ -101,6 +101,11 @@ export default function EliteDraftAuction() {
     setStatus('SOLD');
   }, [currentBid, currentPlayer, selectedTeamId, status, teamBudgets]);
 
+  const handleFinishAuction = useCallback(() => {
+    setStatus('FINISHED');
+    setShowFinishedOverlay(true);
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === '1') handleBid(10);
@@ -113,10 +118,13 @@ export default function EliteDraftAuction() {
       if (e.key === 's' || e.key === 'S') {
         if (status === 'BIDDING' || status === 'IDLE') handleSkip();
       }
+      if (e.key === 'Escape') {
+        if (status === 'FINISHED' && showFinishedOverlay) setShowFinishedOverlay(false);
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleBid, handleSold, handleNextPlayer, handleSkip, status]);
+  }, [handleBid, handleSold, handleNextPlayer, handleSkip, status, showFinishedOverlay]);
 
   useEffect(() => {
     if (status === 'BIDDING' && timer > 0) {
@@ -152,6 +160,7 @@ export default function EliteDraftAuction() {
         </div>
       )}
 
+      {/* Franchises List */}
       <div className="w-1/4 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar z-10">
         <div className="flex items-center gap-2 mb-2 px-1">
           <Trophy className="text-primary w-6 h-6 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]" />
@@ -190,39 +199,58 @@ export default function EliteDraftAuction() {
         ))}
       </div>
 
+      {/* Main Content */}
       <div className="flex-1 flex flex-col gap-6 relative z-10">
-        <div className="flex justify-between items-end px-4">
-          <div className="flex flex-col">
-            <span className="text-xs text-muted-foreground uppercase tracking-[0.3em] mb-1 font-black opacity-60">Auction Live</span>
-            <div className="flex items-center gap-4">
+        {/* Header Section */}
+        <div className="flex justify-between items-center px-4 bg-white/5 backdrop-blur-md py-3 rounded-2xl border border-white/10">
+          <div className="flex items-center gap-8">
+            <div className="flex flex-col">
+              <span className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">Auction Status</span>
               <Badge className={cn(
-                "px-5 py-1.5 text-xs font-black uppercase rounded-full tracking-widest",
-                status === 'BIDDING' ? "bg-primary text-black shadow-[0_0_20px_rgba(0,212,255,0.6)]" : 
-                status === 'SOLD' ? "bg-secondary text-black shadow-[0_0_20px_rgba(255,215,0,0.6)]" : 
-                status === 'SKIPPED' ? "bg-destructive text-white shadow-[0_0_20px_rgba(220,38,38,0.6)]" : "bg-muted text-white/50"
+                "px-4 py-1 text-[10px] font-black uppercase rounded-full tracking-widest mt-1",
+                status === 'BIDDING' ? "bg-primary text-black" : 
+                status === 'SOLD' ? "bg-secondary text-black" : 
+                status === 'SKIPPED' ? "bg-destructive text-white" : "bg-muted text-white/50"
               )}>
                 {status}
               </Badge>
-              {status === 'BIDDING' && (
-                <span className="text-5xl font-black text-secondary tabular-nums drop-shadow-[0_0_15px_rgba(255,215,0,0.4)]">
-                  00:{timer < 10 ? `0${timer}` : timer}
-                </span>
-              )}
             </div>
+            {status === 'BIDDING' && (
+              <div className="flex flex-col">
+                 <span className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">Timer</span>
+                 <span className="text-2xl font-black text-secondary tabular-nums leading-none mt-1">
+                   00:{timer < 10 ? `0${timer}` : timer}
+                 </span>
+              </div>
+            )}
           </div>
-          <div className="text-right">
-             <span className="text-xs text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">Lot ID</span>
-             <div className="text-2xl font-black text-white/90 italic tracking-tighter">#{currentPlayerIdx + 1} <span className="text-xs text-muted-foreground not-italic ml-1">of {PLAYERS.length}</span></div>
+
+          <div className="flex items-center gap-10">
+            <div className="text-right">
+               <span className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">Current Lot</span>
+               <div className="text-xl font-black text-white italic">#{currentPlayerIdx + 1} <span className="text-xs text-muted-foreground not-italic ml-1">/ {PLAYERS.length}</span></div>
+            </div>
+            
+            <Button 
+              variant="outline" 
+              className="h-10 px-4 border-white/10 bg-white/5 hover:bg-destructive hover:text-white hover:border-destructive transition-all rounded-xl font-black text-[10px] uppercase tracking-widest"
+              onClick={handleFinishAuction}
+            >
+              <LogOut className="w-3.5 h-3.5 mr-2" />
+              Finish Draft
+            </Button>
           </div>
         </div>
 
+        {/* Card and Bidding Controls */}
         <div className="flex-1 flex gap-12 items-center justify-center">
-          <div className="relative aspect-[3/4.2] w-[360px] legendary-card-bg rounded-[2.2rem] p-1 border-[5px] border-white/10 shadow-2xl flex flex-col transition-all duration-700 hover:scale-[1.03] hover:shadow-primary/20">
-            <div className="absolute top-8 left-8 z-20">
-              <div className="text-7xl font-black text-[#00ffd0] leading-none drop-shadow-2xl italic tracking-tighter">
+          {/* Legendary Player Card */}
+          <div className="relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2rem] p-1 border-[4px] border-white/10 shadow-2xl flex flex-col transition-all duration-700 hover:scale-[1.02] group">
+            <div className="absolute top-6 left-6 z-20">
+              <div className="text-6xl font-black text-[#00ffd0] leading-none drop-shadow-2xl italic tracking-tighter">
                 {currentPlayer.rating}
               </div>
-              <div className="text-2xl font-black text-white/80 uppercase ml-1 tracking-tighter border-t border-white/20 pt-1 mt-1">
+              <div className="text-xl font-black text-white/80 uppercase ml-1 tracking-tighter border-t border-white/20 pt-1 mt-1">
                 {currentPlayer.position === 'Forward' ? 'ST' : 
                  currentPlayer.position === 'Midfielder' ? 'CM' :
                  currentPlayer.position === 'Defender' ? 'CB' : 'GK'}
@@ -233,64 +261,66 @@ export default function EliteDraftAuction() {
               <img 
                 src={currentPlayer.imageUrl} 
                 alt={currentPlayer.name} 
-                className="w-full h-full object-cover object-center transform scale-[1.15] translate-y-6"
+                className="w-full h-full object-cover object-center transform scale-[1.1] translate-y-4"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#000428] via-transparent to-transparent opacity-90" />
             </div>
 
-            <div className="absolute bottom-14 left-0 right-0 z-20 text-center flex flex-col items-center px-6">
-               <div className="text-xs font-black text-primary tracking-[0.4em] mb-2 italic uppercase drop-shadow-md">{currentPlayer.nationality}</div>
-               <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] truncate w-full">
+            <div className="absolute bottom-12 left-0 right-0 z-20 text-center flex flex-col items-center px-4">
+               <div className="text-[10px] font-black text-primary tracking-[0.4em] mb-2 italic uppercase drop-shadow-md">{currentPlayer.nationality}</div>
+               <h1 className="text-3xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] truncate w-full">
                  {currentPlayer.name}
                </h1>
             </div>
 
-            <div className="absolute bottom-6 inset-x-0 z-20 flex justify-center gap-1.5">
+            <div className="absolute bottom-6 inset-x-0 z-20 flex justify-center gap-1">
                {[...Array(5)].map((_, i) => (
-                 <Star key={i} className="w-4 h-4 fill-secondary text-secondary drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]" />
+                 <Star key={i} className="w-3 h-3 fill-secondary text-secondary drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]" />
                ))}
             </div>
 
+            {/* Overlays */}
             {status === 'SOLD' && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[2rem] animate-in fade-in duration-500">
-                <div className="text-center animate-sold flex flex-col items-center">
-                   <div className="text-8xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SOLD!</div>
-                   <div className="text-lg mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-3 px-8 rounded-full inline-block border border-primary/40 shadow-xl max-w-[300px] truncate">
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
+                <div className="text-center animate-sold flex flex-col items-center p-6">
+                   <div className="text-7xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SOLD!</div>
+                   <div className="text-sm mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-2 px-6 rounded-full border border-primary/40 shadow-xl max-w-full truncate">
                       To {TEAMS.find(t => t.id === selectedTeamId)?.name}
                    </div>
                    <Button 
                     variant="secondary" 
-                    className="mt-8 font-black uppercase tracking-widest px-10 h-14 rounded-xl shadow-2xl"
+                    className="mt-8 font-black uppercase tracking-widest px-8 h-12 rounded-xl shadow-2xl"
                     onClick={handleNextPlayer}
                    >
-                     Continue (N)
+                     Draft Next (N)
                    </Button>
                 </div>
               </div>
             )}
 
             {status === 'SKIPPED' && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[2rem] animate-in fade-in duration-500">
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
                 <div className="text-center animate-sold flex flex-col items-center">
-                   <div className="text-7xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
-                   <div className="text-sm mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Lot Unsold</div>
+                   <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
+                   <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Lot Unsold</div>
                    <Button 
                     variant="outline" 
-                    className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-10 h-14 rounded-xl"
+                    className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-8 h-12 rounded-xl"
                     onClick={handleNextPlayer}
                    >
-                     Next Player (N)
+                     Draft Next (N)
                    </Button>
                 </div>
               </div>
             )}
           </div>
 
+          {/* Bidding Controls */}
           <div className="flex-1 flex flex-col justify-center items-center gap-8 max-w-sm">
               <div className="text-center">
-                <div className="text-xs text-muted-foreground uppercase tracking-[0.4em] font-black mb-3 opacity-60">Current Bid</div>
+                <div className="text-[10px] text-muted-foreground uppercase tracking-[0.4em] font-black mb-2 opacity-60">Current Offer</div>
                 <div className={cn(
-                  "text-[7rem] font-black tracking-tighter leading-none text-primary transition-all duration-150 tabular-nums drop-shadow-[0_0_30px_rgba(0,212,255,0.3)]",
+                  "text-[6rem] font-black tracking-tighter leading-none text-primary transition-all duration-150 tabular-nums drop-shadow-[0_0_30px_rgba(0,212,255,0.3)]",
                   bidAnimating && "animate-bid"
                 )}>
                   ₹{currentBid > 0 ? currentBid.toLocaleString() : "10"}
@@ -299,14 +329,14 @@ export default function EliteDraftAuction() {
 
               <div className="w-full flex flex-col gap-4">
                 <div className="grid grid-cols-3 gap-3">
-                  <Button variant="outline" className="h-14 text-lg font-black border-white/10 hover:bg-primary hover:text-black transition-all" onClick={() => handleBid(10)}>+10</Button>
-                  <Button variant="outline" className="h-14 text-lg font-black border-white/10 hover:bg-primary hover:text-black transition-all" onClick={() => handleBid(50)}>+50</Button>
-                  <Button variant="outline" className="h-14 text-lg font-black border-white/10 hover:bg-primary hover:text-black transition-all" onClick={() => handleBid(100)}>+100</Button>
+                  <Button variant="outline" className="h-12 text-lg font-black border-white/10 hover:bg-primary hover:text-black transition-all" onClick={() => handleBid(10)}>+10</Button>
+                  <Button variant="outline" className="h-12 text-lg font-black border-white/10 hover:bg-primary hover:text-black transition-all" onClick={() => handleBid(50)}>+50</Button>
+                  <Button variant="outline" className="h-12 text-lg font-black border-white/10 hover:bg-primary hover:text-black transition-all" onClick={() => handleBid(100)}>+100</Button>
                 </div>
                 
                 <Button 
                   variant="secondary" 
-                  className="h-20 text-2xl font-black uppercase tracking-tighter shadow-2xl glow-accent border-none rounded-2xl"
+                  className="h-16 text-xl font-black uppercase tracking-tighter shadow-2xl glow-accent border-none rounded-2xl"
                   onClick={handleSold}
                   disabled={(status !== 'BIDDING' && status !== 'IDLE') || !selectedTeamId}
                 >
@@ -314,22 +344,14 @@ export default function EliteDraftAuction() {
                 </Button>
 
                 <div className="flex gap-3">
-                  {(status === 'BIDDING' || status === 'IDLE') ? (
+                  {(status === 'BIDDING' || status === 'IDLE') && (
                     <Button 
                       variant="outline" 
-                      className="flex-1 h-14 text-xs font-black uppercase tracking-[0.2em] border-white/10 hover:bg-destructive hover:text-white transition-all rounded-xl"
+                      className="flex-1 h-12 text-[10px] font-black uppercase tracking-[0.2em] border-white/10 hover:bg-destructive hover:text-white transition-all rounded-xl"
                       onClick={handleSkip}
                     >
-                      <SkipForward className="w-4 h-4 mr-2" />
+                      <SkipForward className="w-3 h-3 mr-2" />
                       Skip Player (S)
-                    </Button>
-                  ) : (status === 'SOLD' || status === 'SKIPPED') && (
-                    <Button 
-                      variant="ghost" 
-                      className="flex-1 h-14 text-xs font-black uppercase tracking-[0.3em] border border-white/5 backdrop-blur-md hover:bg-white/10 rounded-xl animate-in fade-in slide-in-from-bottom-2"
-                      onClick={handleNextPlayer}
-                    >
-                      Draft Next (N)
                     </Button>
                   )}
                 </div>
@@ -338,73 +360,76 @@ export default function EliteDraftAuction() {
         </div>
 
         {errorMsg && (
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[100] bg-destructive text-white px-10 py-5 rounded-full flex items-center gap-4 shadow-[0_0_40px_rgba(220,38,38,0.5)] animate-in slide-in-from-top duration-500">
-            <AlertCircle className="w-7 h-7" />
-            <span className="text-xl font-black uppercase tracking-tight">{errorMsg}</span>
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 z-[100] bg-destructive text-white px-8 py-4 rounded-full flex items-center gap-3 shadow-[0_0_40px_rgba(220,38,38,0.5)] animate-in slide-in-from-top duration-500">
+            <AlertCircle className="w-6 h-6" />
+            <span className="text-sm font-black uppercase tracking-widest">{errorMsg}</span>
           </div>
         )}
 
+        {/* Finished Screen */}
         {status === 'FINISHED' && showFinishedOverlay && (
            <div className="absolute inset-0 z-[101] bg-background/98 backdrop-blur-2xl flex items-center justify-center text-center p-10 animate-in zoom-in duration-700">
               <div className="max-w-3xl flex flex-col items-center">
                 <div className="relative inline-block mb-10">
-                  <Trophy className="w-48 h-48 text-secondary drop-shadow-[0_0_50px_rgba(255,215,0,0.6)]" />
-                  <Star className="absolute -top-4 -right-4 w-12 h-12 text-primary animate-pulse" />
+                  <Trophy className="w-40 h-40 text-secondary drop-shadow-[0_0_50px_rgba(255,215,0,0.6)]" />
+                  <Star className="absolute -top-4 -right-4 w-10 h-10 text-primary animate-pulse" />
                 </div>
-                <h2 className="text-8xl font-black tracking-tighter mb-6 italic text-white shadow-primary">DRAFT CLOSED</h2>
-                <p className="text-2xl text-muted-foreground mb-16 font-medium tracking-tight">The European elite have been distributed. Final rosters are now locked.</p>
+                <h2 className="text-7xl font-black tracking-tighter mb-4 italic text-white">DRAFT CLOSED</h2>
+                <p className="text-xl text-muted-foreground mb-12 font-medium tracking-tight">The European elite have been distributed. Final rosters are now locked.</p>
                 <div className="flex gap-4">
-                  <Button variant="outline" size="lg" className="h-24 px-12 text-2xl font-black rounded-3xl uppercase tracking-tighter border-white/10" onClick={() => setShowFinishedOverlay(false)}>
-                     <X className="w-6 h-6 mr-3" />
+                  <Button variant="outline" size="lg" className="h-16 px-10 text-lg font-black rounded-2xl uppercase tracking-tighter border-white/10" onClick={() => setShowFinishedOverlay(false)}>
+                     <X className="w-4 h-4 mr-2" />
                      Close & Review
                   </Button>
-                  <Button variant="default" size="lg" className="h-24 px-20 text-3xl font-black rounded-3xl uppercase tracking-tighter glow-primary" onClick={() => window.location.reload()}>
-                     Reset Tournament
+                  <Button variant="default" size="lg" className="h-16 px-12 text-xl font-black rounded-2xl uppercase tracking-tighter glow-primary" onClick={() => window.location.reload()}>
+                     Reset Auction
                   </Button>
                 </div>
               </div>
            </div>
         )}
 
+        {/* Summary Re-open Button */}
         {!showFinishedOverlay && status === 'FINISHED' && (
-          <div className="absolute bottom-10 right-10 z-[102] animate-in fade-in slide-in-from-bottom-4">
-             <Button variant="secondary" className="h-16 px-10 text-xl font-black rounded-2xl uppercase tracking-tighter shadow-2xl" onClick={() => setShowFinishedOverlay(true)}>
-                Re-open Summary
+          <div className="absolute bottom-6 right-6 z-[102] animate-in fade-in slide-in-from-bottom-4">
+             <Button variant="secondary" className="h-14 px-8 text-sm font-black rounded-xl uppercase tracking-widest shadow-2xl" onClick={() => setShowFinishedOverlay(true)}>
+                View Draft Summary
              </Button>
           </div>
         )}
       </div>
 
+      {/* History and Pool Side Tabs */}
       <div className="w-1/4 flex flex-col gap-4 overflow-hidden z-10">
         <Tabs defaultValue="sold" className="w-full flex flex-col h-full">
-          <TabsList className="grid w-full grid-cols-2 h-14 bg-muted/20 backdrop-blur-xl border border-white/5 p-1.5 mb-3 rounded-2xl">
-            <TabsTrigger value="sold" className="flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-secondary data-[state=active]:text-black rounded-xl transition-all">
-              <History className="w-4 h-4" />
+          <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/20 backdrop-blur-xl border border-white/5 p-1 mb-3 rounded-xl">
+            <TabsTrigger value="sold" className="flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[9px] data-[state=active]:bg-secondary data-[state=active]:text-black rounded-lg transition-all">
+              <History className="w-3.5 h-3.5" />
               SIGNED
             </TabsTrigger>
-            <TabsTrigger value="unsold" className="flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-black rounded-xl transition-all">
-              <Users className="w-4 h-4" />
+            <TabsTrigger value="unsold" className="flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[9px] data-[state=active]:bg-primary data-[state=active]:text-black rounded-lg transition-all">
+              <Users className="w-3.5 h-3.5" />
               POOL
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="sold" className="flex-1 overflow-hidden mt-0 flex flex-col">
-            <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-4 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar">
               {soldPlayers.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center opacity-20 text-center px-12">
-                  <UserCheck className="w-20 h-20 mb-6" />
-                  <p className="font-black text-lg tracking-tight">AWAITING FIRST SIGNING</p>
+                <div className="h-full flex flex-col items-center justify-center opacity-20 text-center px-8">
+                  <UserCheck className="w-16 h-16 mb-4" />
+                  <p className="font-black text-sm tracking-widest uppercase">No Signings Yet</p>
                 </div>
               ) : (
                 soldPlayers.map((sold, idx) => (
-                  <div key={idx} className="bg-card/40 backdrop-blur-md p-4 rounded-2xl border border-white/5 flex gap-5 animate-in slide-in-from-right duration-500 hover:bg-muted/40 transition-colors">
-                    <div className="w-16 h-16 rounded-xl bg-muted overflow-hidden shrink-0 border border-white/10 shadow-lg">
+                  <div key={idx} className="bg-card/40 backdrop-blur-md p-3 rounded-xl border border-white/5 flex gap-4 animate-in slide-in-from-right duration-500 hover:bg-muted/40 transition-colors">
+                    <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden shrink-0 border border-white/10 shadow-lg">
                       <img src={sold.player.imageUrl} className="w-full h-full object-cover" alt="" />
                     </div>
                     <div className="flex-1 min-w-0">
-                       <div className="font-black text-base truncate uppercase italic leading-none mb-1">{sold.player.name}</div>
-                       <div className="text-[10px] font-black text-primary mb-2 uppercase tracking-widest opacity-80 truncate">{sold.team.name}</div>
-                       <div className="text-xl font-black text-secondary tabular-nums">₹{sold.price.toLocaleString()}</div>
+                       <div className="font-black text-sm truncate uppercase italic leading-none mb-1">{sold.player.name}</div>
+                       <div className="text-[9px] font-black text-primary mb-1.5 uppercase tracking-widest opacity-80 truncate">{sold.team.name}</div>
+                       <div className="text-lg font-black text-secondary tabular-nums">₹{sold.price.toLocaleString()}</div>
                     </div>
                   </div>
                 ))
@@ -413,23 +438,23 @@ export default function EliteDraftAuction() {
           </TabsContent>
 
           <TabsContent value="unsold" className="flex-1 overflow-hidden mt-0 flex flex-col">
-            <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-2 custom-scrollbar">
               {unsoldPlayers.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center opacity-20 text-center px-12">
-                  <Star className="w-20 h-20 mb-6" />
-                  <p className="font-black text-lg">ROSTER EXHAUSTED</p>
+                <div className="h-full flex flex-col items-center justify-center opacity-20 text-center px-8">
+                  <Star className="w-16 h-16 mb-4" />
+                  <p className="font-black text-sm tracking-widest uppercase">Pool Exhausted</p>
                 </div>
               ) : (
                 unsoldPlayers.map((player) => (
-                  <div key={player.id} className="bg-card/20 backdrop-blur-sm p-3 rounded-xl border border-white/5 flex items-center gap-4 opacity-70 hover:opacity-100 hover:bg-muted/30 transition-all">
-                    <div className="w-12 h-12 rounded-full bg-muted overflow-hidden shrink-0 border border-white/10 shadow-md">
+                  <div key={player.id} className="bg-card/20 backdrop-blur-sm p-2.5 rounded-lg border border-white/5 flex items-center gap-3 opacity-70 hover:opacity-100 hover:bg-muted/30 transition-all">
+                    <div className="w-10 h-10 rounded-full bg-muted overflow-hidden shrink-0 border border-white/10 shadow-md">
                       <img src={player.imageUrl} className="w-full h-full object-cover" alt="" />
                     </div>
                     <div className="flex-1 min-w-0">
-                       <div className="font-black text-sm truncate uppercase tracking-tight">{player.name}</div>
-                       <div className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{player.position}</div>
+                       <div className="font-black text-xs truncate uppercase tracking-tight">{player.name}</div>
+                       <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">{player.position}</div>
                     </div>
-                    <div className="text-xs font-black text-primary bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20">
+                    <div className="text-[10px] font-black text-primary bg-primary/10 px-2 py-1 rounded-md border border-primary/20">
                       {player.rating}
                     </div>
                   </div>
@@ -442,17 +467,17 @@ export default function EliteDraftAuction() {
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 5px;
+          width: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(0, 212, 255, 0.15);
+          background: rgba(0, 212, 255, 0.1);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(0, 212, 255, 0.4);
+          background: rgba(0, 212, 255, 0.3);
         }
       `}</style>
     </div>
