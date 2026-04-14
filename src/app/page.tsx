@@ -46,7 +46,7 @@ export default function LandingPage() {
         )}
 
         <div className="relative z-10 flex flex-col items-center text-center px-6 w-full max-w-7xl h-full">
-          {/* Header/Logo Section - Prominent and Clear */}
+          {/* Header/Logo Section */}
           <div className="flex flex-col items-center mb-12 animate-in fade-in slide-in-from-top-4 duration-700 shrink-0">
              <div className="w-28 h-28 bg-white/5 backdrop-blur-3xl rounded-full p-2.5 border-2 border-primary/20 shadow-[0_0_60px_rgba(0,212,255,0.2)] mb-4 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary/10" />
@@ -61,7 +61,7 @@ export default function LandingPage() {
              </h2>
           </div>
 
-          {/* Epic Podium Layout - Lowered and Sized */}
+          {/* Epic Podium Layout */}
           <div key={currentTeam.id} className="flex flex-col md:flex-row items-end justify-center gap-6 w-full max-w-4xl px-4 animate-in fade-in zoom-in duration-700 mt-20 mb-20">
              
              {/* Captain Card */}
@@ -97,10 +97,6 @@ export default function LandingPage() {
              <div className="flex-[1.1] w-full md:w-auto epic-card-frame p-6 flex flex-col items-center transform scale-110 md:-translate-y-12 shadow-[0_30px_100px_rgba(0,191,255,0.3)] z-20 relative group overflow-hidden h-[360px]">
                 <div className="epic-neon-energy opacity-100" />
                 <div className="epic-hex-pattern opacity-40" />
-                {/* Elite Badge Overlay */}
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#d4af37] text-black px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(212,175,55,0.5)] border border-white/30 whitespace-nowrap z-30 animate-pulse">
-                   FRANCHISE STAR
-                </div>
                 <div className="absolute top-6 left-6 z-20">
                    <div className="bg-primary px-4 py-1.5 rounded-[4px] text-[9px] font-black text-black uppercase tracking-widest shadow-lg">MGR</div>
                 </div>
