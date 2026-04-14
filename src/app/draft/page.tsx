@@ -456,60 +456,65 @@ export default function EliteDraftAuction() {
                       <div className="text-3xl font-black text-destructive italic tabular-nums leading-none">{unsoldPlayers.length}</div>
                    </div>
                 </div>
-                <div className="w-full flex-1 min-0 flex flex-col px-4">
+                
+                {/* Scrollable Container for Squads */}
+                <div className="w-full flex-1 min-h-0 flex flex-col px-4 overflow-hidden">
                    <h3 className="text-left text-xs font-black uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3 px-2 shrink-0">
                      <LayoutDashboard className="w-4 h-4" />
                      Franchise Squads
                    </h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 overflow-y-auto pr-2 custom-scrollbar pb-6">
-                     {TEAMS.map(team => {
-                        const teamPlayers = soldPlayers.filter(s => s.team.id === team.id);
-                        const totalSpent = teamPlayers.reduce((sum, p) => sum + p.price, 0);
-                        return (
-                          <div key={team.id} className="bg-card/90 border-2 border-white/10 rounded-2xl flex flex-col shadow-2xl relative overflow-hidden group hover:border-primary transition-all h-[320px]">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-primary/20 group-hover:bg-primary transition-colors" />
-                            <div className="p-4 bg-white/5 border-b border-white/10 flex items-center justify-between gap-3 shrink-0">
-                               <div className="flex items-center gap-3 min-w-0">
-                                  <div className="w-10 h-10 p-1.5 bg-white rounded-lg border border-white/10 flex items-center justify-center shrink-0 shadow-lg">
-                                    <img src={team.logoUrl} className="w-full h-full object-contain" alt="" />
-                                  </div>
-                                  <div className="flex flex-col min-w-0">
-                                    <span className="font-black text-sm uppercase tracking-tight text-white leading-tight block truncate">{team.name}</span>
-                                    <span className="text-[8px] font-black text-primary uppercase tracking-widest">{teamPlayers.length} Players</span>
-                                  </div>
-                               </div>
-                               <div className="text-right shrink-0">
-                                  <div className="flex items-center gap-1 justify-end text-[7px] font-black text-muted-foreground uppercase tracking-widest mb-0.5">
-                                    <Wallet className="w-2.5 h-2.5" />
-                                    <span>Total Spent</span>
-                                  </div>
-                                  <div className="text-lg font-black text-secondary tabular-nums leading-none">₹{totalSpent.toLocaleString()}</div>
-                               </div>
-                            </div>
-                            <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-1.5">
-                              {teamPlayers.length > 0 ? (
-                                teamPlayers.map((s, i) => (
-                                  <div key={i} className="flex justify-between items-center py-2 px-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
-                                    <div className="flex items-center gap-2 min-w-0">
-                                      <span className="text-[9px] font-black text-primary/60 tabular-nums">0{i+1}</span>
-                                      <span className="text-white text-[10px] font-bold uppercase tracking-wide truncate">{s.player.name}</span>
+                   <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar min-h-0 pb-6">
+                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                       {TEAMS.map(team => {
+                          const teamPlayers = soldPlayers.filter(s => s.team.id === team.id);
+                          const totalSpent = teamPlayers.reduce((sum, p) => sum + p.price, 0);
+                          return (
+                            <div key={team.id} className="bg-card/90 border-2 border-white/10 rounded-2xl flex flex-col shadow-2xl relative overflow-hidden group hover:border-primary transition-all h-[320px]">
+                              <div className="absolute top-0 left-0 w-full h-1 bg-primary/20 group-hover:bg-primary transition-colors" />
+                              <div className="p-4 bg-white/5 border-b border-white/10 flex items-center justify-between gap-3 shrink-0">
+                                 <div className="flex items-center gap-3 min-w-0">
+                                    <div className="w-10 h-10 p-1.5 bg-white rounded-lg border border-white/10 flex items-center justify-center shrink-0 shadow-lg">
+                                      <img src={team.logoUrl} className="w-full h-full object-contain" alt="" />
                                     </div>
-                                    <span className="text-secondary font-black text-[10px] shrink-0 ml-3 tabular-nums">₹{s.price}</span>
+                                    <div className="flex flex-col min-w-0">
+                                      <span className="font-black text-sm uppercase tracking-tight text-white leading-tight block truncate">{team.name}</span>
+                                      <span className="text-[8px] font-black text-primary uppercase tracking-widest">{teamPlayers.length} Players</span>
+                                    </div>
+                                 </div>
+                                 <div className="text-right shrink-0">
+                                    <div className="flex items-center gap-1 justify-end text-[7px] font-black text-muted-foreground uppercase tracking-widest mb-0.5">
+                                      <Wallet className="w-2.5 h-2.5" />
+                                      <span>Total Spent</span>
+                                    </div>
+                                    <div className="text-lg font-black text-secondary tabular-nums leading-none">₹{totalSpent.toLocaleString()}</div>
+                                 </div>
+                              </div>
+                              <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-1.5">
+                                {teamPlayers.length > 0 ? (
+                                  teamPlayers.map((s, i) => (
+                                    <div key={i} className="flex justify-between items-center py-2 px-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
+                                      <div className="flex items-center gap-2 min-w-0">
+                                        <span className="text-[9px] font-black text-primary/60 tabular-nums">0{i+1}</span>
+                                        <span className="text-white text-[10px] font-bold uppercase tracking-wide truncate">{s.player.name}</span>
+                                      </div>
+                                      <span className="text-secondary font-black text-[10px] shrink-0 ml-3 tabular-nums">₹{s.price}</span>
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div className="h-full flex flex-col items-center justify-center opacity-30 px-4">
+                                     <div className="text-[9px] font-black uppercase tracking-[0.2em] italic text-center border-2 border-dashed border-white/10 p-6 rounded-xl w-full">
+                                        No signings made
+                                     </div>
                                   </div>
-                                ))
-                              ) : (
-                                <div className="h-full flex flex-col items-center justify-center opacity-30 px-4">
-                                   <div className="text-[9px] font-black uppercase tracking-[0.2em] italic text-center border-2 border-dashed border-white/10 p-6 rounded-xl w-full">
-                                      No signings made
-                                   </div>
-                                </div>
-                              )}
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        );
-                     })}
+                          );
+                       })}
+                     </div>
                    </div>
                 </div>
+
                 <div className="flex gap-4 mt-6 shrink-0 pb-4">
                   <Button variant="outline" size="lg" className="h-14 px-10 text-xs font-black rounded-xl uppercase tracking-[0.2em] border-white/20 hover:bg-white/10 transition-all" onClick={() => setShowFinishedOverlay(false)}>
                      <X className="w-4 h-4 mr-3" />
