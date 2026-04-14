@@ -19,15 +19,14 @@ interface SoldPlayer {
 }
 
 export default function EliteDraftAuction() {
-  // Queue management
-  const [mainQueue, setMainQueue] = useState<string[]>(PLAYERS.map(p => p.id));
-  const [skippedQueue, setSkippedQueue] = useState<string[]>([]);
+  // Auction state
   const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(PLAYERS[0].id);
-  const [lotsProcessedCount, setLotsProcessedCount] = useState(0);
-
+  const [soldPlayers, setSoldPlayers] = useState<SoldPlayer[]>([]);
+  const [skippedInRoundIds, setSkippedInRoundIds] = useState<string[]>([]);
+  const [everSkippedIds, setEverSkippedIds] = useState<string[]>([]);
+  
   const [currentBid, setCurrentBid] = useState(0);
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
-  const [soldPlayers, setSoldPlayers] = useState<SoldPlayer[]>([]);
   const [teamBudgets, setTeamBudgets] = useState<Record<string, number>>(
     TEAMS.reduce((acc, team) => ({ ...acc, [team.id]: team.budget }), {})
   );
@@ -42,50 +41,52 @@ export default function EliteDraftAuction() {
   , [currentPlayerId]);
 
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
-  
-  const hasMoreInMain = mainQueue.length > 0;
-  const hasSkippedRemaining = skippedQueue.length > 0;
-  const isLastPlayer = !hasMoreInMain && !hasSkippedRemaining;
 
   const handleNextPlayer = useCallback(() => {
-    // Reset auction state for next lot
+    // Reset bidding state
     setCurrentBid(0);
     setSelectedTeamId(null);
     setTimer(10);
-    setLotsProcessedCount(prev => prev + 1);
 
-    if (mainQueue.length > 0) {
-      const nextId = mainQueue[0];
-      setMainQueue(prev => prev.slice(1));
-      setCurrentPlayerId(nextId);
+    const isSigned = (id: string) => soldPlayers.some(s => s.player.id === id);
+    
+    // 1. Try to find the next player in the original list who hasn't been signed and hasn't been seen in THIS round
+    const currentIdx = PLAYERS.findIndex(p => p.id === currentPlayerId);
+    let nextPlayer = PLAYERS.slice(currentIdx + 1).find(p => !isSigned(p.id) && !skippedInRoundIds.includes(p.id));
+
+    if (nextPlayer) {
+      setCurrentPlayerId(nextPlayer.id);
       setStatus('IDLE');
-    } else if (skippedQueue.length > 0) {
-      const nextId = skippedQueue[0];
-      setSkippedQueue(prev => prev.slice(1));
+      return;
+    }
+
+    // 2. If we reached the end of the list, check if we have skipped players to re-auction
+    if (skippedInRoundIds.length > 0) {
+      const nextId = skippedInRoundIds[0];
+      setSkippedInRoundIds([]); // Reset round skips as we are starting the "skipped round"
       setCurrentPlayerId(nextId);
       setStatus('IDLE');
     } else {
-      // No players left anywhere
-      setCurrentPlayerId(null);
-      setStatus('FINISHED');
-      setShowFinishedOverlay(true);
+      // 3. Absolutely no players left to show
+      // We don't auto-finish anymore, just stay on the last player or empty state
+      if (soldPlayers.length === PLAYERS.length) {
+        setCurrentPlayerId(null);
+        setStatus('FINISHED');
+        setShowFinishedOverlay(true);
+      }
     }
-  }, [mainQueue, skippedQueue]);
-
-  // Initial setup: pop the first player from main queue
-  useEffect(() => {
-    if (mainQueue.length === PLAYERS.length && currentPlayerId === PLAYERS[0].id) {
-       setMainQueue(prev => prev.slice(1));
-    }
-  }, []);
+  }, [currentPlayerId, soldPlayers, skippedInRoundIds]);
 
   const handleSkip = useCallback(() => {
     if ((status === 'BIDDING' || status === 'IDLE') && currentPlayerId) {
-      setSkippedQueue(prev => [...prev, currentPlayerId]);
+      setSkippedInRoundIds(prev => [...prev, currentPlayerId]);
+      if (!everSkippedIds.includes(currentPlayerId)) {
+        setEverSkippedIds(prev => [...prev, currentPlayerId]);
+      }
       setStatus('SKIPPED');
       setTimer(5);
     }
-  }, [status, currentPlayerId]);
+  }, [status, currentPlayerId, everSkippedIds]);
 
   const handleBid = useCallback((increment: number) => {
     if (status !== 'BIDDING' && status !== 'IDLE') return;
@@ -148,27 +149,24 @@ export default function EliteDraftAuction() {
       if (e.key === '3') handleBid(100);
       if (e.key === 'Enter') handleSold();
       if (e.key === 'n' || e.key === 'N') {
-        if ((status === 'SOLD' || status === 'SKIPPED') && !isLastPlayer) handleNextPlayer();
+        if (status === 'SOLD' || status === 'SKIPPED') handleNextPlayer();
       }
       if (e.key === 's' || e.key === 'S') {
         if (status === 'BIDDING' || status === 'IDLE') handleSkip();
       }
-      if (e.key === 'Escape') {
-        if (status === 'FINISHED' && showFinishedOverlay) setShowFinishedOverlay(false);
-      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleBid, handleSold, handleNextPlayer, handleSkip, status, showFinishedOverlay, isLastPlayer]);
+  }, [handleBid, handleSold, handleNextPlayer, handleSkip, status]);
 
   useEffect(() => {
     if ((status === 'BIDDING' || status === 'SOLD' || status === 'SKIPPED') && timer > 0) {
       const interval = setInterval(() => setTimer(t => t - 1), 1000);
       return () => clearInterval(interval);
-    } else if (timer === 0 && (status === 'SOLD' || status === 'SKIPPED') && !isLastPlayer) {
+    } else if (timer === 0 && (status === 'SOLD' || status === 'SKIPPED')) {
       handleNextPlayer();
     }
-  }, [status, timer, handleNextPlayer, isLastPlayer]);
+  }, [status, timer, handleNextPlayer]);
 
   useEffect(() => {
     if (errorMsg) {
@@ -178,7 +176,7 @@ export default function EliteDraftAuction() {
   }, [errorMsg]);
 
   const unsoldPlayers = PLAYERS.filter(p => 
-    !soldPlayers.some(s => s.player.id === p.id) && p.id !== currentPlayerId
+    !soldPlayers.some(s => s.player.id === p.id)
   );
 
   return (
@@ -263,7 +261,7 @@ export default function EliteDraftAuction() {
                 {status}
               </Badge>
             </div>
-            {(status === 'BIDDING' || (status === 'SOLD' || status === 'SKIPPED') && !isLastPlayer) && (
+            {(status === 'BIDDING' || (status === 'SOLD' || status === 'SKIPPED')) && (
               <div className="flex flex-col">
                  <span className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">
                    {status === 'BIDDING' ? 'Timer' : 'Next Lot In'}
@@ -281,8 +279,8 @@ export default function EliteDraftAuction() {
 
           <div className="flex items-center gap-10">
             <div className="text-right">
-               <span className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">Current Lot</span>
-               <div className="text-xl font-black text-white italic">#{lotsProcessedCount + 1} <span className="text-xs text-muted-foreground not-italic ml-1">/ {PLAYERS.length}</span></div>
+               <span className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">Progress</span>
+               <div className="text-xl font-black text-white italic">{soldPlayers.length} <span className="text-xs text-muted-foreground not-italic ml-1">/ {PLAYERS.length} Signed</span></div>
             </div>
             
             <Button 
@@ -341,15 +339,13 @@ export default function EliteDraftAuction() {
                      <div className="text-sm mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-2 px-6 rounded-full border border-primary/40 shadow-xl max-w-full truncate">
                         To {TEAMS.find(t => t.id === selectedTeamId)?.name}
                      </div>
-                     {!isLastPlayer && (
-                       <Button 
-                        variant="secondary" 
-                        className="mt-8 font-black uppercase tracking-widest px-8 h-12 rounded-xl shadow-2xl"
-                        onClick={handleNextPlayer}
-                       >
-                         Draft Next (N)
-                       </Button>
-                     )}
+                     <Button 
+                      variant="secondary" 
+                      className="mt-8 font-black uppercase tracking-widest px-8 h-12 rounded-xl shadow-2xl"
+                      onClick={handleNextPlayer}
+                     >
+                       Continue (N)
+                     </Button>
                   </div>
                 </div>
               )}
@@ -358,16 +354,14 @@ export default function EliteDraftAuction() {
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
                   <div className="text-center animate-sold flex flex-col items-center p-6">
                      <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
-                     <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Lot Unsold</div>
-                     {!isLastPlayer && (
-                       <Button 
-                        variant="outline" 
-                        className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-8 h-12 rounded-xl"
-                        onClick={handleNextPlayer}
-                       >
-                          Draft Next (N)
-                       </Button>
-                     )}
+                     <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Moving to end of pool</div>
+                     <Button 
+                      variant="outline" 
+                      className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-8 h-12 rounded-xl"
+                      onClick={handleNextPlayer}
+                     >
+                        Continue (N)
+                     </Button>
                   </div>
                 </div>
               )}
@@ -375,7 +369,7 @@ export default function EliteDraftAuction() {
           ) : (
              <div className="text-center p-12 bg-white/5 backdrop-blur-3xl rounded-[2rem] border-2 border-dashed border-white/10">
                 <Trophy className="w-20 h-20 text-secondary mx-auto mb-6 opacity-20" />
-                <h2 className="text-2xl font-black uppercase tracking-widest opacity-50 italic">Draft Process Ready</h2>
+                <h2 className="text-2xl font-black uppercase tracking-widest opacity-50 italic">Draft Process Complete</h2>
                 <p className="text-muted-foreground text-sm mt-2">All players have been processed or drafted.</p>
              </div>
           )}
@@ -383,7 +377,7 @@ export default function EliteDraftAuction() {
           {/* Bidding Controls */}
           <div className={cn(
             "flex-1 flex flex-col justify-center items-center gap-8 max-w-sm transition-opacity duration-500",
-            !currentPlayer && "opacity-20 pointer-events-none"
+            (!currentPlayer || status === 'SOLD' || status === 'SKIPPED') && "opacity-20 pointer-events-none"
           )}>
               <div className="text-center">
                 <div className="text-[10px] text-muted-foreground uppercase tracking-[0.4em] font-black mb-2 opacity-60">Current Offer</div>
@@ -412,7 +406,6 @@ export default function EliteDraftAuction() {
                 </Button>
 
                 <div className="flex gap-3">
-                  {(status === 'BIDDING' || status === 'IDLE') && (
                     <Button 
                       variant="outline" 
                       className="flex-1 h-12 text-[10px] font-black uppercase tracking-[0.2em] border-white/10 hover:bg-destructive hover:text-white transition-all rounded-xl"
@@ -421,7 +414,6 @@ export default function EliteDraftAuction() {
                       <SkipForward className="w-3 h-3 mr-2" />
                       Skip Player (S)
                     </Button>
-                  )}
                 </div>
               </div>
           </div>
@@ -435,7 +427,7 @@ export default function EliteDraftAuction() {
         )}
 
         {/* Finished Screen */}
-        {status === 'FINISHED' && showFinishedOverlay && (
+        {showFinishedOverlay && (
            <div className="absolute inset-0 z-[101] bg-[#000411]/95 backdrop-blur-3xl flex items-center justify-center text-center p-8 animate-in fade-in zoom-in duration-500 overflow-hidden">
               <div className="max-w-7xl w-full flex flex-col items-center h-full max-h-[92vh]">
                 <div className="flex flex-col items-center mb-6 shrink-0">
@@ -456,8 +448,8 @@ export default function EliteDraftAuction() {
                       <div className="text-3xl font-black text-secondary italic tabular-nums leading-none">{soldPlayers.length}</div>
                    </div>
                    <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md flex flex-col items-center">
-                      <div className="text-muted-foreground text-[9px] font-black uppercase tracking-[0.3em] mb-1">Skipped/Unsold</div>
-                      <div className="text-3xl font-black text-destructive italic tabular-nums leading-none">{skippedQueue.length}</div>
+                      <div className="text-muted-foreground text-[9px] font-black uppercase tracking-[0.3em] mb-1">Total Remaining</div>
+                      <div className="text-3xl font-black text-destructive italic tabular-nums leading-none">{unsoldPlayers.length}</div>
                    </div>
                 </div>
 
@@ -473,10 +465,7 @@ export default function EliteDraftAuction() {
                         const totalSpent = teamPlayers.reduce((sum, p) => sum + p.price, 0);
                         return (
                           <div key={team.id} className="bg-card/90 border-2 border-white/10 rounded-2xl flex flex-col shadow-2xl relative overflow-hidden group hover:border-primary transition-all h-[320px]">
-                            {/* Accent Bar */}
                             <div className="absolute top-0 left-0 w-full h-1 bg-primary/20 group-hover:bg-primary transition-colors" />
-                            
-                            {/* Card Header */}
                             <div className="p-4 bg-white/5 border-b border-white/10 flex items-center justify-between gap-3 shrink-0">
                                <div className="flex items-center gap-3 min-w-0">
                                   <div className="w-10 h-10 p-1.5 bg-white rounded-lg border border-white/10 flex items-center justify-center shrink-0 shadow-lg">
@@ -495,8 +484,6 @@ export default function EliteDraftAuction() {
                                   <div className="text-lg font-black text-secondary tabular-nums leading-none">₹{totalSpent.toLocaleString()}</div>
                                </div>
                             </div>
-
-                            {/* Player List */}
                             <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-1.5">
                               {teamPlayers.length > 0 ? (
                                 teamPlayers.map((s, i) => (
@@ -597,7 +584,7 @@ export default function EliteDraftAuction() {
                     key={player.id} 
                     className={cn(
                       "bg-card/20 backdrop-blur-sm p-2.5 rounded-lg border border-white/5 flex items-center gap-3 transition-all",
-                      skippedQueue.includes(player.id) || currentPlayerId === player.id ? "opacity-100 border-destructive/20 bg-destructive/5" : "opacity-70 hover:opacity-100 hover:bg-muted/30"
+                      everSkippedIds.includes(player.id) || currentPlayerId === player.id ? "opacity-100 border-destructive/20 bg-destructive/5" : "opacity-70 hover:opacity-100 hover:bg-muted/30"
                     )}
                   >
                     <div className="w-10 h-10 rounded-full bg-muted overflow-hidden shrink-0 border border-white/10 shadow-md">
@@ -606,7 +593,7 @@ export default function EliteDraftAuction() {
                     <div className="flex-1 min-w-0">
                        <div className="flex items-center gap-2">
                          <div className="font-black text-xs truncate uppercase tracking-tight">{player.name}</div>
-                         {(skippedQueue.includes(player.id) || (currentPlayerId === player.id && !mainQueue.includes(player.id) && !soldPlayers.some(s => s.player.id === player.id))) && (
+                         {everSkippedIds.includes(player.id) && (
                            <Badge variant="destructive" className="text-[7px] py-0 px-1 font-black uppercase tracking-tighter h-3.5">Skipped</Badge>
                          )}
                        </div>
