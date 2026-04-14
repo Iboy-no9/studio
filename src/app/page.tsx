@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Trophy, Play, ChevronRight, User, Star, Shield, Zap, Hexagon } from 'lucide-react';
+import { Trophy, Play, ChevronRight, Star, Zap, Hexagon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TEAMS } from '@/lib/auction-data';
@@ -109,9 +109,6 @@ export default function LandingPage() {
                      data-ai-hint="portrait manager"
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                   <div className="absolute top-4 right-4">
-                     <Shield className="w-8 h-8 text-primary fill-primary drop-shadow-[0_0_15px_rgba(0,212,255,0.8)] animate-bounce-slow" />
-                   </div>
                 </div>
                 <div className="relative z-10 mb-12 text-center">
                   <span className="text-[10px] font-black tracking-[0.5em] text-primary uppercase mb-1.5 drop-shadow-md block">MANAGER</span>
