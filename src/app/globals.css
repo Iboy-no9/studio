@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -45,7 +46,7 @@
 .legendary-card-bg {
   background: linear-gradient(135deg, #001246 0%, #004e92 50%, #000428 100%);
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to allow labels to pop out */
   transform-style: preserve-3d;
   perspective: 1000px;
 }
@@ -55,8 +56,24 @@
   position: absolute;
   inset: 0;
   background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
-                    repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255, 255, 255, 0.03) 15px, rgba(255, 255, 255, 0.03) 30px);
+                    repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255, 255, 255, 0.05) 15px, rgba(255, 255, 255, 0.05) 30px);
   pointer-events: none;
+  border-radius: inherit;
+}
+
+.legendary-card-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 20px,
+    rgba(255, 255, 255, 0.02) 20px,
+    rgba(255, 255, 255, 0.02) 40px
+  );
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 @keyframes bid-pop {
