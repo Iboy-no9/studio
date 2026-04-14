@@ -18,11 +18,12 @@ export interface Team {
 }
 
 export const TEAMS: Team[] = [
-  { id: 't1', name: 'TITANS FC', budget: 50000, logoUrl: 'https://picsum.photos/seed/t1/100/100', color: '#4AB0ED' },
-  { id: 't2', name: 'STORM UNITED', budget: 45000, logoUrl: 'https://picsum.photos/seed/t2/100/100', color: '#FCD34D' },
-  { id: 't3', name: 'REBEL ELITE', budget: 55000, logoUrl: 'https://picsum.photos/seed/t3/100/100', color: '#F87171' },
-  { id: 't4', name: 'PHOENIX STRIKERS', budget: 48000, logoUrl: 'https://picsum.photos/seed/t4/100/100', color: '#10B981' },
-  { id: 't5', name: 'GLADIATORS', budget: 52000, logoUrl: 'https://picsum.photos/seed/t5/100/100', color: '#8B5CF6' },
+  { id: 't1', name: 'TITANS FC', budget: 10000, logoUrl: 'https://picsum.photos/seed/t1/100/100', color: '#4AB0ED' },
+  { id: 't2', name: 'STORM UNITED', budget: 10000, logoUrl: 'https://picsum.photos/seed/t2/100/100', color: '#FCD34D' },
+  { id: 't3', name: 'REBEL ELITE', budget: 10000, logoUrl: 'https://picsum.photos/seed/t3/100/100', color: '#F87171' },
+  { id: 't4', name: 'PHOENIX STRIKERS', budget: 10000, logoUrl: 'https://picsum.photos/seed/t4/100/100', color: '#10B981' },
+  { id: 't5', name: 'GLADIATORS', budget: 10000, logoUrl: 'https://picsum.photos/seed/t5/100/100', color: '#8B5CF6' },
+  { id: 't6', name: 'ZENITH WARRIORS', budget: 10000, logoUrl: 'https://picsum.photos/seed/t6/100/100', color: '#EC4899' },
 ];
 
 export const PLAYERS: Player[] = [
