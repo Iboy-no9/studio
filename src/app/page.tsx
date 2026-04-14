@@ -62,15 +62,16 @@ export default function LandingPage() {
           </div>
 
           {/* Epic Podium Layout */}
-          <div key={currentTeam.id} className="flex flex-col md:flex-row items-end justify-center gap-8 w-full max-w-5xl px-4 animate-in fade-in zoom-in duration-700 mt-20">
+          <div key={currentTeam.id} className="flex flex-col md:flex-row items-end justify-center gap-6 w-full max-w-4xl px-4 animate-in fade-in zoom-in duration-700 mt-16">
              
              {/* Captain Card */}
-             <div className="flex-1 w-full md:w-auto epic-card-frame p-5 flex flex-col items-center transition-all duration-300 relative group overflow-hidden">
-                <div className="epic-neon-hex" />
-                <div className="absolute top-5 left-5 z-20">
-                   <div className="bg-secondary px-3 py-1 rounded-[4px] text-[9px] font-black text-black uppercase tracking-widest shadow-lg">CPT</div>
+             <div className="flex-1 w-full md:w-auto epic-card-frame p-4 flex flex-col items-center transition-all duration-300 relative group overflow-hidden">
+                <div className="epic-neon-energy" />
+                <div className="epic-hex-pattern" />
+                <div className="absolute top-4 left-4 z-20">
+                   <div className="bg-secondary px-3 py-1 rounded-[4px] text-[8px] font-black text-black uppercase tracking-widest shadow-lg">CPT</div>
                 </div>
-                <div className="w-full aspect-square max-w-[150px] rounded-2xl bg-black/40 flex items-center justify-center mb-8 border border-white/10 overflow-hidden relative z-10 shadow-inner group-hover:border-secondary/40 transition-colors">
+                <div className="w-full aspect-[4/5] max-w-[140px] rounded-xl bg-black/40 flex items-center justify-center mb-6 border border-white/10 overflow-hidden relative z-10 shadow-inner group-hover:border-secondary/40 transition-colors">
                    <Image 
                      src={currentTeam.captainImageUrl} 
                      alt={currentTeam.captain} 
@@ -80,29 +81,30 @@ export default function LandingPage() {
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 </div>
-                <div className="relative z-10 mb-8">
-                  <span className="text-[10px] font-black tracking-[0.4em] text-secondary uppercase mb-1 opacity-80 block">CAPTAIN</span>
-                  <span className="text-2xl font-black uppercase italic text-white tracking-tight leading-none">{currentTeam.captain}</span>
+                <div className="relative z-10 mb-10 text-center">
+                  <span className="text-[9px] font-black tracking-[0.4em] text-secondary uppercase mb-1 opacity-80 block">CAPTAIN</span>
+                  <span className="text-xl font-black uppercase italic text-white tracking-tight leading-none truncate max-w-[150px]">{currentTeam.captain}</span>
                 </div>
-                <div className="epic-bottom-podium">
-                   <div className="flex gap-1 mb-1">
-                      {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-secondary text-secondary" />)}
+                <div className="epic-podium">
+                   <div className="flex gap-0.5 mb-0.5">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="w-2.5 h-2.5 fill-secondary text-secondary" />)}
                    </div>
-                   <Hexagon className="w-4 h-4 text-primary fill-primary/20" />
+                   <Hexagon className="w-3.5 h-3.5 text-primary fill-primary/20" />
                 </div>
              </div>
 
              {/* Manager Card (Central Highlight) */}
-             <div className="flex-[1.2] w-full md:w-auto epic-card-frame p-7 flex flex-col items-center transform scale-100 md:scale-110 md:-translate-y-16 shadow-[0_30px_100px_rgba(0,255,0,0.2)] z-20 relative group overflow-hidden">
-                <div className="epic-neon-hex opacity-40" />
+             <div className="flex-[1.1] w-full md:w-auto epic-card-frame p-6 flex flex-col items-center transform scale-100 md:scale-110 md:-translate-y-12 shadow-[0_30px_100px_rgba(0,255,0,0.25)] z-20 relative group overflow-hidden">
+                <div className="epic-neon-energy opacity-90" />
+                <div className="epic-hex-pattern opacity-40" />
                 {/* Elite Badge Overlay */}
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-black px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.25em] shadow-[0_0_30px_rgba(0,255,0,0.5)] border border-white/30 whitespace-nowrap z-30 animate-pulse">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-black px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(0,255,0,0.5)] border border-white/30 whitespace-nowrap z-30 animate-pulse">
                    ELITE TACTICIAN
                 </div>
-                <div className="absolute top-8 left-8 z-20">
-                   <div className="bg-primary px-4 py-1.5 rounded-[4px] text-[10px] font-black text-black uppercase tracking-widest shadow-lg">MGR</div>
+                <div className="absolute top-6 left-6 z-20">
+                   <div className="bg-primary px-4 py-1.5 rounded-[4px] text-[9px] font-black text-black uppercase tracking-widest shadow-lg">MGR</div>
                 </div>
-                <div className="w-full aspect-square max-w-[200px] rounded-[2.5rem] bg-black/40 flex items-center justify-center mb-10 border-2 border-primary/20 overflow-hidden relative z-10 shadow-2xl group-hover:border-primary/50 transition-colors">
+                <div className="w-full aspect-[4/5] max-w-[180px] rounded-2xl bg-black/40 flex items-center justify-center mb-8 border-2 border-primary/20 overflow-hidden relative z-10 shadow-2xl group-hover:border-primary/50 transition-colors">
                    <Image 
                      src={currentTeam.managerImageUrl} 
                      alt={currentTeam.manager} 
@@ -112,28 +114,29 @@ export default function LandingPage() {
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                    <div className="absolute top-4 right-4">
-                     <Shield className="w-10 h-10 text-primary fill-primary drop-shadow-[0_0_15px_rgba(0,212,255,0.8)] animate-bounce-slow" />
+                     <Shield className="w-8 h-8 text-primary fill-primary drop-shadow-[0_0_15px_rgba(0,212,255,0.8)] animate-bounce-slow" />
                    </div>
                 </div>
-                <div className="relative z-10 mb-10">
-                  <span className="text-[11px] font-black tracking-[0.5em] text-primary uppercase mb-1.5 drop-shadow-md block">MANAGER</span>
-                  <span className="text-3xl font-black uppercase italic text-white tracking-tighter leading-none">{currentTeam.manager}</span>
+                <div className="relative z-10 mb-12 text-center">
+                  <span className="text-[10px] font-black tracking-[0.5em] text-primary uppercase mb-1.5 drop-shadow-md block">MANAGER</span>
+                  <span className="text-2xl font-black uppercase italic text-white tracking-tighter leading-none">{currentTeam.manager}</span>
                 </div>
-                <div className="epic-bottom-podium h-[70px]">
-                   <div className="flex gap-1.5 mb-2">
-                      {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-primary text-primary drop-shadow-[0_0_8px_rgba(0,255,0,0.5)]" />)}
+                <div className="epic-podium h-[54px] w-[75%]">
+                   <div className="flex gap-1 mb-1">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-primary text-primary drop-shadow-[0_0_8px_rgba(0,255,0,0.5)]" />)}
                    </div>
-                   <Hexagon className="w-5 h-5 text-primary fill-primary animate-pulse" />
+                   <Zap className="w-4 h-4 text-primary fill-primary animate-pulse" />
                 </div>
              </div>
 
              {/* GK Card */}
-             <div className="flex-1 w-full md:w-auto epic-card-frame p-5 flex flex-col items-center transition-all duration-300 relative group overflow-hidden">
-                <div className="epic-neon-hex" />
-                <div className="absolute top-5 left-5 z-20">
-                   <div className="bg-secondary px-3 py-1 rounded-[4px] text-[9px] font-black text-black uppercase tracking-widest shadow-lg">GKP</div>
+             <div className="flex-1 w-full md:w-auto epic-card-frame p-4 flex flex-col items-center transition-all duration-300 relative group overflow-hidden">
+                <div className="epic-neon-energy" />
+                <div className="epic-hex-pattern" />
+                <div className="absolute top-4 left-4 z-20">
+                   <div className="bg-secondary px-3 py-1 rounded-[4px] text-[8px] font-black text-black uppercase tracking-widest shadow-lg">GKP</div>
                 </div>
-                <div className="w-full aspect-square max-w-[150px] rounded-2xl bg-black/40 flex items-center justify-center mb-8 border border-white/10 overflow-hidden relative z-10 shadow-inner group-hover:border-secondary/40 transition-colors">
+                <div className="w-full aspect-[4/5] max-w-[140px] rounded-xl bg-black/40 flex items-center justify-center mb-6 border border-white/10 overflow-hidden relative z-10 shadow-inner group-hover:border-secondary/40 transition-colors">
                    <Image 
                      src={currentTeam.gkImageUrl} 
                      alt={currentTeam.gk} 
@@ -143,35 +146,35 @@ export default function LandingPage() {
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 </div>
-                <div className="relative z-10 mb-8">
-                  <span className="text-[10px] font-black tracking-[0.4em] text-secondary uppercase mb-1 opacity-80 block">GOALKEEPER</span>
-                  <span className="text-2xl font-black uppercase italic text-white tracking-tight leading-none">{currentTeam.gk}</span>
+                <div className="relative z-10 mb-10 text-center">
+                  <span className="text-[9px] font-black tracking-[0.4em] text-secondary uppercase mb-1 opacity-80 block">GOALKEEPER</span>
+                  <span className="text-xl font-black uppercase italic text-white tracking-tight leading-none truncate max-w-[150px]">{currentTeam.gk}</span>
                 </div>
-                <div className="epic-bottom-podium">
-                   <div className="flex gap-1 mb-1">
-                      {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-secondary text-secondary" />)}
+                <div className="epic-podium">
+                   <div className="flex gap-0.5 mb-0.5">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="w-2.5 h-2.5 fill-secondary text-secondary" />)}
                    </div>
-                   <Hexagon className="w-4 h-4 text-primary fill-primary/20" />
+                   <Hexagon className="w-3.5 h-3.5 text-primary fill-primary/20" />
                 </div>
              </div>
 
           </div>
 
-          <div className="mt-28 flex flex-col items-center gap-6">
+          <div className="mt-24 flex flex-col items-center gap-6">
             <Button 
               onClick={handleEnter}
-              className="h-12 px-10 text-[10px] font-black uppercase tracking-[0.4em] rounded-xl bg-white text-black hover:bg-primary hover:text-white transition-all group shadow-2xl border-none"
+              className="h-10 px-8 text-[9px] font-black uppercase tracking-[0.3em] rounded-xl bg-white text-black hover:bg-primary hover:text-white transition-all group shadow-2xl border-none"
             >
               Skip Intro
               <ChevronRight className="ml-2 w-3 h-3 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               {TEAMS.map((_, i) => (
                 <div 
                   key={i} 
                   className={cn(
-                    "w-2 h-2 rounded-full transition-all duration-700",
-                    activeTeamIndex === i ? "bg-primary w-10 shadow-[0_0_12px_rgba(0,212,255,1)]" : "bg-white/10"
+                    "w-1.5 h-1.5 rounded-full transition-all duration-700",
+                    activeTeamIndex === i ? "bg-primary w-8 shadow-[0_0_12px_rgba(0,212,255,1)]" : "bg-white/10"
                   )} 
                 />
               ))}
