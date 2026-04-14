@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Trophy, Zap, Star, Play } from 'lucide-react';
+import { Trophy, Star, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -21,12 +21,12 @@ export default function LandingPage() {
             src={bgImage.imageUrl} 
             alt="UCL Stadium" 
             fill 
-            className="object-cover opacity-30 mix-blend-screen" 
+            className="object-cover opacity-40 brightness-75" 
             priority
             data-ai-hint={bgImage.imageHint}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#000411] via-transparent to-[#000411]/80" />
-          <div className="absolute inset-0 ucl-gradient opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#000411] via-transparent to-[#000411]/60" />
+          <div className="absolute inset-0 ucl-gradient opacity-40" />
         </div>
       )}
 

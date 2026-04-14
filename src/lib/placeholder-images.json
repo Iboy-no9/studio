@@ -1,3 +1,190 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "p1",
+      "description": "Lionel Messi",
+      "imageUrl": "https://picsum.photos/seed/p1/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p2",
+      "description": "Cristiano Ronaldo",
+      "imageUrl": "https://picsum.photos/seed/p2/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p3",
+      "description": "Kylian Mbappe",
+      "imageUrl": "https://picsum.photos/seed/p3/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p4",
+      "description": "Erling Haaland",
+      "imageUrl": "https://picsum.photos/seed/p4/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p5",
+      "description": "Kevin De Bruyne",
+      "imageUrl": "https://picsum.photos/seed/p5/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p6",
+      "description": "Robert Lewandowski",
+      "imageUrl": "https://picsum.photos/seed/p6/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p7",
+      "description": "Mohamed Salah",
+      "imageUrl": "https://picsum.photos/seed/p7/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p8",
+      "description": "Karim Benzema",
+      "imageUrl": "https://picsum.photos/seed/p8/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p9",
+      "description": "Harry Kane",
+      "imageUrl": "https://picsum.photos/seed/p9/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p10",
+      "description": "Neymar Jr",
+      "imageUrl": "https://picsum.photos/seed/p10/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p11",
+      "description": "Luka Modric",
+      "imageUrl": "https://picsum.photos/seed/p11/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p12",
+      "description": "Thibaut Courtois",
+      "imageUrl": "https://picsum.photos/seed/p12/400/500",
+      "imageHint": "goalkeeper"
+    },
+    {
+      "id": "p13",
+      "description": "Virgil van Dijk",
+      "imageUrl": "https://picsum.photos/seed/p13/400/500",
+      "imageHint": "defender"
+    },
+    {
+      "id": "p14",
+      "description": "Sadio Mane",
+      "imageUrl": "https://picsum.photos/seed/p14/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p15",
+      "description": "Joshua Kimmich",
+      "imageUrl": "https://picsum.photos/seed/p15/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p16",
+      "description": "Vinicius Jr",
+      "imageUrl": "https://picsum.photos/seed/p16/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p17",
+      "description": "Bernardo Silva",
+      "imageUrl": "https://picsum.photos/seed/p17/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p18",
+      "description": "Alisson Becker",
+      "imageUrl": "https://picsum.photos/seed/p18/400/500",
+      "imageHint": "goalkeeper"
+    },
+    {
+      "id": "p19",
+      "description": "Casemiro",
+      "imageUrl": "https://picsum.photos/seed/p19/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p20",
+      "description": "Ruben Dias",
+      "imageUrl": "https://picsum.photos/seed/p20/400/500",
+      "imageHint": "defender"
+    },
+    {
+      "id": "p21",
+      "description": "Son Heung-min",
+      "imageUrl": "https://picsum.photos/seed/p21/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p22",
+      "description": "Pedri",
+      "imageUrl": "https://picsum.photos/seed/p22/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p23",
+      "description": "Gavi",
+      "imageUrl": "https://picsum.photos/seed/p23/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p24",
+      "description": "Jude Bellingham",
+      "imageUrl": "https://picsum.photos/seed/p24/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p25",
+      "description": "Jamal Musiala",
+      "imageUrl": "https://picsum.photos/seed/p25/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p26",
+      "description": "Bukayo Saka",
+      "imageUrl": "https://picsum.photos/seed/p26/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p27",
+      "description": "Martin Odegaard",
+      "imageUrl": "https://picsum.photos/seed/p27/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p28",
+      "description": "Marcus Rashford",
+      "imageUrl": "https://picsum.photos/seed/p28/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p29",
+      "description": "Bruno Fernandes",
+      "imageUrl": "https://picsum.photos/seed/p29/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "p30",
+      "description": "Rodri",
+      "imageUrl": "https://picsum.photos/seed/p30/400/500",
+      "imageHint": "footballer"
+    },
+    {
+      "id": "ucl_bg",
+      "description": "UEFA Champions League Stadium",
+      "imageUrl": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/dd73d109-2496-4db2-b33e-a3cbe8936ce4/deb209j-829583bf-4aa3-41df-b20f-126c97898b94.png/v1/fill/w_1280,h_720,q_80,strp/fifa_19_background_ucl_by_algis21_deb209j-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6Ii9mL2RkNzNkMTA5LTI0OTYtNGRiMi1iMzNlLWEzY2JlODkzNmNlNC9kZWIyMDlqLTgyOTU4M2JmLTRhYTMtNDFkZi1iMjBmLTEyNmM5Nzg5OGI5NC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.JmG5BXCaz0WhafU4xn3yjj0lRBazvucmHp8b4Y81tuw",
+      "imageHint": "ucl stadium"
+    }
+  ]
 }

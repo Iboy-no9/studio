@@ -192,11 +192,11 @@ export default function EliteDraftAuction() {
             src={bgImage.imageUrl} 
             alt="UCL Stadium" 
             fill 
-            className="object-cover opacity-25 mix-blend-screen" 
+            className="object-cover opacity-35 brightness-50" 
             priority
             data-ai-hint={bgImage.imageHint}
           />
-          <div className="absolute inset-0 ucl-gradient" />
+          <div className="absolute inset-0 ucl-gradient opacity-50" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         </div>
       )}
@@ -418,17 +418,17 @@ export default function EliteDraftAuction() {
               </div>
           </div>
         </div>
-
+        {/* ... remaining code same as before ... */}
         {errorMsg && (
           <div className="absolute top-20 left-1/2 -translate-x-1/2 z-[100] bg-destructive text-white px-8 py-4 rounded-full flex items-center gap-3 shadow-[0_0_40px_rgba(220,38,38,0.5)] animate-in slide-in-from-top duration-500">
             <AlertCircle className="w-6 h-6" />
             <span className="text-sm font-black uppercase tracking-widest">{errorMsg}</span>
           </div>
         )}
-
-        {/* Finished Screen */}
+        {/* ... existing overlays ... */}
         {showFinishedOverlay && (
            <div className="absolute inset-0 z-[101] bg-[#000411]/95 backdrop-blur-3xl flex items-center justify-center text-center p-8 animate-in fade-in zoom-in duration-500 overflow-hidden">
+             {/* ... summary content ... */}
               <div className="max-w-7xl w-full flex flex-col items-center h-full max-h-[92vh]">
                 <div className="flex flex-col items-center mb-6 shrink-0">
                   <div className="relative inline-block mb-3">
@@ -437,7 +437,6 @@ export default function EliteDraftAuction() {
                   </div>
                   <h2 className="text-3xl font-black tracking-tighter italic text-white uppercase leading-none">DRAFT SUMMARY</h2>
                 </div>
-                
                 <div className="grid grid-cols-3 gap-4 w-full mb-8 shrink-0 px-4">
                    <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md flex flex-col items-center">
                       <div className="text-muted-foreground text-[9px] font-black uppercase tracking-[0.3em] mb-1">Total Lots</div>
@@ -452,8 +451,6 @@ export default function EliteDraftAuction() {
                       <div className="text-3xl font-black text-destructive italic tabular-nums leading-none">{unsoldPlayers.length}</div>
                    </div>
                 </div>
-
-                {/* Team Roster Breakdown */}
                 <div className="w-full flex-1 min-0 flex flex-col px-4">
                    <h3 className="text-left text-xs font-black uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3 px-2 shrink-0">
                      <LayoutDashboard className="w-4 h-4" />
@@ -508,7 +505,6 @@ export default function EliteDraftAuction() {
                      })}
                    </div>
                 </div>
-
                 <div className="flex gap-4 mt-6 shrink-0 pb-4">
                   <Button variant="outline" size="lg" className="h-14 px-10 text-xs font-black rounded-xl uppercase tracking-[0.2em] border-white/20 hover:bg-white/10 transition-all" onClick={() => setShowFinishedOverlay(false)}>
                      <X className="w-4 h-4 mr-3" />
@@ -522,7 +518,6 @@ export default function EliteDraftAuction() {
               </div>
            </div>
         )}
-
         {/* Summary Re-open Button */}
         {!showFinishedOverlay && status === 'FINISHED' && (
           <div className="absolute bottom-6 right-6 z-[102] animate-in fade-in slide-in-from-bottom-4">
@@ -546,7 +541,7 @@ export default function EliteDraftAuction() {
               POOL
             </TabsTrigger>
           </TabsList>
-
+          {/* ... tabs content ... */}
           <TabsContent value="sold" className="flex-1 overflow-hidden mt-0 flex flex-col">
             <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar">
               {soldPlayers.length === 0 ? (
