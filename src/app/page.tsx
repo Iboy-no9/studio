@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X, CheckCircle2, RotateCcw, LayoutDashboard } from 'lucide-react';
+import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X, CheckCircle2, RotateCcw, LayoutDashboard, Wallet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -398,70 +398,83 @@ export default function EliteDraftAuction() {
 
         {/* Finished Screen */}
         {status === 'FINISHED' && showFinishedOverlay && (
-           <div className="absolute inset-0 z-[101] bg-[#000411]/95 backdrop-blur-3xl flex items-center justify-center text-center p-8 animate-in fade-in zoom-in duration-500">
-              <div className="max-w-7xl w-full flex flex-col items-center h-full max-h-[90vh]">
-                <div className="flex flex-col items-center mb-8 shrink-0">
-                  <div className="relative inline-block mb-4">
-                    <Trophy className="w-16 h-16 text-secondary drop-shadow-[0_0_50px_rgba(255,215,0,0.6)]" />
-                    <Star className="absolute -top-2 -right-2 w-6 h-6 text-primary animate-pulse" />
+           <div className="absolute inset-0 z-[101] bg-[#000411]/95 backdrop-blur-3xl flex items-center justify-center text-center p-8 animate-in fade-in zoom-in duration-500 overflow-hidden">
+              <div className="max-w-7xl w-full flex flex-col items-center h-full max-h-[92vh]">
+                <div className="flex flex-col items-center mb-6 shrink-0">
+                  <div className="relative inline-block mb-3">
+                    <Trophy className="w-14 h-14 text-secondary drop-shadow-[0_0_50px_rgba(255,215,0,0.6)]" />
+                    <Star className="absolute -top-2 -right-2 w-5 h-5 text-primary animate-pulse" />
                   </div>
-                  <h2 className="text-4xl font-black tracking-tighter italic text-white uppercase">DRAFT SUMMARY</h2>
+                  <h2 className="text-3xl font-black tracking-tighter italic text-white uppercase leading-none">DRAFT SUMMARY</h2>
                 </div>
                 
-                <div className="grid grid-cols-3 gap-4 w-full mb-10 shrink-0">
-                   <div className="bg-white/10 border border-white/20 p-6 rounded-2xl backdrop-blur-md">
-                      <div className="text-muted-foreground text-[10px] font-black uppercase tracking-[0.3em] mb-2">Total Lots</div>
-                      <div className="text-4xl font-black text-primary italic tabular-nums">{PLAYERS.length}</div>
+                <div className="grid grid-cols-3 gap-4 w-full mb-8 shrink-0 px-4">
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md flex flex-col items-center">
+                      <div className="text-muted-foreground text-[9px] font-black uppercase tracking-[0.3em] mb-1">Total Lots</div>
+                      <div className="text-3xl font-black text-primary italic tabular-nums leading-none">{PLAYERS.length}</div>
                    </div>
-                   <div className="bg-white/10 border border-white/20 p-6 rounded-2xl backdrop-blur-md">
-                      <div className="text-muted-foreground text-[10px] font-black uppercase tracking-[0.3em] mb-2">Players Signed</div>
-                      <div className="text-4xl font-black text-secondary italic tabular-nums">{soldPlayers.length}</div>
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md flex flex-col items-center">
+                      <div className="text-muted-foreground text-[9px] font-black uppercase tracking-[0.3em] mb-1">Players Signed</div>
+                      <div className="text-3xl font-black text-secondary italic tabular-nums leading-none">{soldPlayers.length}</div>
                    </div>
-                   <div className="bg-white/10 border border-white/20 p-6 rounded-2xl backdrop-blur-md">
-                      <div className="text-muted-foreground text-[10px] font-black uppercase tracking-[0.3em] mb-2">Skipped/Unsold</div>
-                      <div className="text-4xl font-black text-destructive italic tabular-nums">{skippedPlayerIds.length}</div>
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md flex flex-col items-center">
+                      <div className="text-muted-foreground text-[9px] font-black uppercase tracking-[0.3em] mb-1">Skipped/Unsold</div>
+                      <div className="text-3xl font-black text-destructive italic tabular-nums leading-none">{skippedPlayerIds.length}</div>
                    </div>
                 </div>
 
-                {/* Team Roster Breakdown - Improved Visibility */}
-                <div className="w-full flex-1 min-h-0 flex flex-col">
-                   <h3 className="text-left text-sm font-black uppercase tracking-[0.4em] text-primary mb-6 flex items-center gap-3 px-2 shrink-0">
-                     <LayoutDashboard className="w-5 h-5" />
+                {/* Team Roster Breakdown */}
+                <div className="w-full flex-1 min-h-0 flex flex-col px-4">
+                   <h3 className="text-left text-xs font-black uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3 px-2 shrink-0">
+                     <LayoutDashboard className="w-4 h-4" />
                      Franchise Squads
                    </h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pr-4 custom-scrollbar pb-8">
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 overflow-y-auto pr-2 custom-scrollbar pb-6">
                      {TEAMS.map(team => {
                         const teamPlayers = soldPlayers.filter(s => s.team.id === team.id);
                         const totalSpent = teamPlayers.reduce((sum, p) => sum + p.price, 0);
                         return (
-                          <div key={team.id} className="bg-card/80 border-2 border-white/10 rounded-3xl p-6 text-left shadow-2xl relative overflow-hidden group hover:border-primary/50 transition-all">
+                          <div key={team.id} className="bg-card/90 border-2 border-white/10 rounded-2xl flex flex-col shadow-2xl relative overflow-hidden group hover:border-primary transition-all h-[320px]">
                             {/* Accent Bar */}
-                            <div className="absolute top-0 left-0 w-full h-1.5 bg-primary/20 group-hover:bg-primary transition-colors" />
+                            <div className="absolute top-0 left-0 w-full h-1 bg-primary/20 group-hover:bg-primary transition-colors" />
                             
-                            <div className="flex items-center justify-between mb-6">
-                              <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 p-1.5 bg-white/10 rounded-xl border border-white/10 flex items-center justify-center shrink-0">
-                                  <img src={team.logoUrl} className="w-full h-full object-contain" alt="" />
-                                </div>
-                                <span className="font-black text-lg uppercase tracking-tight truncate leading-none">{team.name}</span>
-                              </div>
-                              <div className="flex flex-col items-end">
-                                <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest opacity-60">Total Spent</span>
-                                <span className="text-2xl font-black text-primary tabular-nums italic">₹{totalSpent.toLocaleString()}</span>
-                              </div>
+                            {/* Card Header */}
+                            <div className="p-4 bg-white/5 border-b border-white/10 flex items-center justify-between gap-3 shrink-0">
+                               <div className="flex items-center gap-3 min-w-0">
+                                  <div className="w-10 h-10 p-1.5 bg-white rounded-lg border border-white/10 flex items-center justify-center shrink-0 shadow-lg">
+                                    <img src={team.logoUrl} className="w-full h-full object-contain" alt="" />
+                                  </div>
+                                  <div className="flex flex-col min-w-0">
+                                    <span className="font-black text-sm uppercase tracking-tight text-white leading-tight block truncate">{team.name}</span>
+                                    <span className="text-[8px] font-black text-primary uppercase tracking-widest">{teamPlayers.length} Players</span>
+                                  </div>
+                               </div>
+                               <div className="text-right shrink-0">
+                                  <div className="flex items-center gap-1 justify-end text-[7px] font-black text-muted-foreground uppercase tracking-widest mb-0.5">
+                                    <Wallet className="w-2.5 h-2.5" />
+                                    <span>Total Spent</span>
+                                  </div>
+                                  <div className="text-lg font-black text-secondary tabular-nums leading-none">₹{totalSpent.toLocaleString()}</div>
+                               </div>
                             </div>
 
-                            <div className="space-y-2.5 max-h-[200px] overflow-y-auto custom-scrollbar pr-2">
+                            {/* Player List */}
+                            <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-1.5">
                               {teamPlayers.length > 0 ? (
                                 teamPlayers.map((s, i) => (
-                                  <div key={i} className="flex justify-between items-center py-2.5 px-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
-                                    <span className="text-white text-xs font-bold uppercase tracking-wide truncate flex-1">{s.player.name}</span>
-                                    <span className="text-secondary font-black text-xs shrink-0 ml-3 italic tabular-nums">₹{s.price}</span>
+                                  <div key={i} className="flex justify-between items-center py-2 px-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                      <span className="text-[9px] font-black text-primary/60 tabular-nums">0{i+1}</span>
+                                      <span className="text-white text-[10px] font-bold uppercase tracking-wide truncate">{s.player.name}</span>
+                                    </div>
+                                    <span className="text-secondary font-black text-[10px] shrink-0 ml-3 tabular-nums">₹{s.price}</span>
                                   </div>
                                 ))
                               ) : (
-                                <div className="text-[11px] text-muted-foreground font-black uppercase tracking-[0.2em] italic text-center py-8 opacity-40 border-2 border-dashed border-white/5 rounded-2xl">
-                                   No Signings
+                                <div className="h-full flex flex-col items-center justify-center opacity-30 px-4">
+                                   <div className="text-[9px] font-black uppercase tracking-[0.2em] italic text-center border-2 border-dashed border-white/10 p-6 rounded-xl w-full">
+                                      No signings made
+                                   </div>
                                 </div>
                               )}
                             </div>
@@ -471,13 +484,13 @@ export default function EliteDraftAuction() {
                    </div>
                 </div>
 
-                <div className="flex gap-6 mt-8 shrink-0 pb-4">
-                  <Button variant="outline" size="lg" className="h-16 px-12 text-sm font-black rounded-2xl uppercase tracking-[0.2em] border-white/20 hover:bg-white/10 transition-all" onClick={() => setShowFinishedOverlay(false)}>
-                     <X className="w-5 h-5 mr-3" />
+                <div className="flex gap-4 mt-6 shrink-0 pb-4">
+                  <Button variant="outline" size="lg" className="h-14 px-10 text-xs font-black rounded-xl uppercase tracking-[0.2em] border-white/20 hover:bg-white/10 transition-all" onClick={() => setShowFinishedOverlay(false)}>
+                     <X className="w-4 h-4 mr-3" />
                      Close & Review
                   </Button>
-                  <Button variant="default" size="lg" className="h-16 px-16 text-sm font-black rounded-2xl uppercase tracking-[0.2em] glow-primary bg-primary text-black hover:scale-105 transition-all" onClick={() => window.location.reload()}>
-                     <RotateCcw className="w-6 h-6 mr-3" />
+                  <Button variant="default" size="lg" className="h-14 px-14 text-xs font-black rounded-xl uppercase tracking-[0.2em] glow-primary bg-primary text-black hover:scale-105 transition-all" onClick={() => window.location.reload()}>
+                     <RotateCcw className="w-5 h-5 mr-3" />
                      Reset Draft
                   </Button>
                 </div>
