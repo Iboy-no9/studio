@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -151,8 +152,8 @@ export default function EliteDraftAuction() {
           >
             <div className="flex justify-between items-center relative z-10">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-muted border border-white/10 overflow-hidden shadow-inner">
-                   <img src={team.logoUrl} className="w-full h-full object-cover" alt="" />
+                <div className="w-12 h-12 rounded-full bg-white/10 border border-white/10 overflow-hidden shadow-inner p-1">
+                   <img src={team.logoUrl} className="w-full h-full object-contain" alt={team.name} />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors">{team.name}</h3>
@@ -237,7 +238,7 @@ export default function EliteDraftAuction() {
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[2rem] animate-in fade-in duration-500">
                 <div className="text-center animate-sold">
                    <div className="text-8xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SOLD!</div>
-                   <div className="text-lg mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-3 px-8 rounded-full inline-block border border-primary/40 shadow-xl">
+                   <div className="text-lg mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-3 px-8 rounded-full inline-block border border-primary/40 shadow-xl max-w-[300px] truncate">
                       To {TEAMS.find(t => t.id === selectedTeamId)?.name}
                    </div>
                 </div>
@@ -314,11 +315,11 @@ export default function EliteDraftAuction() {
       <div className="w-1/4 flex flex-col gap-4 overflow-hidden z-10">
         <Tabs defaultValue="sold" className="w-full flex flex-col h-full">
           <TabsList className="grid w-full grid-cols-2 h-14 bg-muted/20 backdrop-blur-xl border border-white/5 p-1.5 mb-3 rounded-2xl">
-            <TabsTrigger value="sold" className="flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-secondary data-[state=active]:text-black rounded-xl">
+            <TabsTrigger value="sold" className="flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-secondary data-[state=active]:text-black rounded-xl transition-all">
               <History className="w-4 h-4" />
               SIGNED
             </TabsTrigger>
-            <TabsTrigger value="unsold" className="flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-black rounded-xl">
+            <TabsTrigger value="unsold" className="flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-black rounded-xl transition-all">
               <Users className="w-4 h-4" />
               POOL
             </TabsTrigger>
