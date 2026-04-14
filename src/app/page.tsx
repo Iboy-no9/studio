@@ -46,7 +46,7 @@ export default function LandingPage() {
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground uppercase tracking-[0.2em] font-medium mb-12 max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
-          The ultimate professional player draft experience. Build your dream squad with real-time bidding.
+          Experience the ultimate football auction presented by Welfare DIIA. Compete in a real-time auction, build your dream team, and battle it out with 6 teams and 60 players.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 items-center animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
