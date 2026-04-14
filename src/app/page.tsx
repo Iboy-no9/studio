@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -5,7 +6,8 @@ import { TEAMS, PLAYERS, Player, Team } from '@/lib/auction-data';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Trophy, Zap, History, UserCheck, AlertCircle, Star } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface SoldPlayer {
@@ -107,6 +109,9 @@ export default function EliteDraftAuction() {
     }
   }, [errorMsg]);
 
+  // Derive unsold players
+  const unsoldPlayers = PLAYERS.filter(p => !soldPlayers.some(s => s.player.id === p.id) && p.id !== currentPlayer.id);
+
   return (
     <div className="flex h-screen w-full bg-[#0a0a0a] text-white p-6 gap-6 font-headline overflow-hidden">
       
@@ -129,8 +134,8 @@ export default function EliteDraftAuction() {
           >
             <div className="flex justify-between items-center relative z-10">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center font-bold text-xs">
-                   {team.name.charAt(0)}
+                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center font-bold text-xs border border-white/10 overflow-hidden">
+                   <img src={team.logoUrl} className="w-full h-full object-cover" alt="" />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg leading-tight">{team.name}</h3>
@@ -153,10 +158,10 @@ export default function EliteDraftAuction() {
       <div className="flex-1 flex flex-col gap-6 relative">
         <div className="flex justify-between items-end px-2">
           <div className="flex flex-col">
-            <span className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Live Auction Status</span>
+            <span className="text-xs text-muted-foreground uppercase tracking-widest mb-1 font-bold">Live Auction Status</span>
             <div className="flex items-center gap-3">
               <Badge className={cn(
-                "px-4 py-1 text-sm font-bold uppercase",
+                "px-4 py-1 text-sm font-bold uppercase rounded-md",
                 status === 'BIDDING' ? "bg-primary text-black animate-pulse" : 
                 status === 'SOLD' ? "bg-secondary text-black" : "bg-muted"
               )}>
@@ -170,7 +175,7 @@ export default function EliteDraftAuction() {
             </div>
           </div>
           <div className="text-right">
-             <span className="text-xs text-muted-foreground uppercase tracking-widest">Player Index</span>
+             <span className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Player Index</span>
              <div className="text-xl font-bold">{currentPlayerIdx + 1} / {PLAYERS.length}</div>
           </div>
         </div>
@@ -191,7 +196,7 @@ export default function EliteDraftAuction() {
             </div>
 
             {/* Club Logo Overlay */}
-            <div className="absolute top-24 left-6 z-20 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+            <div className="absolute top-24 left-6 z-20 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 overflow-hidden">
                <img src={TEAMS[currentPlayerIdx % TEAMS.length].logoUrl} alt="Logo" className="w-10 h-10 object-contain" />
             </div>
 
@@ -206,9 +211,9 @@ export default function EliteDraftAuction() {
             </div>
 
             {/* Bottom Info Overlay */}
-            <div className="absolute bottom-12 left-0 right-0 z-20 text-center flex flex-col items-center">
-               <div className="text-sm font-medium text-white/80 tracking-widest mb-1 italic">01.01.2024</div>
-               <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter drop-shadow-lg px-4 truncate max-w-full">
+            <div className="absolute bottom-12 left-0 right-0 z-20 text-center flex flex-col items-center px-4">
+               <div className="text-sm font-medium text-white/80 tracking-widest mb-1 italic uppercase">{currentPlayer.nationality}</div>
+               <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter drop-shadow-lg truncate w-full">
                  {currentPlayer.name}
                </h1>
             </div>
@@ -295,33 +300,70 @@ export default function EliteDraftAuction() {
         )}
       </div>
 
-      {/* RIGHT PANEL: History */}
-      <div className="w-1/4 flex flex-col gap-4">
-        <div className="flex items-center gap-2 mb-2">
-          <History className="text-secondary w-6 h-6" />
-          <h2 className="text-xl font-bold tracking-tight text-secondary uppercase">Draft Board</h2>
-        </div>
-        <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar">
-          {soldPlayers.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center opacity-10 text-center px-10">
-              <UserCheck className="w-20 h-20 mb-4" />
-              <p className="font-bold text-lg">No active signings yet.</p>
+      {/* RIGHT PANEL: Draft Board & Unsold Pool */}
+      <div className="w-1/4 flex flex-col gap-4 overflow-hidden">
+        <Tabs defaultValue="sold" className="w-full flex flex-col h-full">
+          <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 border border-white/5 p-1 mb-2">
+            <TabsTrigger value="sold" className="flex items-center gap-2 font-bold uppercase tracking-tight text-xs data-[state=active]:bg-secondary data-[state=active]:text-black">
+              <History className="w-3 h-3" />
+              Sold
+            </TabsTrigger>
+            <TabsTrigger value="unsold" className="flex items-center gap-2 font-bold uppercase tracking-tight text-xs data-[state=active]:bg-primary data-[state=active]:text-black">
+              <Users className="w-3 h-3" />
+              Pool
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="sold" className="flex-1 overflow-hidden mt-0 flex flex-col">
+            <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar">
+              {soldPlayers.length === 0 ? (
+                <div className="h-full flex flex-col items-center justify-center opacity-10 text-center px-10">
+                  <UserCheck className="w-16 h-16 mb-4" />
+                  <p className="font-bold text-lg">No active signings yet.</p>
+                </div>
+              ) : (
+                soldPlayers.map((sold, idx) => (
+                  <div key={idx} className="bg-card/40 p-3 rounded-xl border border-white/5 flex gap-4 animate-in slide-in-from-right duration-500">
+                    <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden shrink-0 border border-white/10">
+                      <img src={sold.player.imageUrl} className="w-full h-full object-cover" alt="" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                       <div className="font-black text-sm truncate uppercase italic">{sold.player.name}</div>
+                       <div className="text-[10px] font-bold text-primary mb-1 uppercase tracking-tighter opacity-70 truncate">{sold.team.name}</div>
+                       <div className="text-lg font-black text-secondary tabular-nums">₹{sold.price.toLocaleString()}</div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
-          ) : (
-            soldPlayers.map((sold, idx) => (
-              <div key={idx} className="bg-card/40 p-3 rounded-xl border border-white/5 flex gap-4 animate-in slide-in-from-right duration-500">
-                <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden shrink-0 border border-white/10">
-                  <img src={sold.player.imageUrl} className="w-full h-full object-cover" alt="" />
+          </TabsContent>
+
+          <TabsContent value="unsold" className="flex-1 overflow-hidden mt-0 flex flex-col">
+            <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar">
+              {unsoldPlayers.length === 0 ? (
+                <div className="h-full flex flex-col items-center justify-center opacity-10 text-center px-10">
+                  <Star className="w-16 h-16 mb-4" />
+                  <p className="font-bold text-lg">No players left in pool.</p>
                 </div>
-                <div className="flex-1 min-w-0">
-                   <div className="font-black text-sm truncate uppercase italic">{sold.player.name}</div>
-                   <div className="text-[10px] font-bold text-primary mb-1 uppercase tracking-tighter opacity-70">{sold.team.name}</div>
-                   <div className="text-lg font-black text-secondary tabular-nums">₹{sold.price.toLocaleString()}</div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+              ) : (
+                unsoldPlayers.map((player) => (
+                  <div key={player.id} className="bg-card/20 p-2 rounded-lg border border-white/5 flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity">
+                    <div className="w-10 h-10 rounded-full bg-muted overflow-hidden shrink-0 border border-white/10">
+                      <img src={player.imageUrl} className="w-full h-full object-cover" alt="" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                       <div className="font-bold text-xs truncate uppercase">{player.name}</div>
+                       <div className="text-[10px] font-bold text-muted-foreground uppercase">{player.position}</div>
+                    </div>
+                    <div className="text-xs font-black text-primary bg-primary/10 px-2 py-1 rounded">
+                      RT: {player.rating}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       <style jsx global>{`
