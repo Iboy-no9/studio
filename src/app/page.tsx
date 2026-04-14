@@ -65,7 +65,7 @@ export default function EliteDraftAuction() {
         setSkippedPlayerIds(prev => [...prev, currentPlayer.id]);
       }
       setStatus('SKIPPED');
-      setTimer(5); // Reduced from 15 to 5 seconds
+      setTimer(5);
     }
   }, [status, currentPlayer.id, skippedPlayerIds]);
 
@@ -116,7 +116,7 @@ export default function EliteDraftAuction() {
       [selectedTeamId]: prev[selectedTeamId] - finalPrice
     }));
     setStatus('SOLD');
-    setTimer(5); // Reduced from 15 to 5 seconds
+    setTimer(5);
   }, [currentBid, currentPlayer, selectedTeamId, status, teamBudgets]);
 
   const handleFinishAuction = useCallback(() => {
@@ -188,37 +188,46 @@ export default function EliteDraftAuction() {
           <Trophy className="text-primary w-6 h-6 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]" />
           <h2 className="text-xl font-black tracking-tight text-primary">FRANCHISES</h2>
         </div>
-        {TEAMS.map((team) => (
-          <div
-            key={team.id}
-            onClick={() => setSelectedTeamId(team.id)}
-            className={cn(
-              "p-4 rounded-xl cursor-pointer transition-all border-2 relative overflow-hidden group",
-              selectedTeamId === team.id 
-                ? "bg-primary/10 border-primary glow-primary scale-[1.03] z-10" 
-                : "bg-card/40 backdrop-blur-md border-transparent hover:bg-muted/50"
-            )}
-          >
-            <div className="flex justify-between items-center relative z-10">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-white/10 border border-white/10 overflow-hidden shadow-inner p-1">
-                   <img src={team.logoUrl} className="w-full h-full object-contain" alt={team.name} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors">{team.name}</h3>
-                  <div className="flex items-center gap-1 text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-black">
-                    <Zap className="w-3 h-3 text-secondary" />
-                    <span>BUDGET LEFT</span>
+        {TEAMS.map((team) => {
+          const teamPlayerCount = soldPlayers.filter(s => s.team.id === team.id).length;
+          return (
+            <div
+              key={team.id}
+              onClick={() => setSelectedTeamId(team.id)}
+              className={cn(
+                "p-4 rounded-xl cursor-pointer transition-all border-2 relative overflow-hidden group",
+                selectedTeamId === team.id 
+                  ? "bg-primary/10 border-primary glow-primary scale-[1.03] z-10" 
+                  : "bg-card/40 backdrop-blur-md border-transparent hover:bg-muted/50"
+              )}
+            >
+              <div className="flex justify-between items-center relative z-10">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-white/10 border border-white/10 overflow-hidden shadow-inner p-1">
+                     <img src={team.logoUrl} className="w-full h-full object-contain" alt={team.name} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors">{team.name}</h3>
+                    <div className="flex flex-col gap-1 mt-1">
+                      <div className="flex items-center gap-1 text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-black">
+                        <Zap className="w-3 h-3 text-secondary" />
+                        <span>BUDGET LEFT</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-[10px] text-primary uppercase tracking-[0.2em] font-black">
+                        <Users className="w-3 h-3" />
+                        <span>SQUAD: {teamPlayerCount}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <div className="text-right">
+                  <div className="text-xl font-black text-primary tabular-nums">₹{teamBudgets[team.id].toLocaleString()}</div>
+                </div>
               </div>
-              <div className="text-right">
-                <div className="text-xl font-black text-primary tabular-nums">₹{teamBudgets[team.id].toLocaleString()}</div>
-              </div>
+              <Progress value={(teamBudgets[team.id] / team.budget) * 100} className="h-1 mt-3 bg-white/5" />
             </div>
-            <Progress value={(teamBudgets[team.id] / team.budget) * 100} className="h-1 mt-3 bg-white/5" />
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Main Content */}
