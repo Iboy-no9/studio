@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X, CheckCircle2, RotateCcw, LayoutDashboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -36,7 +36,6 @@ export default function EliteDraftAuction() {
   const currentPlayer = PLAYERS[currentPlayerIdx];
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
   
-  // A draft is only "last" if we are at the end of the list AND no skipped players are waiting
   const hasMoreInSequence = currentPlayerIdx < PLAYERS.length - 1;
   const hasSkippedRemaining = skippedPlayerIds.length > 0;
   const isLastPlayer = !hasMoreInSequence && !hasSkippedRemaining;
@@ -49,11 +48,8 @@ export default function EliteDraftAuction() {
       setTimer(10);
       setSelectedTeamId(null);
     } else if (hasSkippedRemaining) {
-      // Re-auction the first skipped player
       const nextId = skippedPlayerIds[0];
       const nextIdx = PLAYERS.findIndex(p => p.id === nextId);
-      
-      // Remove from skipped list as it's entering the hot seat again
       setSkippedPlayerIds(prev => prev.slice(1));
       setCurrentPlayerIdx(nextIdx);
       setCurrentBid(0);
@@ -65,7 +61,6 @@ export default function EliteDraftAuction() {
 
   const handleSkip = useCallback(() => {
     if (status === 'BIDDING' || status === 'IDLE') {
-      // Don't duplicate in skipped list if it's already there (though logic prevents this)
       if (!skippedPlayerIds.includes(currentPlayer.id)) {
         setSkippedPlayerIds(prev => [...prev, currentPlayer.id]);
       }
@@ -113,7 +108,6 @@ export default function EliteDraftAuction() {
     };
 
     setSoldPlayers(prev => [soldPlayer, ...prev]);
-    // Remove from skipped if it was being re-auctioned
     setSkippedPlayerIds(prev => prev.filter(id => id !== currentPlayer.id));
     
     setTeamBudgets(prev => ({
@@ -404,35 +398,72 @@ export default function EliteDraftAuction() {
 
         {/* Finished Screen */}
         {status === 'FINISHED' && showFinishedOverlay && (
-           <div className="absolute inset-0 z-[101] bg-background/98 backdrop-blur-2xl flex items-center justify-center text-center p-10 animate-in zoom-in duration-700">
-              <div className="max-w-4xl flex flex-col items-center">
-                <div className="relative inline-block mb-10">
-                  <Trophy className="w-32 h-32 text-secondary drop-shadow-[0_0_50px_rgba(255,215,0,0.6)]" />
-                  <Star className="absolute -top-4 -right-4 w-10 h-10 text-primary animate-pulse" />
+           <div className="absolute inset-0 z-[101] bg-background/98 backdrop-blur-2xl flex items-center justify-center text-center p-8 animate-in zoom-in duration-700">
+              <div className="max-w-6xl w-full flex flex-col items-center">
+                <div className="relative inline-block mb-6">
+                  <Trophy className="w-20 h-20 text-secondary drop-shadow-[0_0_50px_rgba(255,215,0,0.6)]" />
+                  <Star className="absolute -top-2 -right-2 w-8 h-8 text-primary animate-pulse" />
                 </div>
-                <h2 className="text-6xl font-black tracking-tighter mb-4 italic text-white uppercase">DRAFT COMPLETED</h2>
+                <h2 className="text-5xl font-black tracking-tighter mb-8 italic text-white uppercase">DRAFT SUMMARY</h2>
                 
-                <div className="grid grid-cols-3 gap-6 w-full mb-12">
-                   <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
-                      <div className="text-muted-foreground text-[10px] font-black uppercase tracking-widest mb-1">Total Lots</div>
-                      <div className="text-4xl font-black text-primary italic">{PLAYERS.length}</div>
+                <div className="grid grid-cols-3 gap-4 w-full mb-8">
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
+                      <div className="text-muted-foreground text-[9px] font-black uppercase tracking-widest mb-1">Total Lots</div>
+                      <div className="text-3xl font-black text-primary italic">{PLAYERS.length}</div>
                    </div>
-                   <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
-                      <div className="text-muted-foreground text-[10px] font-black uppercase tracking-widest mb-1">Players Signed</div>
-                      <div className="text-4xl font-black text-secondary italic">{soldPlayers.length}</div>
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
+                      <div className="text-muted-foreground text-[9px] font-black uppercase tracking-widest mb-1">Players Signed</div>
+                      <div className="text-3xl font-black text-secondary italic">{soldPlayers.length}</div>
                    </div>
-                   <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
-                      <div className="text-muted-foreground text-[10px] font-black uppercase tracking-widest mb-1">Skipped/Unsold</div>
-                      <div className="text-4xl font-black text-destructive italic">{skippedPlayerIds.length}</div>
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
+                      <div className="text-muted-foreground text-[9px] font-black uppercase tracking-widest mb-1">Skipped/Unsold</div>
+                      <div className="text-3xl font-black text-destructive italic">{skippedPlayerIds.length}</div>
+                   </div>
+                </div>
+
+                {/* Team Roster Breakdown */}
+                <div className="w-full mb-8">
+                   <h3 className="text-left text-xs font-black uppercase tracking-[0.3em] text-primary mb-4 flex items-center gap-2 px-2">
+                     <LayoutDashboard className="w-4 h-4" />
+                     Franchise Squads
+                   </h3>
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
+                     {TEAMS.map(team => {
+                        const teamPlayers = soldPlayers.filter(s => s.team.id === team.id);
+                        const totalSpent = teamPlayers.reduce((sum, p) => sum + p.price, 0);
+                        return (
+                          <div key={team.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 text-left transition-hover hover:bg-white/10">
+                            <div className="flex items-center justify-between mb-3 pb-2 border-b border-white/10">
+                              <div className="flex items-center gap-2">
+                                <img src={team.logoUrl} className="w-6 h-6 object-contain" alt="" />
+                                <span className="font-black text-xs uppercase truncate max-w-[120px]">{team.name}</span>
+                              </div>
+                              <span className="text-primary font-black text-xs">₹{totalSpent.toLocaleString()}</span>
+                            </div>
+                            <div className="space-y-1.5">
+                              {teamPlayers.length > 0 ? (
+                                teamPlayers.map((s, i) => (
+                                  <div key={i} className="flex justify-between items-center text-[10px]">
+                                    <span className="text-white/80 font-bold uppercase truncate">{s.player.name}</span>
+                                    <span className="text-secondary font-black shrink-0 ml-2 italic">₹{s.price}</span>
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="text-[10px] text-muted-foreground italic text-center py-2">No signings in this draft</div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                     })}
                    </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <Button variant="outline" size="lg" className="h-16 px-10 text-lg font-black rounded-2xl uppercase tracking-tighter border-white/10 hover:bg-white/5" onClick={() => setShowFinishedOverlay(false)}>
+                  <Button variant="outline" size="lg" className="h-14 px-10 text-sm font-black rounded-xl uppercase tracking-widest border-white/10 hover:bg-white/5" onClick={() => setShowFinishedOverlay(false)}>
                      <X className="w-4 h-4 mr-2" />
                      Close & Review
                   </Button>
-                  <Button variant="default" size="lg" className="h-16 px-12 text-xl font-black rounded-2xl uppercase tracking-tighter glow-primary" onClick={() => window.location.reload()}>
+                  <Button variant="default" size="lg" className="h-14 px-12 text-sm font-black rounded-xl uppercase tracking-widest glow-primary" onClick={() => window.location.reload()}>
                      <RotateCcw className="w-5 h-5 mr-2" />
                      Reset Draft
                   </Button>
