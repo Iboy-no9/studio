@@ -91,6 +91,7 @@ export default function EliteDraftAuction() {
     const startPrice = currentBid === 0 ? (currentPlayer?.basePrice || 10) : currentBid;
     const newBid = startPrice + increment;
 
+    // Optional budget check if team is already selected
     if (selectedTeamId && teamBudgets[selectedTeamId] < newBid) {
       setErrorMsg("Budget Exceeded for " + TEAMS.find(t => t.id === selectedTeamId)?.name);
       return;
@@ -264,13 +265,6 @@ export default function EliteDraftAuction() {
                   <div className="text-[5.5rem] font-black text-[#00ffd0] leading-[0.9] drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] italic tracking-tighter">
                     {currentPlayer.rating}
                   </div>
-                  {/* Starball Icon */}
-                  <div className="w-10 h-10 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] mb-2">
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                      <path d="M12 2L14.5 9H21.5L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2.5 9H9.5L12 2Z"/>
-                      <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="1.5" fill="none" />
-                    </svg>
-                  </div>
                 </div>
                 <div className="h-[2px] w-12 bg-[#00ffd0]/40 my-1" />
                 <div className="text-2xl font-black text-white italic tracking-tighter uppercase drop-shadow-md">
@@ -339,7 +333,16 @@ export default function EliteDraftAuction() {
                   <Button variant="outline" className="h-12 text-lg font-black border-white/10 hover:bg-primary hover:text-black transition-all" onClick={() => handleBid(50)}>+50</Button>
                   <Button variant="outline" className="h-12 text-lg font-black border-white/10 hover:bg-primary hover:text-black transition-all" onClick={() => handleBid(100)}>+100</Button>
                 </div>
-                <Button variant="secondary" className={cn("h-16 text-xl font-black uppercase tracking-tighter shadow-2xl transition-all duration-300 rounded-2xl border-none", selectedTeamId ? "glow-accent bg-secondary text-black" : "bg-muted text-white/30")} onClick={handleSold}>SIGN PLAYER</Button>
+                <Button 
+                  variant="secondary" 
+                  className={cn(
+                    "h-16 text-xl font-black uppercase tracking-tighter shadow-2xl transition-all duration-300 rounded-2xl border-none", 
+                    selectedTeamId ? "glow-accent bg-secondary text-black" : "bg-muted text-white/30 cursor-not-allowed"
+                  )} 
+                  onClick={handleSold}
+                >
+                  SIGN PLAYER
+                </Button>
                 <Button variant="outline" className="h-12 text-[10px] font-black uppercase tracking-[0.2em] border-white/10 hover:bg-destructive hover:text-white transition-all rounded-xl" onClick={handleSkip}><SkipForward className="w-3 h-3 mr-2" />Skip Player (S)</Button>
               </div>
           </div>
