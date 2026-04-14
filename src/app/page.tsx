@@ -35,24 +35,43 @@ export default function EliteDraftAuction() {
 
   const currentPlayer = PLAYERS[currentPlayerIdx];
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
-  const isLastPlayer = currentPlayerIdx === PLAYERS.length - 1;
+  
+  // A draft is only "last" if we are at the end of the list AND no skipped players are waiting
+  const hasMoreInSequence = currentPlayerIdx < PLAYERS.length - 1;
+  const hasSkippedRemaining = skippedPlayerIds.length > 0;
+  const isLastPlayer = !hasMoreInSequence && !hasSkippedRemaining;
 
   const handleNextPlayer = useCallback(() => {
-    if (currentPlayerIdx < PLAYERS.length - 1) {
+    if (hasMoreInSequence) {
       setCurrentPlayerIdx(prev => prev + 1);
       setCurrentBid(0);
       setStatus('IDLE');
       setTimer(10);
       setSelectedTeamId(null);
+    } else if (hasSkippedRemaining) {
+      // Re-auction the first skipped player
+      const nextId = skippedPlayerIds[0];
+      const nextIdx = PLAYERS.findIndex(p => p.id === nextId);
+      
+      // Remove from skipped list as it's entering the hot seat again
+      setSkippedPlayerIds(prev => prev.slice(1));
+      setCurrentPlayerIdx(nextIdx);
+      setCurrentBid(0);
+      setStatus('IDLE');
+      setTimer(10);
+      setSelectedTeamId(null);
     }
-  }, [currentPlayerIdx]);
+  }, [hasMoreInSequence, hasSkippedRemaining, skippedPlayerIds]);
 
   const handleSkip = useCallback(() => {
     if (status === 'BIDDING' || status === 'IDLE') {
-      setSkippedPlayerIds(prev => [...prev, currentPlayer.id]);
+      // Don't duplicate in skipped list if it's already there (though logic prevents this)
+      if (!skippedPlayerIds.includes(currentPlayer.id)) {
+        setSkippedPlayerIds(prev => [...prev, currentPlayer.id]);
+      }
       setStatus('SKIPPED');
     }
-  }, [status, currentPlayer.id]);
+  }, [status, currentPlayer.id, skippedPlayerIds]);
 
   const handleBid = useCallback((increment: number) => {
     if (status !== 'BIDDING' && status !== 'IDLE') return;
@@ -94,7 +113,7 @@ export default function EliteDraftAuction() {
     };
 
     setSoldPlayers(prev => [soldPlayer, ...prev]);
-    // Remove from skipped if somehow it was there
+    // Remove from skipped if it was being re-auctioned
     setSkippedPlayerIds(prev => prev.filter(id => id !== currentPlayer.id));
     
     setTeamBudgets(prev => ({
@@ -298,7 +317,7 @@ export default function EliteDraftAuction() {
                       className="mt-8 font-black uppercase tracking-widest px-8 h-12 rounded-xl shadow-2xl"
                       onClick={handleNextPlayer}
                      >
-                       Draft Next (N)
+                       {hasMoreInSequence ? "Draft Next (N)" : "Re-auction Skipped (N)"}
                      </Button>
                    ) : (
                      <div className="mt-8 p-3 bg-secondary/20 border border-secondary/40 rounded-xl text-secondary text-[10px] font-black uppercase tracking-widest animate-pulse">
@@ -311,7 +330,7 @@ export default function EliteDraftAuction() {
 
             {status === 'SKIPPED' && (
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
-                <div className="text-center animate-sold flex flex-col items-center">
+                <div className="text-center animate-sold flex flex-col items-center p-6">
                    <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
                    <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Lot Unsold</div>
                    {!isLastPlayer ? (
@@ -320,7 +339,7 @@ export default function EliteDraftAuction() {
                       className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-8 h-12 rounded-xl"
                       onClick={handleNextPlayer}
                      >
-                       Draft Next (N)
+                        {hasMoreInSequence ? "Draft Next (N)" : "Re-auction Skipped (N)"}
                      </Button>
                    ) : (
                      <div className="mt-8 p-3 bg-destructive/20 border border-destructive/40 rounded-xl text-destructive text-[10px] font-black uppercase tracking-widest animate-pulse">
@@ -396,7 +415,7 @@ export default function EliteDraftAuction() {
                 <div className="grid grid-cols-3 gap-6 w-full mb-12">
                    <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
                       <div className="text-muted-foreground text-[10px] font-black uppercase tracking-widest mb-1">Total Lots</div>
-                      <div className="text-4xl font-black text-primary italic">60</div>
+                      <div className="text-4xl font-black text-primary italic">{PLAYERS.length}</div>
                    </div>
                    <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
                       <div className="text-muted-foreground text-[10px] font-black uppercase tracking-widest mb-1">Players Signed</div>
