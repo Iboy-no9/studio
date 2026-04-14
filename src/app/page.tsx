@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X, CheckCircle2, RotateCcw, LayoutDashboard, Wallet } from 'lucide-react';
+import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X, CheckCircle2, RotateCcw, LayoutDashboard, Wallet, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -65,6 +65,7 @@ export default function EliteDraftAuction() {
         setSkippedPlayerIds(prev => [...prev, currentPlayer.id]);
       }
       setStatus('SKIPPED');
+      setTimer(15); // Set timer for auto-transition
     }
   }, [status, currentPlayer.id, skippedPlayerIds]);
 
@@ -115,6 +116,7 @@ export default function EliteDraftAuction() {
       [selectedTeamId]: prev[selectedTeamId] - finalPrice
     }));
     setStatus('SOLD');
+    setTimer(15); // Set timer for auto-transition
   }, [currentBid, currentPlayer, selectedTeamId, status, teamBudgets]);
 
   const handleFinishAuction = useCallback(() => {
@@ -143,11 +145,13 @@ export default function EliteDraftAuction() {
   }, [handleBid, handleSold, handleNextPlayer, handleSkip, status, showFinishedOverlay, isLastPlayer]);
 
   useEffect(() => {
-    if (status === 'BIDDING' && timer > 0) {
+    if ((status === 'BIDDING' || status === 'SOLD' || status === 'SKIPPED') && timer > 0) {
       const interval = setInterval(() => setTimer(t => t - 1), 1000);
       return () => clearInterval(interval);
+    } else if (timer === 0 && (status === 'SOLD' || status === 'SKIPPED') && !isLastPlayer) {
+      handleNextPlayer();
     }
-  }, [status, timer]);
+  }, [status, timer, handleNextPlayer, isLastPlayer]);
 
   useEffect(() => {
     if (errorMsg) {
@@ -233,10 +237,16 @@ export default function EliteDraftAuction() {
                 {status}
               </Badge>
             </div>
-            {status === 'BIDDING' && (
+            {(status === 'BIDDING' || (status === 'SOLD' || status === 'SKIPPED') && !isLastPlayer) && (
               <div className="flex flex-col">
-                 <span className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">Timer</span>
-                 <span className="text-2xl font-black text-secondary tabular-nums leading-none mt-1">
+                 <span className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-60">
+                   {status === 'BIDDING' ? 'Timer' : 'Next Lot In'}
+                 </span>
+                 <span className={cn(
+                   "text-2xl font-black tabular-nums leading-none mt-1 flex items-center gap-2",
+                   status === 'BIDDING' ? "text-secondary" : "text-primary animate-pulse"
+                 )}>
+                   <Clock className="w-4 h-4" />
                    00:{timer < 10 ? `0${timer}` : timer}
                  </span>
               </div>
