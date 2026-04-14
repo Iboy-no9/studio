@@ -348,7 +348,7 @@ export default function EliteDraftAuction() {
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[1.8rem] animate-in fade-in duration-500">
                   <div className="text-center animate-sold flex flex-col items-center p-6">
                      <div className="text-6xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
-                     <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Moving to end of pool</div>
+                     <div className="text-[10px] mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Moving to next player</div>
                   </div>
                 </div>
               )}
