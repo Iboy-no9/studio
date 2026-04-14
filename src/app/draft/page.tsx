@@ -94,14 +94,11 @@ export default function EliteDraftAuction() {
 
   const handleBid = useCallback((increment: number) => {
     if (status !== 'BIDDING' && status !== 'IDLE') return;
-    if (!selectedTeamId) {
-      setErrorMsg("Select your franchise!");
-      return;
-    }
 
     const newBid = (currentBid === 0 ? 10 : currentBid) + increment;
 
-    if (teamBudgets[selectedTeamId] < newBid) {
+    // Only check budget if a team is already selected
+    if (selectedTeamId && teamBudgets[selectedTeamId] < newBid) {
       setErrorMsg("Budget Exceeded!");
       return;
     }
