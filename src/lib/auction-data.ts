@@ -18,12 +18,48 @@ export interface Team {
 }
 
 export const TEAMS: Team[] = [
-  { id: 't1', name: 'Real Madrid', budget: 10000, logoUrl: 'https://picsum.photos/seed/rm/100/100', color: '#4AB0ED' },
-  { id: 't2', name: 'FC Barcelona', budget: 10000, logoUrl: 'https://picsum.photos/seed/barca/100/100', color: '#FCD34D' },
-  { id: 't3', name: 'Arsenal FC', budget: 10000, logoUrl: 'https://picsum.photos/seed/afc/100/100', color: '#F87171' },
-  { id: 't4', name: 'Manchester City', budget: 10000, logoUrl: 'https://picsum.photos/seed/mcfc/100/100', color: '#10B981' },
-  { id: 't5', name: 'Liverpool FC', budget: 10000, logoUrl: 'https://picsum.photos/seed/lfc/100/100', color: '#8B5CF6' },
-  { id: 't6', name: 'FC Bayern Munich', budget: 10000, logoUrl: 'https://picsum.photos/seed/fcb/100/100', color: '#EC4899' },
+  { 
+    id: 't1', 
+    name: 'Real Madrid', 
+    budget: 10000, 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/250px-Real_Madrid_CF.svg.png', 
+    color: '#4AB0ED' 
+  },
+  { 
+    id: 't2', 
+    name: 'FC Barcelona', 
+    budget: 10000, 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/1280px-FC_Barcelona_%28crest%29.svg.png', 
+    color: '#FCD34D' 
+  },
+  { 
+    id: 't3', 
+    name: 'Arsenal FC', 
+    budget: 10000, 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/sco/thumb/5/53/Arsenal_FC.svg/1920px-Arsenal_FC.svg.png', 
+    color: '#F87171' 
+  },
+  { 
+    id: 't4', 
+    name: 'Manchester City', 
+    budget: 10000, 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/1280px-Manchester_City_FC_badge.svg.png', 
+    color: '#10B981' 
+  },
+  { 
+    id: 't5', 
+    name: 'Liverpool FC', 
+    budget: 10000, 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/250px-Liverpool_FC.svg.png', 
+    color: '#8B5CF6' 
+  },
+  { 
+    id: 't6', 
+    name: 'FC Bayern Munich', 
+    budget: 10000, 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/1280px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png', 
+    color: '#EC4899' 
+  },
 ];
 
 export const PLAYERS: Player[] = [
