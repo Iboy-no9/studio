@@ -10,13 +10,31 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { TEAMS } from '@/lib/auction-data';
 import { cn } from '@/lib/utils';
 
-const TEAM_TRANSITIONS = [
+const HEADER_TRANSITIONS = [
   "animate-in fade-in slide-in-from-left-20 duration-1000 ease-out",   // Real Madrid
   "animate-in fade-in zoom-in-95 duration-1000 ease-out",            // FC Barcelona
   "animate-in fade-in slide-in-from-right-20 duration-1000 ease-out",  // Arsenal FC
   "animate-in fade-in slide-in-from-bottom-20 duration-1000 ease-out",// Manchester City
   "animate-in fade-in zoom-in-110 duration-1000 ease-out",           // Liverpool FC
   "animate-in fade-in slide-in-from-top-20 duration-1000 ease-out",    // Bayern Munich
+];
+
+const CAPTAIN_TRANSITIONS = [
+  "animate-in fade-in slide-in-from-left-40 duration-700 delay-[1200ms]", // Real Madrid
+  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms]",           // FC Barcelona
+  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms]",  // Arsenal FC
+  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms]", // Manchester City
+  "animate-in fade-in slide-in-from-left-20 duration-700 delay-[1200ms]", // Liverpool FC
+  "animate-in fade-in zoom-in-125 duration-700 delay-[1200ms]",          // Bayern Munich
+];
+
+const GK_TRANSITIONS = [
+  "animate-in fade-in slide-in-from-right-40 duration-700 delay-[1200ms]",// Real Madrid
+  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms]",           // FC Barcelona
+  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms]",// Arsenal FC
+  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms]",   // Manchester City
+  "animate-in fade-in slide-in-from-right-20 duration-700 delay-[1200ms]", // Liverpool FC
+  "animate-in fade-in zoom-in-75 duration-700 delay-[1200ms]",           // Bayern Munich
 ];
 
 export default function LandingPage() {
@@ -28,7 +46,7 @@ export default function LandingPage() {
     if (showIntro) {
       const interval = setInterval(() => {
         setActiveTeamIndex((prev) => (prev + 1) % TEAMS.length);
-      }, 3000);
+      }, 4500); // Increased interval to allow for staggered animations to complete
       return () => clearInterval(interval);
     }
   }, [showIntro]);
@@ -39,7 +57,9 @@ export default function LandingPage() {
 
   if (showIntro) {
     const currentTeam = TEAMS[activeTeamIndex];
-    const currentTransition = TEAM_TRANSITIONS[activeTeamIndex];
+    const currentHeaderTransition = HEADER_TRANSITIONS[activeTeamIndex];
+    const currentCaptainTransition = CAPTAIN_TRANSITIONS[activeTeamIndex];
+    const currentGKTransition = GK_TRANSITIONS[activeTeamIndex];
 
     return (
       <div className="relative h-screen w-full flex flex-col items-center justify-start pt-12 bg-[#000411] text-white overflow-hidden font-body">
@@ -59,7 +79,7 @@ export default function LandingPage() {
 
         <div className="relative z-10 flex flex-col items-center text-center px-6 w-full max-w-7xl h-full">
           {/* Header/Logo Section */}
-          <div key={`header-${currentTeam.id}`} className={cn("flex flex-col items-center mb-12 shrink-0", currentTransition)}>
+          <div key={`header-${currentTeam.id}`} className={cn("flex flex-col items-center mb-12 shrink-0", currentHeaderTransition)}>
              <div className="w-28 h-28 bg-white/5 backdrop-blur-3xl rounded-full p-2.5 border-2 border-primary/20 shadow-[0_0_60px_rgba(0,212,255,0.2)] mb-4 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary/10" />
                 <img 
@@ -74,10 +94,16 @@ export default function LandingPage() {
           </div>
 
           {/* Epic Podium Layout */}
-          <div key={`cards-${currentTeam.id}`} className={cn("flex flex-col md:flex-row items-end justify-center gap-6 w-full max-w-4xl px-4 mt-20 mb-20", currentTransition)}>
+          <div className="flex flex-col md:row items-end justify-center gap-6 w-full max-w-4xl px-4 mt-20 mb-20">
              
              {/* Captain Card */}
-             <div className="flex-1 w-full md:w-auto epic-card-frame p-4 flex flex-col items-center transition-all duration-300 relative group overflow-hidden h-[340px]">
+             <div 
+               key={`captain-${currentTeam.id}`}
+               className={cn(
+                 "flex-1 w-full md:w-auto epic-card-frame p-4 flex flex-col items-center transition-all duration-300 relative group overflow-hidden h-[340px]",
+                 currentCaptainTransition
+               )}
+             >
                 <div className="epic-neon-energy" />
                 <div className="epic-hex-pattern" />
                 <div className="absolute top-4 left-4 z-20">
@@ -105,8 +131,14 @@ export default function LandingPage() {
                 </div>
              </div>
 
-             {/* Manager Card (Central Highlight) */}
-             <div className="flex-[1.1] w-full md:w-auto epic-card-frame p-6 flex flex-col items-center transform scale-110 md:-translate-y-12 shadow-[0_30px_100px_rgba(0,191,255,0.3)] z-20 relative group overflow-hidden h-[360px]">
+             {/* Manager Card (Central Highlight - Always Spins) */}
+             <div 
+               key={`manager-${currentTeam.id}`}
+               className={cn(
+                 "flex-[1.1] w-full md:w-auto epic-card-frame p-6 flex flex-col items-center transform scale-110 md:-translate-y-12 shadow-[0_30px_100px_rgba(0,191,255,0.3)] z-20 relative group overflow-hidden h-[360px]",
+                 "animate-card-spin"
+               )}
+             >
                 <div className="epic-neon-energy opacity-100" />
                 <div className="epic-hex-pattern opacity-40" />
                 <div className="absolute top-6 left-6 z-20">
@@ -135,7 +167,13 @@ export default function LandingPage() {
              </div>
 
              {/* GK Card */}
-             <div className="flex-1 w-full md:w-auto epic-card-frame p-4 flex flex-col items-center transition-all duration-300 relative group overflow-hidden h-[340px]">
+             <div 
+               key={`gk-${currentTeam.id}`}
+               className={cn(
+                 "flex-1 w-full md:w-auto epic-card-frame p-4 flex flex-col items-center transition-all duration-300 relative group overflow-hidden h-[340px]",
+                 currentGKTransition
+               )}
+             >
                 <div className="epic-neon-energy" />
                 <div className="epic-hex-pattern" />
                 <div className="absolute top-4 left-4 z-20">
