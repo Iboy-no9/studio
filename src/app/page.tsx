@@ -47,7 +47,7 @@ export default function LandingPage() {
     if (showIntro) {
       const interval = setInterval(() => {
         setActiveTeamIndex((prev) => (prev + 1) % TEAMS.length);
-      }, 4000); // Changed from 7000 to 4000 for a faster 4s interval
+      }, 4000); 
       return () => clearInterval(interval);
     }
   }, [showIntro]);
@@ -227,7 +227,7 @@ export default function LandingPage() {
         </div>
 
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-black uppercase tracking-[0.8em] opacity-20 whitespace-nowrap">
-           PROCEED TO AUCTION SYSTEM • WELFARE DIIA • 2024
+           PROCEED TO AUCTION SYSTEM • WELFARE DIIA • 2026
         </div>
       </div>
     );
@@ -279,7 +279,7 @@ export default function LandingPage() {
       </div>
 
       <div className="absolute top-1/2 -right-24 -translate-y-1/2 rotate-90 text-[10rem] font-black text-white/[0.02] select-none tracking-tighter uppercase whitespace-nowrap">
-        LEAGUE CHAMPIONS 2024
+        LEAGUE CHAMPIONS 2026
       </div>
     </div>
   );
