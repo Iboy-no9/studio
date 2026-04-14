@@ -42,11 +42,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/250px-Real_Madrid_CF.svg.png', 
     color: '#4AB0ED',
     manager: 'Ashfaq',
-    managerImageUrl: 'https://picsum.photos/seed/rm_mgr/200/200',
+    managerImageUrl: 'https://i.postimg.cc/RV1Lb01F/real-one-jpg.jpg',
     captain: 'Mirshad',
-    captainImageUrl: 'https://picsum.photos/seed/rm_cpt/200/200',
+    captainImageUrl: 'https://i.postimg.cc/tJ3Wfrxd/real-three-jpg.jpg',
     gk: 'Nishmal',
-    gkImageUrl: 'https://picsum.photos/seed/rm_gk/200/200'
+    gkImageUrl: 'https://i.postimg.cc/vZHfqtHg/real-two-jpg.jpg'
   },
   { 
     id: 't2', 
