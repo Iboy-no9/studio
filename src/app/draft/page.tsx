@@ -25,10 +25,12 @@ export default function EliteDraftAuction() {
   const [skippedInRoundIds, setSkippedInRoundIds] = useState<string[]>([]);
   const [everSkippedIds, setEverSkippedIds] = useState<string[]>([]);
   
+  const auctionTeams = useMemo(() => TEAMS.filter(t => !t.isExhibition), []);
+
   const [currentBid, setCurrentBid] = useState(0);
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [teamBudgets, setTeamBudgets] = useState<Record<string, number>>(
-    TEAMS.reduce((acc, team) => ({ ...acc, [team.id]: team.budget }), {})
+    auctionTeams.reduce((acc, team) => ({ ...acc, [team.id]: team.budget }), {})
   );
   const [status, setStatus] = useState<'IDLE' | 'BIDDING' | 'SOLD' | 'SKIPPED' | 'FINISHED'>('IDLE');
   const [lastAction, setLastAction] = useState<'SOLD' | 'SKIPPED' | 'INITIAL'>('INITIAL');
@@ -93,7 +95,7 @@ export default function EliteDraftAuction() {
 
     // Budget check only if team is selected
     if (selectedTeamId && teamBudgets[selectedTeamId] < newBid) {
-      setErrorMsg("Budget Exceeded for " + TEAMS.find(t => t.id === selectedTeamId)?.name);
+      setErrorMsg("Budget Exceeded for " + auctionTeams.find(t => t.id === selectedTeamId)?.name);
       return;
     }
 
@@ -103,7 +105,7 @@ export default function EliteDraftAuction() {
     setBidAnimating(true);
     setTimeout(() => setBidAnimating(false), 200);
     setErrorMsg(null);
-  }, [currentBid, selectedTeamId, status, teamBudgets, currentPlayer]);
+  }, [currentBid, selectedTeamId, status, teamBudgets, currentPlayer, auctionTeams]);
 
   const handleSold = useCallback(() => {
     if ((status !== 'BIDDING' && status !== 'IDLE') || !currentPlayer) return;
@@ -120,12 +122,12 @@ export default function EliteDraftAuction() {
       return;
     }
 
-    const team = TEAMS.find(t => t.id === selectedTeamId)!;
+    const team = auctionTeams.find(t => t.id === selectedTeamId)!;
     setSoldPlayers(prev => [{ player: currentPlayer, team, price: finalPrice }, ...prev]);
     setTeamBudgets(prev => ({ ...prev, [selectedTeamId]: prev[selectedTeamId] - finalPrice }));
     setStatus('SOLD');
     setTimer(5);
-  }, [currentBid, currentPlayer, selectedTeamId, status, teamBudgets]);
+  }, [currentBid, currentPlayer, selectedTeamId, status, teamBudgets, auctionTeams]);
 
   const handleFinishAuction = useCallback(() => {
     setStatus('FINISHED');
@@ -179,7 +181,7 @@ export default function EliteDraftAuction() {
           <Trophy className="text-primary w-6 h-6 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)] group-hover:scale-110 transition-transform" />
           <h2 className="text-xl font-black tracking-tight text-primary">FRANCHISES</h2>
         </Link>
-        {TEAMS.map((team) => (
+        {auctionTeams.map((team) => (
           <div
             key={team.id}
             onClick={() => setSelectedTeamId(team.id)}
@@ -298,7 +300,7 @@ export default function EliteDraftAuction() {
                   <div className="text-center animate-sold flex flex-col items-center p-6">
                      <div className="text-8xl font-black text-secondary italic tracking-tighter drop-shadow-[0_0_50px_rgba(255,215,0,1)] uppercase">SOLD!</div>
                      <div className="text-sm mt-6 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-3 px-8 rounded-full border border-primary/40 shadow-2xl">
-                        To {TEAMS.find(t => t.id === selectedTeamId)?.name}
+                        To {auctionTeams.find(t => t.id === selectedTeamId)?.name}
                      </div>
                   </div>
                 </div>
@@ -380,7 +382,7 @@ export default function EliteDraftAuction() {
                    <h3 className="text-left text-xs font-black uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3 px-2 shrink-0"><LayoutDashboard className="w-4 h-4" />Franchise Squads</h3>
                    <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar min-h-0 pb-6">
                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                       {TEAMS.map(team => {
+                       {auctionTeams.map(team => {
                           const teamPlayers = soldPlayers.filter(s => s.team.id === team.id);
                           const totalSpent = teamPlayers.reduce((sum, p) => sum + p.price, 0);
                           return (

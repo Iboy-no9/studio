@@ -17,6 +17,7 @@ const HEADER_TRANSITIONS = [
   "animate-in fade-in slide-in-from-bottom-20 duration-1000 ease-out",// Manchester City
   "animate-in fade-in zoom-in-110 duration-1000 ease-out",           // Liverpool FC
   "animate-in fade-in slide-in-from-top-20 duration-1000 ease-out",    // Bayern Munich
+  "animate-in fade-in zoom-in-50 slide-in-from-left-12 duration-1000 ease-out", // Manchester United
 ];
 
 // Staggered transitions for Captain and GK (start after Manager 1.2s spin)
@@ -27,6 +28,7 @@ const CAPTAIN_TRANSITIONS = [
   "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms] ease-out", // Manchester City
   "animate-in fade-in slide-in-from-left-20 duration-700 delay-[1200ms] ease-out", // Liverpool FC
   "animate-in fade-in zoom-in-125 duration-700 delay-[1200ms] ease-out",          // Bayern Munich
+  "animate-in fade-in slide-in-from-right-40 duration-700 delay-[1200ms] ease-out", // Manchester United
 ];
 
 const GK_TRANSITIONS = [
@@ -36,6 +38,7 @@ const GK_TRANSITIONS = [
   "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms] ease-out",   // Manchester City
   "animate-in fade-in slide-in-from-right-20 duration-700 delay-[1200ms] ease-out", // Liverpool FC
   "animate-in fade-in zoom-in-75 duration-700 delay-[1200ms] ease-out",           // Bayern Munich
+  "animate-in fade-in slide-in-from-left-40 duration-700 delay-[1200ms] ease-out",  // Manchester United
 ];
 
 export default function LandingPage() {

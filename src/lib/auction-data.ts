@@ -31,6 +31,7 @@ export interface Team {
   captainImageUrl: string; // Image for the captain
   gk: string;          // The team's primary goalkeeper
   gkImageUrl: string;  // Image for the goalkeeper
+  isExhibition?: boolean; // If true, team appears in intro but not in auction
 }
 
 export const TEAMS: Team[] = [
@@ -103,7 +104,7 @@ export const TEAMS: Team[] = [
     id: 't6', 
     name: 'Bayern Munich', 
     budget: 10000, 
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/1280px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png', 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/1280px-Bayern_Munich_logo.png', 
     color: '#EC4899',
     manager: 'Aman',
     managerImageUrl: 'https://picsum.photos/seed/bay_mgr/200/200',
@@ -111,6 +112,20 @@ export const TEAMS: Team[] = [
     captainImageUrl: 'https://picsum.photos/seed/bay_cpt/200/200',
     gk: 'Minhaj',
     gkImageUrl: 'https://picsum.photos/seed/bay_gk/200/200'
+  },
+  { 
+    id: 't7', 
+    name: 'Manchester United F.C.', 
+    budget: 0, 
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/1280px-Manchester_United_FC_crest.svg.png', 
+    color: '#DA291C',
+    manager: 'Haseeb USD',
+    managerImageUrl: 'https://picsum.photos/seed/mun_mgr/200/200',
+    captain: 'Jishar Sir',
+    captainImageUrl: 'https://picsum.photos/seed/mun_cpt/200/200',
+    gk: 'Nabhan Sadique USD',
+    gkImageUrl: 'https://picsum.photos/seed/mun_gk/200/200',
+    isExhibition: true
   },
 ];
 
