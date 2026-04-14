@@ -32,11 +32,11 @@ export default function LandingPage() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl">
-        <div className="flex items-center gap-3 mb-6 animate-in fade-in slide-in-from-top-8 duration-700">
-          <Trophy className="w-12 h-12 text-secondary drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]" />
-          <div className="flex flex-col items-start">
-             <span className="text-xs font-black tracking-[0.5em] text-primary uppercase leading-none">Professional</span>
-             <span className="text-xs font-black tracking-[0.5em] text-white uppercase leading-none mt-1 opacity-50">Sports Broadcast</span>
+        <div className="flex items-center gap-4 mb-8 animate-in fade-in slide-in-from-top-8 duration-700">
+          <Trophy className="w-14 h-14 text-secondary drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]" />
+          <div className="flex flex-col items-start text-left">
+             <span className="text-sm font-black tracking-[0.4em] text-primary uppercase leading-none">Welfare Diia</span>
+             <span className="text-sm font-black tracking-[0.4em] text-white uppercase leading-none mt-1.5 opacity-50">Presents</span>
           </div>
         </div>
 
