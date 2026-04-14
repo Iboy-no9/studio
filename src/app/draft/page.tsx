@@ -240,33 +240,41 @@ export default function EliteDraftAuction() {
             <div 
               key={currentPlayerId}
               className={cn(
-                "relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[1rem] p-0 shadow-2xl flex flex-col transition-all group overflow-hidden border border-white/20",
+                "relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2rem] p-0 shadow-2xl flex flex-col transition-all group overflow-hidden border-2 border-[#00ffd0]/30",
                 lastAction === 'SOLD' ? "animate-card-spin" : lastAction === 'SKIPPED' ? "animate-in fade-in slide-in-from-right-20 duration-1000" : "animate-in fade-in zoom-in-95 slide-in-from-bottom-12 duration-1000"
               )}
             >
-              {/* Card Background Branding */}
-              <div className="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center select-none overflow-hidden">
-                <div className="text-[14rem] font-black text-white rotate-[-25deg] scale-150 flex flex-col leading-none">
+              {/* Card Background Branding - Repeated WPL */}
+              <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none flex items-center justify-center select-none overflow-hidden">
+                <div className="text-[14rem] font-black text-white rotate-[-25deg] scale-150 flex flex-col leading-none italic select-none">
                   <span>WPL</span>
-                  <span className="ml-20">WPL</span>
+                  <span className="ml-24">WPL</span>
                   <span>WPL</span>
                 </div>
               </div>
 
+              {/* Diagonal Cyan Glow Lines */}
+              <div className="absolute inset-0 z-0 opacity-40">
+                <div className="absolute top-0 right-0 w-[120%] h-[120%] bg-[repeating-linear-gradient(45deg,transparent,transparent_40px,#00ffd0_41px,#00ffd0_42px,transparent_43px)] opacity-20 rotate-[-15deg] translate-x-1/4 -translate-y-1/4" />
+                <div className="absolute bottom-0 left-0 w-[120%] h-[120%] bg-[repeating-linear-gradient(45deg,transparent,transparent_40px,#00ffd0_41px,#00ffd0_42px,transparent_43px)] opacity-20 rotate-[-15deg] -translate-x-1/4 translate-y-1/4" />
+              </div>
+
               {/* Rating and Position Header */}
               <div className="absolute top-8 left-8 z-30 flex flex-col items-start">
-                <div className="flex items-center gap-3">
-                  <div className="text-[5.5rem] font-black text-[#00ffd0] leading-none drop-shadow-[0_0_15px_rgba(0,255,208,0.4)] italic tracking-tighter">
+                <div className="flex items-center gap-5">
+                  <div className="text-[5.5rem] font-black text-[#00ffd0] leading-none drop-shadow-[0_0_15px_rgba(0,255,208,0.6)] italic tracking-tighter">
                     {currentPlayer.rating}
                   </div>
-                  <div className="w-10 h-10 mb-6 opacity-80">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white">
-                      <circle cx="12" cy="12" r="10"/><path d="m6.7 6.7 10.6 10.6"/><path d="m6.7 17.3 10.6-10.6"/><path d="M12 2v20"/><path d="M2 12h20"/><path d="m12 12 5.5 5.5"/><path d="m12 12-5.5 5.5"/><path d="m12 12 5.5-5.5"/><path d="m12 12-5.5-5.5"/>
+                  <div className="w-10 h-10 opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full text-white">
+                      <path d="M12 2L14.5 9H21.5L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2.5 9H9.5L12 2Z"/>
+                      <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="1.5" fill="none" />
+                      <path d="M12 2C12 2 15 12 12 22M2 12C2 12 12 15 22 12" stroke="white" strokeWidth="0.5" />
                     </svg>
                   </div>
                 </div>
-                <div className="h-px w-16 bg-white/20 mb-1" />
-                <div className="text-2xl font-black text-white/90 uppercase tracking-tighter italic">
+                <div className="h-[2px] w-20 bg-white/20 my-2" />
+                <div className="text-2xl font-black text-white/90 uppercase tracking-tighter italic ml-0.5">
                   {currentPlayer.position === 'Forward' ? 'ST' : currentPlayer.position === 'Midfielder' ? 'CMF' : currentPlayer.position === 'Defender' ? 'DEF' : 'GKP'}
                 </div>
               </div>
@@ -276,27 +284,28 @@ export default function EliteDraftAuction() {
                 <img 
                   src={currentPlayer.imageUrl} 
                   alt={currentPlayer.name} 
-                  className="w-full h-full object-cover object-top transform scale-[1.1] translate-y-2 group-hover:scale-[1.15] transition-transform duration-700" 
+                  className="w-full h-full object-cover object-top transform scale-[1.1] translate-y-4 group-hover:scale-[1.15] transition-transform duration-700" 
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#000428] via-[#000428]/20 to-transparent opacity-90" />
+                {/* Bottom dark overlay to blend name */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020b2e] via-[#020b2e]/10 to-transparent opacity-95" />
               </div>
 
               {/* Bottom Details Section */}
-              <div className="absolute bottom-10 left-0 right-0 z-30 flex flex-col items-center px-4">
-                 {/* Nationality Badge */}
-                 <div className="bg-[#00ffd0]/10 backdrop-blur-md px-5 py-0.5 rounded-full border border-[#00ffd0]/30 mb-2">
-                    <div className="text-[10px] font-black text-[#00ffd0] tracking-[0.4em] italic uppercase leading-none">{currentPlayer.nationality}</div>
+              <div className="absolute bottom-12 left-0 right-0 z-30 flex flex-col items-center px-4">
+                 {/* Nationality - Plain text, italic, cyan */}
+                 <div className="text-[11px] font-black text-[#00ffd0] tracking-[0.5em] italic uppercase mb-1 drop-shadow-md">
+                   {currentPlayer.nationality}
                  </div>
                  
-                 {/* Name */}
-                 <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_15px_rgba(0,0,0,1)] truncate w-full px-2 text-center leading-tight">
+                 {/* Name - Large, Bold, Italic, White */}
+                 <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_15px_rgba(0,0,0,0.8)] truncate w-full px-4 text-center leading-tight">
                    {currentPlayer.name}
                  </h1>
 
-                 {/* Stars */}
+                 {/* Stars - Gold */}
                  <div className="mt-3 flex gap-1.5">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-secondary text-secondary drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]" />
+                      <Star key={i} className="w-3.5 h-3.5 fill-[#ffb800] text-[#ffb800] drop-shadow-[0_0_8px_rgba(255,184,0,0.4)]" />
                     ))}
                  </div>
               </div>
