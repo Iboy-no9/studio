@@ -107,11 +107,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/1280px-Bayern_Munich_logo.png', 
     color: '#EC4899',
     manager: 'Aman',
-    managerImageUrl: 'https://picsum.photos/seed/bay_mgr/200/200',
+    managerImageUrl: 'https://i.postimg.cc/nrLrp0js/bay-one-jpg.jpg',
     captain: 'Shadil CM',
-    captainImageUrl: 'https://picsum.photos/seed/bay_cpt/200/200',
+    captainImageUrl: 'https://i.postimg.cc/g2hJzwJD/bay-two-jpg.jpg',
     gk: 'Minhaj',
-    gkImageUrl: 'https://picsum.photos/seed/bay_gk/200/200'
+    gkImageUrl: 'https://i.postimg.cc/MT9ZPVsP/bay-three-jpg.jpg'
   },
   { 
     id: 't7', 
@@ -178,7 +178,7 @@ export const PLAYERS: Player[] = [
   { id: 'p46', name: 'William Saliba', basePrice: 10, position: 'Defender', rating: 91, nationality: 'FRA', imageUrl: 'https://picsum.photos/seed/p46/400/500' },
   { id: 'p47', name: 'Declan Rice', basePrice: 10, position: 'Midfielder', rating: 92, nationality: 'ENG', imageUrl: 'https://picsum.photos/seed/p47/400/500' },
   { id: 'p48', name: 'Frenkie de Jong', basePrice: 10, position: 'Midfielder', rating: 90, nationality: 'NED', imageUrl: 'https://picsum.photos/seed/p48/400/500' },
-  { id: 'p49', name: 'Federico Valverde', basePrice: 10, position: 'Midfielder', rating: 93, nationality: 'URU', imageUrl: 'https://picsum.photos/seed/p49/400/500' },
+  { id: 'p49', name: 'Federico Valverde', basePrice: 10, position: 'Midfielder', rating: 93, nationality: 'URU', imageUrl: 'https://i.postimg.cc/pTf14Hdr/valverde.jpg' },
   { id: 'p50', name: 'Toni Kroos', basePrice: 10, position: 'Midfielder', rating: 88, nationality: 'GER', imageUrl: 'https://picsum.photos/seed/p50/400/500' },
   { id: 'p51', name: 'Nicolo Barella', basePrice: 10, position: 'Midfielder', rating: 90, nationality: 'ITA', imageUrl: 'https://picsum.photos/seed/p51/400/500' },
   { id: 'p52', name: 'Rafael Leao', basePrice: 10, position: 'Forward', rating: 91, nationality: 'POR', imageUrl: 'https://picsum.photos/seed/p52/400/500' },
