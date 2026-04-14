@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { TEAMS, PLAYERS, Player, Team } from '@/lib/auction-data';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -203,10 +204,10 @@ export default function EliteDraftAuction() {
 
       {/* Franchises List */}
       <div className="w-1/4 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar z-10">
-        <div className="flex items-center gap-2 mb-2 px-1">
-          <Trophy className="text-primary w-6 h-6 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]" />
+        <Link href="/" className="flex items-center gap-2 mb-2 px-1 hover:opacity-80 transition-opacity group">
+          <Trophy className="text-primary w-6 h-6 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)] group-hover:scale-110 transition-transform" />
           <h2 className="text-xl font-black tracking-tight text-primary">FRANCHISES</h2>
-        </div>
+        </Link>
         {TEAMS.map((team) => {
           const teamPlayerCount = soldPlayers.filter(s => s.team.id === team.id).length;
           return (
@@ -418,17 +419,14 @@ export default function EliteDraftAuction() {
               </div>
           </div>
         </div>
-        {/* ... remaining code same as before ... */}
         {errorMsg && (
           <div className="absolute top-20 left-1/2 -translate-x-1/2 z-[100] bg-destructive text-white px-8 py-4 rounded-full flex items-center gap-3 shadow-[0_0_40px_rgba(220,38,38,0.5)] animate-in slide-in-from-top duration-500">
             <AlertCircle className="w-6 h-6" />
             <span className="text-sm font-black uppercase tracking-widest">{errorMsg}</span>
           </div>
         )}
-        {/* ... existing overlays ... */}
         {showFinishedOverlay && (
            <div className="absolute inset-0 z-[101] bg-[#000411]/95 backdrop-blur-3xl flex items-center justify-center text-center p-8 animate-in fade-in zoom-in duration-500 overflow-hidden">
-             {/* ... summary content ... */}
               <div className="max-w-7xl w-full flex flex-col items-center h-full max-h-[92vh]">
                 <div className="flex flex-col items-center mb-6 shrink-0">
                   <div className="relative inline-block mb-3">
@@ -518,7 +516,6 @@ export default function EliteDraftAuction() {
               </div>
            </div>
         )}
-        {/* Summary Re-open Button */}
         {!showFinishedOverlay && status === 'FINISHED' && (
           <div className="absolute bottom-6 right-6 z-[102] animate-in fade-in slide-in-from-bottom-4">
              <Button variant="secondary" className="h-14 px-8 text-sm font-black rounded-xl uppercase tracking-widest shadow-2xl" onClick={() => setShowFinishedOverlay(true)}>
@@ -537,11 +534,11 @@ export default function EliteDraftAuction() {
               SIGNED
             </TabsTrigger>
             <TabsTrigger value="unsold" className="flex items-center justify-center gap-2 font-black uppercase tracking-widest text-[9px] data-[state=active]:bg-primary data-[state=active]:text-black rounded-lg transition-all">
-              <Users className="w-3.5 h-3.5" />
+              <History className="w-3.5 h-3.5" />
               POOL
             </TabsTrigger>
           </TabsList>
-          {/* ... tabs content ... */}
+
           <TabsContent value="sold" className="flex-1 overflow-hidden mt-0 flex flex-col">
             <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar">
               {soldPlayers.length === 0 ? (
