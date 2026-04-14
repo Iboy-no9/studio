@@ -19,22 +19,23 @@ const HEADER_TRANSITIONS = [
   "animate-in fade-in slide-in-from-top-20 duration-1000 ease-out",    // Bayern Munich
 ];
 
+// Staggered transitions for Captain and GK (start after Manager 1.2s spin)
 const CAPTAIN_TRANSITIONS = [
-  "animate-in fade-in slide-in-from-left-40 duration-700 delay-[1200ms]", // Real Madrid
-  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms]",           // FC Barcelona
-  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms]",  // Arsenal FC
-  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms]", // Manchester City
-  "animate-in fade-in slide-in-from-left-20 duration-700 delay-[1200ms]", // Liverpool FC
-  "animate-in fade-in zoom-in-125 duration-700 delay-[1200ms]",          // Bayern Munich
+  "animate-in fade-in slide-in-from-left-40 duration-700 delay-[1200ms] ease-out", // Real Madrid
+  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms] ease-out",           // FC Barcelona
+  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms] ease-out",  // Arsenal FC
+  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms] ease-out", // Manchester City
+  "animate-in fade-in slide-in-from-left-20 duration-700 delay-[1200ms] ease-out", // Liverpool FC
+  "animate-in fade-in zoom-in-125 duration-700 delay-[1200ms] ease-out",          // Bayern Munich
 ];
 
 const GK_TRANSITIONS = [
-  "animate-in fade-in slide-in-from-right-40 duration-700 delay-[1200ms]",// Real Madrid
-  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms]",           // FC Barcelona
-  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms]",// Arsenal FC
-  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms]",   // Manchester City
-  "animate-in fade-in slide-in-from-right-20 duration-700 delay-[1200ms]", // Liverpool FC
-  "animate-in fade-in zoom-in-75 duration-700 delay-[1200ms]",           // Bayern Munich
+  "animate-in fade-in slide-in-from-right-40 duration-700 delay-[1200ms] ease-out",// Real Madrid
+  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms] ease-out",           // FC Barcelona
+  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms] ease-out",// Arsenal FC
+  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms] ease-out",   // Manchester City
+  "animate-in fade-in slide-in-from-right-20 duration-700 delay-[1200ms] ease-out", // Liverpool FC
+  "animate-in fade-in zoom-in-75 duration-700 delay-[1200ms] ease-out",           // Bayern Munich
 ];
 
 export default function LandingPage() {
@@ -46,7 +47,7 @@ export default function LandingPage() {
     if (showIntro) {
       const interval = setInterval(() => {
         setActiveTeamIndex((prev) => (prev + 1) % TEAMS.length);
-      }, 4500); // Increased interval to allow for staggered animations to complete
+      }, 5000); // Increased interval to allow full animation sequence to complete
       return () => clearInterval(interval);
     }
   }, [showIntro]);
@@ -79,8 +80,8 @@ export default function LandingPage() {
 
         <div className="relative z-10 flex flex-col items-center text-center px-6 w-full max-w-7xl h-full">
           {/* Header/Logo Section */}
-          <div key={`header-${currentTeam.id}`} className={cn("flex flex-col items-center mb-12 shrink-0", currentHeaderTransition)}>
-             <div className="w-28 h-28 bg-white/5 backdrop-blur-3xl rounded-full p-2.5 border-2 border-primary/20 shadow-[0_0_60px_rgba(0,212,255,0.2)] mb-4 flex items-center justify-center relative overflow-hidden">
+          <div key={`header-${currentTeam.id}`} className={cn("flex flex-col items-center mb-8 shrink-0", currentHeaderTransition)}>
+             <div className="w-24 h-24 bg-white/5 backdrop-blur-3xl rounded-full p-2 border-2 border-primary/20 shadow-[0_0_60px_rgba(0,212,255,0.2)] mb-4 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary/10" />
                 <img 
                   src={currentTeam.logoUrl} 
@@ -88,15 +89,15 @@ export default function LandingPage() {
                   className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]" 
                 />
              </div>
-             <h2 className="text-6xl font-black italic tracking-tighter uppercase text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.4)]">
+             <h2 className="text-5xl font-black italic tracking-tighter uppercase text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.4)]">
                {currentTeam.name}
              </h2>
           </div>
 
-          {/* Epic Podium Layout */}
-          <div className="flex flex-col md:row items-end justify-center gap-6 w-full max-w-4xl px-4 mt-20 mb-20">
+          {/* Epic Personnel Row */}
+          <div className="flex flex-col md:flex-row items-end justify-center gap-6 w-full max-w-5xl px-4 mt-20 mb-20">
              
-             {/* Captain Card */}
+             {/* Captain Card (Left) */}
              <div 
                key={`captain-${currentTeam.id}`}
                className={cn(
@@ -131,11 +132,11 @@ export default function LandingPage() {
                 </div>
              </div>
 
-             {/* Manager Card (Central Highlight - Always Spins) */}
+             {/* Manager Card (Center Highlight - Spins First) */}
              <div 
                key={`manager-${currentTeam.id}`}
                className={cn(
-                 "flex-[1.1] w-full md:w-auto epic-card-frame p-6 flex flex-col items-center transform scale-110 md:-translate-y-12 shadow-[0_30px_100px_rgba(0,191,255,0.3)] z-20 relative group overflow-hidden h-[360px]",
+                 "flex-[1.1] w-full md:w-auto epic-card-frame p-6 flex flex-col items-center transform scale-110 md:-translate-y-8 shadow-[0_30px_100px_rgba(0,191,255,0.3)] z-20 relative group overflow-hidden h-[360px]",
                  "animate-card-spin"
                )}
              >
@@ -166,7 +167,7 @@ export default function LandingPage() {
                 </div>
              </div>
 
-             {/* GK Card */}
+             {/* GK Card (Right) */}
              <div 
                key={`gk-${currentTeam.id}`}
                className={cn(
@@ -228,16 +229,6 @@ export default function LandingPage() {
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-black uppercase tracking-[0.8em] opacity-20 whitespace-nowrap">
            PROCEED TO AUCTION SYSTEM • WELFARE DIIA • 2024
         </div>
-
-        <style jsx global>{`
-          @keyframes bounce-slow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-          }
-          .animate-bounce-slow {
-            animation: bounce-slow 3s infinite ease-in-out;
-          }
-        `}</style>
       </div>
     );
   }
