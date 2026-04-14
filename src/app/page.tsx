@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users } from 'lucide-react';
+import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -45,6 +45,10 @@ export default function EliteDraftAuction() {
       setStatus('FINISHED');
     }
   }, [currentPlayerIdx]);
+
+  const handleSkip = useCallback(() => {
+    handleNextPlayer();
+  }, [handleNextPlayer]);
 
   const handleBid = useCallback((increment: number) => {
     if (status !== 'BIDDING' && status !== 'IDLE') return;
@@ -93,10 +97,11 @@ export default function EliteDraftAuction() {
       if (e.key === '3') handleBid(100);
       if (e.key === 'Enter') handleSold();
       if (e.key === 'n' || e.key === 'N') handleNextPlayer();
+      if (e.key === 's' || e.key === 'S') handleSkip();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleBid, handleSold, handleNextPlayer]);
+  }, [handleBid, handleSold, handleNextPlayer, handleSkip]);
 
   useEffect(() => {
     if (status === 'BIDDING' && timer > 0) {
@@ -274,15 +279,25 @@ export default function EliteDraftAuction() {
                   Confirm Signing
                 </Button>
 
-                {status === 'SOLD' && (
+                <div className="flex gap-3">
                   <Button 
-                    variant="ghost" 
-                    className="h-14 text-sm font-black uppercase tracking-[0.3em] border border-white/5 backdrop-blur-md hover:bg-white/10 rounded-xl"
-                    onClick={handleNextPlayer}
+                    variant="outline" 
+                    className="flex-1 h-14 text-xs font-black uppercase tracking-[0.2em] border-white/10 hover:bg-destructive hover:text-white transition-all rounded-xl"
+                    onClick={handleSkip}
                   >
-                    Draft Next (N)
+                    <SkipForward className="w-4 h-4 mr-2" />
+                    Skip Player (S)
                   </Button>
-                )}
+                  {status === 'SOLD' && (
+                    <Button 
+                      variant="ghost" 
+                      className="flex-1 h-14 text-xs font-black uppercase tracking-[0.3em] border border-white/5 backdrop-blur-md hover:bg-white/10 rounded-xl"
+                      onClick={handleNextPlayer}
+                    >
+                      Draft Next (N)
+                    </Button>
+                  )}
+                </div>
               </div>
           </div>
         </div>
