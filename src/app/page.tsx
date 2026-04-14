@@ -75,8 +75,14 @@ export default function LandingPage() {
              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
                 {/* Manager Card */}
                 <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1">
-                   <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center mb-4 border border-primary/30 group-hover/card:scale-110 transition-transform">
-                      <User className="text-primary w-6 h-6" />
+                   <div className="w-20 h-20 rounded-2xl bg-primary/20 flex items-center justify-center mb-4 border border-primary/30 group-hover/card:scale-110 transition-transform overflow-hidden relative">
+                      <Image 
+                        src={currentTeam.managerImageUrl} 
+                        alt={currentTeam.manager} 
+                        fill 
+                        className="object-cover" 
+                        data-ai-hint="portrait manager"
+                      />
                    </div>
                    <span className="text-[10px] font-black tracking-[0.3em] text-muted-foreground uppercase mb-1">MANAGER</span>
                    <span className="text-lg font-black uppercase italic text-white tracking-tight">{currentTeam.manager}</span>
@@ -84,8 +90,14 @@ export default function LandingPage() {
 
                 {/* Captain Card */}
                 <div className="bg-primary/10 backdrop-blur-lg border-2 border-primary/30 p-8 rounded-[2rem] flex flex-col items-center transform scale-110 shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-20 hover:scale-[1.12] transition-all duration-300">
-                   <div className="w-14 h-14 rounded-2xl bg-secondary/20 flex items-center justify-center mb-4 border border-secondary/30">
-                      <Star className="text-secondary w-7 h-7 fill-secondary" />
+                   <div className="w-24 h-24 rounded-2xl bg-secondary/20 flex items-center justify-center mb-4 border border-secondary/30 overflow-hidden relative shadow-2xl">
+                      <Image 
+                        src={currentTeam.captainImageUrl} 
+                        alt={currentTeam.captain} 
+                        fill 
+                        className="object-cover" 
+                        data-ai-hint="footballer captain"
+                      />
                    </div>
                    <span className="text-[10px] font-black tracking-[0.3em] text-primary uppercase mb-1">CAPTAIN</span>
                    <span className="text-xl font-black uppercase italic text-white tracking-tight">{currentTeam.captain}</span>
@@ -94,8 +106,14 @@ export default function LandingPage() {
 
                 {/* GK Card */}
                 <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1">
-                   <div className="w-12 h-12 rounded-2xl bg-secondary/20 flex items-center justify-center mb-4 border border-secondary/30 group-hover/card:scale-110 transition-transform">
-                      <Shield className="text-secondary w-6 h-6" />
+                   <div className="w-20 h-20 rounded-2xl bg-secondary/20 flex items-center justify-center mb-4 border border-secondary/30 group-hover/card:scale-110 transition-transform overflow-hidden relative">
+                      <Image 
+                        src={currentTeam.gkImageUrl} 
+                        alt={currentTeam.gk} 
+                        fill 
+                        className="object-cover" 
+                        data-ai-hint="goalkeeper portrait"
+                      />
                    </div>
                    <span className="text-[10px] font-black tracking-[0.3em] text-muted-foreground uppercase mb-1">GOALKEEPER</span>
                    <span className="text-lg font-black uppercase italic text-white tracking-tight">{currentTeam.gk}</span>

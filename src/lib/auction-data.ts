@@ -26,8 +26,11 @@ export interface Team {
   logoUrl: string;     // A link to the team's logo
   color: string;       // A hex code for the team's primary UI accent
   manager: string;     // The team manager's name
+  managerImageUrl: string; // Image for the manager
   captain: string;     // The team captain's name
+  captainImageUrl: string; // Image for the captain
   gk: string;          // The team's primary goalkeeper
+  gkImageUrl: string;  // Image for the goalkeeper
 }
 
 export const TEAMS: Team[] = [
@@ -38,8 +41,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/250px-Real_Madrid_CF.svg.png', 
     color: '#4AB0ED',
     manager: 'Ancelotti',
+    managerImageUrl: 'https://picsum.photos/seed/t1m/200/200',
     captain: 'Luka Modrić',
-    gk: 'Thibaut Courtois'
+    captainImageUrl: 'https://picsum.photos/seed/t1c/200/200',
+    gk: 'Thibaut Courtois',
+    gkImageUrl: 'https://picsum.photos/seed/t1g/200/200'
   },
   { 
     id: 't2', 
@@ -48,8 +54,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/1280px-FC_Barcelona_%28crest%29.svg.png', 
     color: '#FCD34D',
     manager: 'Hansi Flick',
+    managerImageUrl: 'https://picsum.photos/seed/t2m/200/200',
     captain: 'Ter Stegen',
-    gk: 'Ter Stegen'
+    captainImageUrl: 'https://picsum.photos/seed/t2c/200/200',
+    gk: 'Ter Stegen',
+    gkImageUrl: 'https://picsum.photos/seed/t2g/200/200'
   },
   { 
     id: 't3', 
@@ -58,8 +67,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/sco/thumb/5/53/Arsenal_FC.svg/1920px-Arsenal_FC.svg.png', 
     color: '#F87171',
     manager: 'Mikel Arteta',
+    managerImageUrl: 'https://picsum.photos/seed/t3m/200/200',
     captain: 'Martin Ødegaard',
-    gk: 'David Raya'
+    captainImageUrl: 'https://picsum.photos/seed/t3c/200/200',
+    gk: 'David Raya',
+    gkImageUrl: 'https://picsum.photos/seed/t3g/200/200'
   },
   { 
     id: 't4', 
@@ -68,8 +80,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/1280px-Manchester_City_FC_badge.svg.png', 
     color: '#10B981',
     manager: 'Pep Guardiola',
+    managerImageUrl: 'https://picsum.photos/seed/t4m/200/200',
     captain: 'Kyle Walker',
-    gk: 'Ederson'
+    captainImageUrl: 'https://picsum.photos/seed/t4c/200/200',
+    gk: 'Ederson',
+    gkImageUrl: 'https://picsum.photos/seed/t4g/200/200'
   },
   { 
     id: 't5', 
@@ -78,18 +93,24 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/250px-Liverpool_FC.svg.png', 
     color: '#8B5CF6',
     manager: 'Arne Slot',
+    managerImageUrl: 'https://picsum.photos/seed/t5m/200/200',
     captain: 'Virgil van Dijk',
-    gk: 'Alisson Becker'
+    captainImageUrl: 'https://picsum.photos/seed/t5c/200/200',
+    gk: 'Alisson Becker',
+    gkImageUrl: 'https://picsum.photos/seed/t5g/200/200'
   },
   { 
     id: 't6', 
-    name: 'FC Bayern Munich', 
+    name: 'Bayern Munich', 
     budget: 10000, 
     logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/1280px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png', 
     color: '#EC4899',
     manager: 'Vincent Kompany',
+    managerImageUrl: 'https://picsum.photos/seed/t6m/200/200',
     captain: 'Manuel Neuer',
-    gk: 'Manuel Neuer'
+    captainImageUrl: 'https://picsum.photos/seed/t6c/200/200',
+    gk: 'Manuel Neuer',
+    gkImageUrl: 'https://picsum.photos/seed/t6g/200/200'
   },
 ];
 
