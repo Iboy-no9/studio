@@ -1,3 +1,4 @@
+
 {
   "placeholderImages": [
     { "id": "p1", "description": "Lionel Messi", "imageUrl": "https://picsum.photos/seed/p1/400/500", "imageHint": "footballer" },
@@ -60,6 +61,6 @@
     { "id": "p58", "description": "Phil Foden", "imageUrl": "https://picsum.photos/seed/p58/400/500", "imageHint": "footballer" },
     { "id": "p59", "description": "Jack Grealish", "imageUrl": "https://picsum.photos/seed/p59/400/500", "imageHint": "footballer" },
     { "id": "p60", "description": "Julian Alvarez", "imageUrl": "https://picsum.photos/seed/p60/400/500", "imageHint": "footballer" },
-    { "id": "ucl_bg", "description": "UEFA Champions League Stadium", "imageUrl": "https://picsum.photos/seed/ucl_stadium/1920/1080", "imageHint": "stadium blue" }
+    { "id": "ucl_bg", "description": "UEFA Champions League Stadium", "imageUrl": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/dd73d109-2496-4db2-b33e-a3cbe8936ce4/deb209j-829583bf-4aa3-41df-b20f-126c97898b94.png/v1/fill/w_1280,h_720,q_80,strp/fifa_19_background_ucl_by_algis21_deb209j-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6Ii9mL2RkNzNkMTA5LTI0OTYtNGRiMi1iMzNlLWEzY2JlODkzNmNlNC9kZWIyMDlqLTgyOTU4M2JmLTRhYTMtNDFkZi1iMjBmLTEyNmM5Nzg5OGI5NC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.JmG5BXCaz0WhafU4xn3yjj0lRBazvucmHp8b4Y81tuw", "imageHint": "ucl stadium" }
   ]
 }
