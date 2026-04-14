@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { TEAMS, PLAYERS, Player, Team } from '@/lib/auction-data';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,7 @@ import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 interface SoldPlayer {
   player: Player;
@@ -30,6 +32,7 @@ export default function EliteDraftAuction() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const currentPlayer = PLAYERS[currentPlayerIdx];
+  const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
 
   const handleNextPlayer = useCallback(() => {
     if (currentPlayerIdx < PLAYERS.length - 1) {
@@ -113,10 +116,25 @@ export default function EliteDraftAuction() {
   const unsoldPlayers = PLAYERS.filter(p => !soldPlayers.some(s => s.player.id === p.id) && p.id !== currentPlayer.id);
 
   return (
-    <div className="flex h-screen w-full bg-[#0a0a0a] text-white p-6 gap-6 font-headline overflow-hidden">
+    <div className="relative flex h-screen w-full bg-[#0a0a0a] text-white p-6 gap-6 font-headline overflow-hidden">
       
+      {/* BACKGROUND IMAGE OVERLAY */}
+      {bgImage && (
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src={bgImage.imageUrl} 
+            alt="UCL Background" 
+            fill 
+            className="object-cover opacity-30" 
+            priority
+            data-ai-hint={bgImage.imageHint}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/60 to-background" />
+        </div>
+      )}
+
       {/* LEFT PANEL: Teams */}
-      <div className="w-1/4 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
+      <div className="w-1/4 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar z-10">
         <div className="flex items-center gap-2 mb-2">
           <Trophy className="text-primary w-6 h-6" />
           <h2 className="text-xl font-bold tracking-tight text-primary">FRANCHISES</h2>
@@ -129,7 +147,7 @@ export default function EliteDraftAuction() {
               "p-4 rounded-xl cursor-pointer transition-all border-2 relative overflow-hidden group",
               selectedTeamId === team.id 
                 ? "bg-primary/20 border-primary glow-primary scale-105 z-10 shadow-lg shadow-primary/20" 
-                : "bg-card border-transparent hover:bg-muted"
+                : "bg-card/60 backdrop-blur-sm border-transparent hover:bg-muted/80"
             )}
           >
             <div className="flex justify-between items-center relative z-10">
@@ -155,7 +173,7 @@ export default function EliteDraftAuction() {
       </div>
 
       {/* CENTER FOCUS: Iconic Player Card & Bidding */}
-      <div className="flex-1 flex flex-col gap-6 relative">
+      <div className="flex-1 flex flex-col gap-6 relative z-10">
         <div className="flex justify-between items-end px-2">
           <div className="flex flex-col">
             <span className="text-xs text-muted-foreground uppercase tracking-widest mb-1 font-bold">Live Auction Status</span>
@@ -193,11 +211,6 @@ export default function EliteDraftAuction() {
                  currentPlayer.position === 'Midfielder' ? 'AMF' :
                  currentPlayer.position === 'Defender' ? 'CB' : 'GK'}
               </div>
-            </div>
-
-            {/* Club Logo Overlay */}
-            <div className="absolute top-24 left-6 z-20 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 overflow-hidden">
-               <img src={TEAMS[currentPlayerIdx % TEAMS.length].logoUrl} alt="Logo" className="w-10 h-10 object-contain" />
             </div>
 
             {/* Main Player Image */}
@@ -252,9 +265,9 @@ export default function EliteDraftAuction() {
 
               <div className="w-full flex flex-col gap-3">
                 <div className="grid grid-cols-3 gap-2">
-                  <Button variant="outline" className="h-12 text-md font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(100)}>+100</Button>
-                  <Button variant="outline" className="h-12 text-md font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(500)}>+500</Button>
-                  <Button variant="outline" className="h-12 text-md font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(1000)}>+1000</Button>
+                  <Button variant="outline" className="h-12 text-md font-bold border-white/10 hover:bg-white/10 backdrop-blur-md" onClick={() => handleBid(100)}>+100</Button>
+                  <Button variant="outline" className="h-12 text-md font-bold border-white/10 hover:bg-white/10 backdrop-blur-md" onClick={() => handleBid(500)}>+500</Button>
+                  <Button variant="outline" className="h-12 text-md font-bold border-white/10 hover:bg-white/10 backdrop-blur-md" onClick={() => handleBid(1000)}>+1000</Button>
                 </div>
                 
                 <Button 
@@ -269,7 +282,7 @@ export default function EliteDraftAuction() {
                 {status === 'SOLD' && (
                   <Button 
                     variant="ghost" 
-                    className="h-12 text-lg font-bold uppercase tracking-widest border border-white/5"
+                    className="h-12 text-lg font-bold uppercase tracking-widest border border-white/5 backdrop-blur-sm hover:bg-white/10"
                     onClick={handleNextPlayer}
                   >
                     Draft Next Player (N)
@@ -287,7 +300,7 @@ export default function EliteDraftAuction() {
         )}
 
         {status === 'FINISHED' && (
-           <div className="absolute inset-0 z-[101] bg-background/95 flex items-center justify-center text-center p-10 animate-in zoom-in duration-500">
+           <div className="absolute inset-0 z-[101] bg-background/95 backdrop-blur-lg flex items-center justify-center text-center p-10 animate-in zoom-in duration-500">
               <div className="max-w-2xl">
                 <Trophy className="w-40 h-40 text-secondary mx-auto mb-8 drop-shadow-[0_0_30px_rgba(100,255,218,0.5)]" />
                 <h2 className="text-7xl font-black tracking-tighter mb-4 italic">DRAFT COMPLETED</h2>
@@ -301,9 +314,9 @@ export default function EliteDraftAuction() {
       </div>
 
       {/* RIGHT PANEL: Draft Board & Unsold Pool */}
-      <div className="w-1/4 flex flex-col gap-4 overflow-hidden">
+      <div className="w-1/4 flex flex-col gap-4 overflow-hidden z-10">
         <Tabs defaultValue="sold" className="w-full flex flex-col h-full">
-          <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 border border-white/5 p-1 mb-2">
+          <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 backdrop-blur-md border border-white/5 p-1 mb-2">
             <TabsTrigger value="sold" className="flex items-center gap-2 font-bold uppercase tracking-tight text-xs data-[state=active]:bg-secondary data-[state=active]:text-black">
               <History className="w-3 h-3" />
               Sold
@@ -323,7 +336,7 @@ export default function EliteDraftAuction() {
                 </div>
               ) : (
                 soldPlayers.map((sold, idx) => (
-                  <div key={idx} className="bg-card/40 p-3 rounded-xl border border-white/5 flex gap-4 animate-in slide-in-from-right duration-500">
+                  <div key={idx} className="bg-card/40 backdrop-blur-sm p-3 rounded-xl border border-white/5 flex gap-4 animate-in slide-in-from-right duration-500">
                     <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden shrink-0 border border-white/10">
                       <img src={sold.player.imageUrl} className="w-full h-full object-cover" alt="" />
                     </div>
@@ -347,7 +360,7 @@ export default function EliteDraftAuction() {
                 </div>
               ) : (
                 unsoldPlayers.map((player) => (
-                  <div key={player.id} className="bg-card/20 p-2 rounded-lg border border-white/5 flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity">
+                  <div key={player.id} className="bg-card/20 backdrop-blur-sm p-2 rounded-lg border border-white/5 flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity">
                     <div className="w-10 h-10 rounded-full bg-muted overflow-hidden shrink-0 border border-white/10">
                       <img src={player.imageUrl} className="w-full h-full object-cover" alt="" />
                     </div>

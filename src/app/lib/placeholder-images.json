@@ -60,6 +60,7 @@
     { "id": "p57", "description": "Christopher Nkunku", "imageUrl": "https://picsum.photos/seed/p57/400/500", "imageHint": "footballer" },
     { "id": "p58", "description": "Phil Foden", "imageUrl": "https://picsum.photos/seed/p58/400/500", "imageHint": "footballer" },
     { "id": "p59", "description": "Jack Grealish", "imageUrl": "https://picsum.photos/seed/p59/400/500", "imageHint": "footballer" },
-    { "id": "p60", "description": "Julian Alvarez", "imageUrl": "https://picsum.photos/seed/p60/400/500", "imageHint": "footballer" }
+    { "id": "p60", "description": "Julian Alvarez", "imageUrl": "https://picsum.photos/seed/p60/400/500", "imageHint": "footballer" },
+    { "id": "ucl_bg", "description": "UEFA Champions League Stadium Background", "imageUrl": "https://picsum.photos/seed/ucl_bg/1920/1080", "imageHint": "stadium blue" }
   ]
 }
