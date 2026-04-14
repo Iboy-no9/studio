@@ -1,13 +1,11 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { TEAMS, PLAYERS, Player, Team } from '@/lib/auction-data';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Trophy, Users, Zap, History, UserCheck, AlertCircle } from 'lucide-react';
+import { Trophy, Zap, History, UserCheck, AlertCircle, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface SoldPlayer {
@@ -50,7 +48,6 @@ export default function EliteDraftAuction() {
       return;
     }
 
-    const team = TEAMS.find(t => t.id === selectedTeamId)!;
     const newBid = (currentBid === 0 ? currentPlayer.basePrice : currentBid) + increment;
 
     if (teamBudgets[selectedTeamId] < newBid) {
@@ -82,12 +79,8 @@ export default function EliteDraftAuction() {
       [selectedTeamId]: prev[selectedTeamId] - currentBid
     }));
     setStatus('SOLD');
-    
-    // Play sold sound effect if needed (simulated)
-    console.log("SOLD!");
   }, [currentBid, currentPlayer, selectedTeamId, status]);
 
-  // Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === '1') handleBid(100);
@@ -100,7 +93,6 @@ export default function EliteDraftAuction() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleBid, handleSold, handleNextPlayer]);
 
-  // Countdown Logic
   useEffect(() => {
     if (status === 'BIDDING' && timer > 0) {
       const interval = setInterval(() => setTimer(t => t - 1), 1000);
@@ -116,9 +108,9 @@ export default function EliteDraftAuction() {
   }, [errorMsg]);
 
   return (
-    <div className="flex h-screen w-full bg-[#14191C] text-white p-6 gap-6 font-headline">
+    <div className="flex h-screen w-full bg-[#0a0a0a] text-white p-6 gap-6 font-headline overflow-hidden">
       
-      {/* LEFT PANEL: Teams & Budgets */}
+      {/* LEFT PANEL: Teams */}
       <div className="w-1/4 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
         <div className="flex items-center gap-2 mb-2">
           <Trophy className="text-primary w-6 h-6" />
@@ -131,7 +123,7 @@ export default function EliteDraftAuction() {
             className={cn(
               "p-4 rounded-xl cursor-pointer transition-all border-2 relative overflow-hidden group",
               selectedTeamId === team.id 
-                ? "bg-primary/20 border-primary glow-primary scale-105 z-10" 
+                ? "bg-primary/20 border-primary glow-primary scale-105 z-10 shadow-lg shadow-primary/20" 
                 : "bg-card border-transparent hover:bg-muted"
             )}
           >
@@ -142,7 +134,7 @@ export default function EliteDraftAuction() {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg leading-tight">{team.name}</h3>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground uppercase tracking-widest font-semibold">
                     <Zap className="w-3 h-3 text-secondary" />
                     <span>REMAINING</span>
                   </div>
@@ -157,136 +149,131 @@ export default function EliteDraftAuction() {
         ))}
       </div>
 
-      {/* CENTER FOCUS: Player Card & Current Bid */}
+      {/* CENTER FOCUS: Iconic Player Card & Bidding */}
       <div className="flex-1 flex flex-col gap-6 relative">
-        {/* Top Progress */}
         <div className="flex justify-between items-end px-2">
           <div className="flex flex-col">
-            <span className="text-xs text-muted-foreground uppercase tracking-widest">Auction Status</span>
+            <span className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Live Auction Status</span>
             <div className="flex items-center gap-3">
               <Badge className={cn(
-                "px-4 py-1 text-sm font-bold",
+                "px-4 py-1 text-sm font-bold uppercase",
                 status === 'BIDDING' ? "bg-primary text-black animate-pulse" : 
                 status === 'SOLD' ? "bg-secondary text-black" : "bg-muted"
               )}>
                 {status}
               </Badge>
               {status === 'BIDDING' && (
-                <span className="text-3xl font-black text-secondary tabular-nums">00:{timer < 10 ? `0${timer}` : timer}</span>
+                <span className="text-4xl font-black text-secondary tabular-nums drop-shadow-[0_0_10px_rgba(100,255,218,0.5)]">
+                  00:{timer < 10 ? `0${timer}` : timer}
+                </span>
               )}
             </div>
           </div>
           <div className="text-right">
-             <span className="text-xs text-muted-foreground uppercase tracking-widest">Player Pool</span>
-             <div className="text-lg font-bold">{currentPlayerIdx + 1} / {PLAYERS.length}</div>
+             <span className="text-xs text-muted-foreground uppercase tracking-widest">Player Index</span>
+             <div className="text-xl font-bold">{currentPlayerIdx + 1} / {PLAYERS.length}</div>
           </div>
         </div>
 
-        {/* Main Display */}
-        <div className="flex-1 bg-card rounded-2xl border border-white/5 flex flex-col relative overflow-hidden shadow-2xl">
-          {/* Background Highlight */}
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/5 to-transparent pointer-events-none" />
+        <div className="flex-1 flex gap-10 items-center justify-center">
+          {/* THE ICONIC CARD */}
+          <div className="relative aspect-[3/4.2] w-[450px] legendary-card-bg rounded-[2.5rem] p-1 border-[6px] border-white/20 shadow-2xl flex flex-col transition-all duration-500 hover:scale-[1.02]">
+            {/* Top Section: Rating & Position */}
+            <div className="absolute top-8 left-8 z-20">
+              <div className="text-7xl font-black text-[#00ffd0] leading-none drop-shadow-md italic">
+                {currentPlayer.rating}
+              </div>
+              <div className="text-3xl font-bold text-white uppercase ml-1 tracking-tighter">
+                {currentPlayer.position === 'Forward' ? 'SS' : 
+                 currentPlayer.position === 'Midfielder' ? 'AMF' :
+                 currentPlayer.position === 'Defender' ? 'CB' : 'GK'}
+              </div>
+            </div>
 
-          {status === 'SOLD' && (
-             <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in">
+            {/* Club Logo Overlay */}
+            <div className="absolute top-28 left-8 z-20 w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+               <img src={TEAMS[currentPlayerIdx % TEAMS.length].logoUrl} alt="Logo" className="w-12 h-12 object-contain" />
+            </div>
+
+            {/* Main Player Image */}
+            <div className="absolute inset-0 z-10">
+              <img 
+                src={currentPlayer.imageUrl} 
+                alt={currentPlayer.name} 
+                className="w-full h-full object-cover object-center transform scale-110 translate-y-4"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2e004d] via-transparent to-transparent opacity-80" />
+            </div>
+
+            {/* Bottom Info Overlay */}
+            <div className="absolute bottom-14 left-0 right-0 z-20 text-center flex flex-col items-center">
+               <div className="text-lg font-medium text-white/80 tracking-widest mb-1 italic">01.01.2024</div>
+               <h1 className="text-5xl font-black text-white uppercase italic tracking-tighter drop-shadow-lg px-4 truncate max-w-full">
+                 {currentPlayer.name}
+               </h1>
+            </div>
+
+            {/* Star Footer */}
+            <div className="absolute bottom-6 inset-x-0 z-20 flex justify-center gap-1">
+               {[...Array(5)].map((_, i) => (
+                 <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400 drop-shadow-glow" />
+               ))}
+            </div>
+
+            {/* SOLD Overlay */}
+            {status === 'SOLD' && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-[2.2rem] animate-in fade-in duration-300">
                 <div className="text-center animate-sold">
-                   <div className="text-9xl font-black text-secondary italic tracking-tighter drop-shadow-2xl">SOLD!</div>
-                   <div className="text-3xl mt-4 font-bold text-white uppercase tracking-widest">
+                   <div className="text-8xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] uppercase">SOLD!</div>
+                   <div className="text-2xl mt-4 font-bold text-white uppercase tracking-widest bg-black/50 py-2 px-6 rounded-full inline-block border border-white/20">
                       To {TEAMS.find(t => t.id === selectedTeamId)?.name}
                    </div>
                 </div>
-             </div>
-          )}
+              </div>
+            )}
+          </div>
 
-          <div className="flex h-full p-8 gap-10">
-            {/* Player Image & Stats */}
-            <div className="w-1/3 flex flex-col gap-4">
-              <div className="aspect-[3/4] rounded-2xl bg-muted overflow-hidden border-2 border-white/10 relative">
-                <img 
-                  src={currentPlayer.imageUrl} 
-                  alt={currentPlayer.name} 
-                  className="w-full h-full object-cover grayscale-[20%]"
-                />
-                <div className="absolute bottom-4 right-4 bg-primary text-black w-14 h-14 rounded-full flex items-center justify-center text-2xl font-black">
-                  {currentPlayer.rating}
+          {/* Bidding Controls Side */}
+          <div className="flex-1 flex flex-col justify-center items-center gap-8 max-w-md">
+              <div className="text-center">
+                <div className="text-sm text-muted-foreground uppercase tracking-[0.3em] font-bold mb-4">Current Valuation</div>
+                <div className={cn(
+                  "text-[8rem] font-black tracking-tighter leading-none text-primary transition-all duration-200 tabular-nums drop-shadow-[0_0_15px_rgba(74,176,237,0.4)]",
+                  bidAnimating && "animate-bid"
+                )}>
+                  ₹{currentBid > 0 ? currentBid.toLocaleString() : currentPlayer.basePrice.toLocaleString()}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-muted/50 p-3 rounded-xl border border-white/5 text-center">
-                   <div className="text-xs text-muted-foreground uppercase">Position</div>
-                   <div className="font-bold">{currentPlayer.position}</div>
-                </div>
-                <div className="bg-muted/50 p-3 rounded-xl border border-white/5 text-center">
-                   <div className="text-xs text-muted-foreground uppercase">Nationality</div>
-                   <div className="font-bold">{currentPlayer.nationality}</div>
-                </div>
-              </div>
-            </div>
 
-            {/* Bidding Zone */}
-            <div className="flex-1 flex flex-col justify-center items-center text-center">
-              <h1 className="text-7xl font-black tracking-tighter uppercase mb-2 leading-none">
-                {currentPlayer.name}
-              </h1>
-              <div className="h-px w-24 bg-primary mb-12" />
+              <div className="w-full flex flex-col gap-4">
+                <div className="grid grid-cols-3 gap-3">
+                  <Button variant="outline" className="h-14 text-lg font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(100)}>+100</Button>
+                  <Button variant="outline" className="h-14 text-lg font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(500)}>+500</Button>
+                  <Button variant="outline" className="h-14 text-lg font-bold border-white/10 hover:bg-white/10" onClick={() => handleBid(1000)}>+1000</Button>
+                </div>
+                
+                <Button 
+                  variant="secondary" 
+                  className="h-20 text-3xl font-black uppercase tracking-tighter shadow-2xl shadow-secondary/20 glow-accent"
+                  onClick={handleSold}
+                  disabled={status !== 'BIDDING' || !selectedTeamId}
+                >
+                  Confirm Purchase
+                </Button>
 
-              <div className="mb-4 text-muted-foreground uppercase tracking-widest font-medium">Current Bid Amount</div>
-              <div className={cn(
-                "text-[10rem] font-black tracking-tighter leading-none text-primary transition-all duration-200 tabular-nums",
-                bidAnimating && "animate-bid"
-              )}>
-                ₹{currentBid > 0 ? currentBid.toLocaleString() : currentPlayer.basePrice.toLocaleString()}
+                {status === 'SOLD' && (
+                  <Button 
+                    variant="ghost" 
+                    className="h-14 text-xl font-bold uppercase tracking-widest border border-white/5"
+                    onClick={handleNextPlayer}
+                  >
+                    Draft Next Player (N)
+                  </Button>
+                )}
               </div>
-              
-              <div className="mt-12 w-full max-w-md flex flex-col gap-4">
-                <div className="flex gap-4">
-                  <Button 
-                    variant="outline" 
-                    className="flex-1 h-16 text-xl font-bold border-2 border-primary/20 hover:bg-primary/10"
-                    onClick={() => handleBid(100)}
-                  >
-                    +100
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="flex-1 h-16 text-xl font-bold border-2 border-primary/20 hover:bg-primary/10"
-                    onClick={() => handleBid(500)}
-                  >
-                    +500
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="flex-1 h-16 text-xl font-bold border-2 border-primary/20 hover:bg-primary/10"
-                    onClick={() => handleBid(1000)}
-                  >
-                    +1000
-                  </Button>
-                </div>
-                <div className="flex gap-4">
-                  <Button 
-                    variant="secondary" 
-                    className="flex-1 h-16 text-2xl font-black uppercase tracking-tighter glow-accent"
-                    onClick={handleSold}
-                    disabled={status !== 'BIDDING' || !selectedTeamId}
-                  >
-                    Mark as SOLD (Enter)
-                  </Button>
-                  {status === 'SOLD' && (
-                    <Button 
-                      variant="outline" 
-                      className="w-1/3 h-16 text-xl font-bold border-2"
-                      onClick={handleNextPlayer}
-                    >
-                      Next Player (N)
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Global Error Popups */}
         {errorMsg && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[100] bg-destructive text-white px-8 py-4 rounded-full flex items-center gap-3 shadow-2xl animate-in slide-in-from-top duration-300">
             <AlertCircle className="w-6 h-6" />
@@ -295,41 +282,41 @@ export default function EliteDraftAuction() {
         )}
 
         {status === 'FINISHED' && (
-           <div className="absolute inset-0 z-[101] bg-background/95 flex flex-center items-center justify-center text-center p-10 animate-in zoom-in">
-              <div>
-                <Trophy className="w-32 h-32 text-secondary mx-auto mb-6" />
-                <h2 className="text-6xl font-black tracking-tighter mb-4">AUCTION FINISHED</h2>
-                <p className="text-2xl text-muted-foreground mb-10">All players have been drafted. Review final squads in history.</p>
-                <Button variant="primary" size="lg" className="h-16 px-12 text-2xl font-bold rounded-full" onClick={() => window.location.reload()}>
-                   Restart Draft
+           <div className="absolute inset-0 z-[101] bg-background/95 flex items-center justify-center text-center p-10 animate-in zoom-in duration-500">
+              <div className="max-w-2xl">
+                <Trophy className="w-40 h-40 text-secondary mx-auto mb-8 drop-shadow-[0_0_30px_rgba(100,255,218,0.5)]" />
+                <h2 className="text-7xl font-black tracking-tighter mb-4 italic">DRAFT COMPLETED</h2>
+                <p className="text-2xl text-muted-foreground mb-12">The rosters are finalized. All iconic signings have been claimed.</p>
+                <Button variant="secondary" size="lg" className="h-20 px-16 text-2xl font-black rounded-full uppercase" onClick={() => window.location.reload()}>
+                   Start New Session
                 </Button>
               </div>
            </div>
         )}
       </div>
 
-      {/* RIGHT PANEL: Sold History */}
+      {/* RIGHT PANEL: History */}
       <div className="w-1/4 flex flex-col gap-4">
         <div className="flex items-center gap-2 mb-2">
           <History className="text-secondary w-6 h-6" />
-          <h2 className="text-xl font-bold tracking-tight text-secondary uppercase">Draft History</h2>
+          <h2 className="text-xl font-bold tracking-tight text-secondary uppercase">Draft Board</h2>
         </div>
         <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-3 custom-scrollbar">
           {soldPlayers.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center opacity-20 text-center px-6">
-              <UserCheck className="w-16 h-16 mb-4" />
-              <p className="font-medium">No players sold yet.</p>
+            <div className="h-full flex flex-col items-center justify-center opacity-10 text-center px-10">
+              <UserCheck className="w-20 h-20 mb-4" />
+              <p className="font-bold text-lg">No active signings yet.</p>
             </div>
           ) : (
             soldPlayers.map((sold, idx) => (
-              <div key={idx} className="bg-card/50 p-4 rounded-xl border border-white/5 flex gap-4 animate-in slide-in-from-right duration-500">
-                <div className="w-12 h-16 rounded-lg bg-muted overflow-hidden shrink-0">
+              <div key={idx} className="bg-card/40 p-3 rounded-xl border border-white/5 flex gap-4 animate-in slide-in-from-right duration-500">
+                <div className="w-14 h-14 rounded-lg bg-muted overflow-hidden shrink-0 border border-white/10">
                   <img src={sold.player.imageUrl} className="w-full h-full object-cover" alt="" />
                 </div>
                 <div className="flex-1 min-w-0">
-                   <div className="font-bold truncate">{sold.player.name}</div>
-                   <div className="text-xs font-bold text-primary mb-1">{sold.team.name}</div>
-                   <div className="text-lg font-black text-secondary">₹{sold.price.toLocaleString()}</div>
+                   <div className="font-black text-sm truncate uppercase italic">{sold.player.name}</div>
+                   <div className="text-[10px] font-bold text-primary mb-1 uppercase tracking-tighter opacity-70">{sold.team.name}</div>
+                   <div className="text-lg font-black text-secondary tabular-nums">₹{sold.price.toLocaleString()}</div>
                 </div>
               </div>
             ))
@@ -337,7 +324,6 @@ export default function EliteDraftAuction() {
         </div>
       </div>
 
-      {/* Custom Scrollbar Styles */}
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
@@ -346,11 +332,14 @@ export default function EliteDraftAuction() {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.05);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.15);
+        }
+        .drop-shadow-glow {
+          filter: drop-shadow(0 0 4px rgba(250, 204, 21, 0.6));
         }
       `}</style>
     </div>
