@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward } from 'lucide-react';
+import { Trophy, Zap, History, UserCheck, AlertCircle, Star, Users, SkipForward, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -30,6 +30,7 @@ export default function EliteDraftAuction() {
   const [timer, setTimer] = useState(10);
   const [bidAnimating, setBidAnimating] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [showFinishedOverlay, setShowFinishedOverlay] = useState(true);
 
   const currentPlayer = PLAYERS[currentPlayerIdx];
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
@@ -43,6 +44,7 @@ export default function EliteDraftAuction() {
       setSelectedTeamId(null);
     } else {
       setStatus('FINISHED');
+      setShowFinishedOverlay(true);
     }
   }, [currentPlayerIdx]);
 
@@ -77,7 +79,6 @@ export default function EliteDraftAuction() {
   const handleSold = useCallback(() => {
     if ((status !== 'BIDDING' && status !== 'IDLE') || !selectedTeamId) return;
 
-    // Default to base price of 10 if no bids have been placed
     const finalPrice = currentBid === 0 ? 10 : currentBid;
 
     if (teamBudgets[selectedTeamId] < finalPrice) {
@@ -252,20 +253,34 @@ export default function EliteDraftAuction() {
 
             {status === 'SOLD' && (
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[2rem] animate-in fade-in duration-500">
-                <div className="text-center animate-sold">
+                <div className="text-center animate-sold flex flex-col items-center">
                    <div className="text-8xl font-black text-secondary italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SOLD!</div>
                    <div className="text-lg mt-4 font-black text-white uppercase tracking-[0.2em] bg-primary/20 backdrop-blur-xl py-3 px-8 rounded-full inline-block border border-primary/40 shadow-xl max-w-[300px] truncate">
                       To {TEAMS.find(t => t.id === selectedTeamId)?.name}
                    </div>
+                   <Button 
+                    variant="secondary" 
+                    className="mt-8 font-black uppercase tracking-widest px-10 h-14 rounded-xl shadow-2xl"
+                    onClick={handleNextPlayer}
+                   >
+                     Continue (N)
+                   </Button>
                 </div>
               </div>
             )}
 
             {status === 'SKIPPED' && (
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[2rem] animate-in fade-in duration-500">
-                <div className="text-center animate-sold">
+                <div className="text-center animate-sold flex flex-col items-center">
                    <div className="text-7xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
                    <div className="text-sm mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Lot Unsold</div>
+                   <Button 
+                    variant="outline" 
+                    className="mt-8 border-white/20 text-white font-black uppercase tracking-widest px-10 h-14 rounded-xl"
+                    onClick={handleNextPlayer}
+                   >
+                     Next Player (N)
+                   </Button>
                 </div>
               </div>
             )}
@@ -329,20 +344,34 @@ export default function EliteDraftAuction() {
           </div>
         )}
 
-        {status === 'FINISHED' && (
+        {status === 'FINISHED' && showFinishedOverlay && (
            <div className="absolute inset-0 z-[101] bg-background/98 backdrop-blur-2xl flex items-center justify-center text-center p-10 animate-in zoom-in duration-700">
-              <div className="max-w-3xl">
+              <div className="max-w-3xl flex flex-col items-center">
                 <div className="relative inline-block mb-10">
                   <Trophy className="w-48 h-48 text-secondary drop-shadow-[0_0_50px_rgba(255,215,0,0.6)]" />
                   <Star className="absolute -top-4 -right-4 w-12 h-12 text-primary animate-pulse" />
                 </div>
                 <h2 className="text-8xl font-black tracking-tighter mb-6 italic text-white shadow-primary">DRAFT CLOSED</h2>
                 <p className="text-2xl text-muted-foreground mb-16 font-medium tracking-tight">The European elite have been distributed. Final rosters are now locked.</p>
-                <Button variant="default" size="lg" className="h-24 px-20 text-3xl font-black rounded-3xl uppercase tracking-tighter glow-primary" onClick={() => window.location.reload()}>
-                   Reset Tournament
-                </Button>
+                <div className="flex gap-4">
+                  <Button variant="outline" size="lg" className="h-24 px-12 text-2xl font-black rounded-3xl uppercase tracking-tighter border-white/10" onClick={() => setShowFinishedOverlay(false)}>
+                     <X className="w-6 h-6 mr-3" />
+                     Close & Review
+                  </Button>
+                  <Button variant="default" size="lg" className="h-24 px-20 text-3xl font-black rounded-3xl uppercase tracking-tighter glow-primary" onClick={() => window.location.reload()}>
+                     Reset Tournament
+                  </Button>
+                </div>
               </div>
            </div>
+        )}
+
+        {!showFinishedOverlay && status === 'FINISHED' && (
+          <div className="absolute bottom-10 right-10 z-[102] animate-in fade-in slide-in-from-bottom-4">
+             <Button variant="secondary" className="h-16 px-10 text-xl font-black rounded-2xl uppercase tracking-tighter shadow-2xl" onClick={() => setShowFinishedOverlay(true)}>
+                Re-open Summary
+             </Button>
+          </div>
         )}
       </div>
 
