@@ -262,7 +262,7 @@ export default function EliteDraftAuction() {
               {/* 1. Rating and Position Overlay (Top Left) */}
               <div className="absolute top-8 left-8 z-30 flex flex-col items-start select-none pointer-events-none">
                 <div className="flex items-center gap-4">
-                  <div className="text-[4rem] font-black text-[#00ffd0] leading-[0.9] drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] italic tracking-tighter">
+                  <div className="text-[3rem] font-black text-[#00ffd0] leading-[0.9] drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] italic tracking-tighter">
                     {currentPlayer.rating}
                   </div>
                 </div>
