@@ -65,7 +65,7 @@ export default function EliteDraftAuction() {
         setSkippedPlayerIds(prev => [...prev, currentPlayer.id]);
       }
       setStatus('SKIPPED');
-      setTimer(15); // Set timer for auto-transition
+      setTimer(5); // Reduced from 15 to 5 seconds
     }
   }, [status, currentPlayer.id, skippedPlayerIds]);
 
@@ -116,7 +116,7 @@ export default function EliteDraftAuction() {
       [selectedTeamId]: prev[selectedTeamId] - finalPrice
     }));
     setStatus('SOLD');
-    setTimer(15); // Set timer for auto-transition
+    setTimer(5); // Reduced from 15 to 5 seconds
   }, [currentBid, currentPlayer, selectedTeamId, status, teamBudgets]);
 
   const handleFinishAuction = useCallback(() => {
