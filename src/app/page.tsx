@@ -62,92 +62,99 @@ export default function LandingPage() {
              </h2>
           </div>
 
-          {/* Cards Section - Manager is now the Highlighted Centerpiece */}
-          <div key={currentTeam.id} className="flex flex-col md:flex-row items-end justify-center gap-4 w-full max-w-5xl px-4 animate-in fade-in zoom-in duration-700 mt-12">
+          {/* Elite Cards Section - Manager is the Star highlight */}
+          <div key={currentTeam.id} className="flex flex-col md:flex-row items-end justify-center gap-6 w-full max-w-5xl px-4 animate-in fade-in zoom-in duration-700 mt-12">
              
-             {/* Captain Card */}
-             <div className="flex-1 w-full md:w-auto legendary-card-bg border border-white/10 p-4 rounded-[2rem] flex flex-col items-center transition-all duration-300 shadow-xl relative">
-                <div className="absolute top-4 left-4 z-20">
-                   <div className="bg-secondary/80 px-1.5 py-0.5 rounded-[4px] text-[7px] font-black text-black uppercase tracking-widest shadow-lg">CPT</div>
+             {/* Captain Card (Elite Design) */}
+             <div className="flex-1 w-full md:w-auto legendary-card-bg border border-white/10 p-5 rounded-[2.5rem] flex flex-col items-center transition-all duration-300 shadow-2xl relative group overflow-hidden">
+                <div className="absolute top-5 left-5 z-20">
+                   <div className="bg-secondary px-2 py-0.5 rounded-[4px] text-[8px] font-black text-black uppercase tracking-widest shadow-lg">CPT</div>
                 </div>
-                <div className="w-full aspect-square max-w-[130px] rounded-xl bg-black/40 flex items-center justify-center mb-4 border border-white/10 overflow-hidden relative shadow-inner">
+                <div className="w-full aspect-square max-w-[140px] rounded-2xl bg-black/40 flex items-center justify-center mb-5 border border-white/10 overflow-hidden relative shadow-inner group-hover:border-secondary/40 transition-colors">
                    <Image 
                      src={currentTeam.captainImageUrl} 
                      alt={currentTeam.captain} 
                      fill 
-                     className="object-cover" 
+                     className="object-cover transition-transform duration-500 group-hover:scale-110" 
                      data-ai-hint="footballer captain"
                    />
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 </div>
-                <span className="text-[8px] font-black tracking-[0.3em] text-secondary uppercase mb-1 opacity-80">CAPTAIN</span>
-                <span className="text-lg font-black uppercase italic text-white tracking-tight text-center">{currentTeam.captain}</span>
+                <span className="text-[9px] font-black tracking-[0.4em] text-secondary uppercase mb-1 opacity-80">CAPTAIN</span>
+                <span className="text-xl font-black uppercase italic text-white tracking-tight text-center leading-none">{currentTeam.captain}</span>
+                <div className="mt-3 flex gap-0.5">
+                   {[...Array(4)].map((_, i) => <Star key={i} className="w-2.5 h-2.5 fill-secondary text-secondary" />)}
+                </div>
              </div>
 
-             {/* Manager Card (Elevated and Star of the Show) */}
-             <div className="flex-[1.1] w-full md:w-auto legendary-card-bg border-2 border-primary/40 p-6 rounded-[2.5rem] flex flex-col items-center transform scale-100 md:scale-105 md:-translate-y-10 shadow-[0_30px_80px_rgba(0,0,0,0.8)] z-20 relative">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-black px-6 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] shadow-[0_0_25px_rgba(0,212,255,0.4)] border border-white/20 whitespace-nowrap z-30 animate-pulse">
+             {/* Manager Card (Elite Highlight Centerpiece) */}
+             <div className="flex-[1.2] w-full md:w-auto legendary-card-bg border-2 border-primary/50 p-7 rounded-[3rem] flex flex-col items-center transform scale-100 md:scale-110 md:-translate-y-12 shadow-[0_30px_100px_rgba(0,212,255,0.25)] z-20 relative group overflow-hidden">
+                {/* Elite Badge Overlay */}
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-black px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.25em] shadow-[0_0_30px_rgba(0,212,255,0.5)] border border-white/30 whitespace-nowrap z-30 animate-pulse">
                    ELITE TACTICIAN
                 </div>
-                <div className="absolute top-6 left-6 z-20">
-                   <div className="bg-primary px-2 py-0.5 rounded-[4px] text-[8px] font-black text-black uppercase tracking-widest shadow-lg">MGR</div>
+                <div className="absolute top-8 left-8 z-20">
+                   <div className="bg-primary px-3 py-1 rounded-[4px] text-[9px] font-black text-black uppercase tracking-widest shadow-lg">MGR</div>
                 </div>
-                <div className="w-full aspect-square max-w-[170px] rounded-[2rem] bg-black/40 flex items-center justify-center mb-6 border border-primary/20 overflow-hidden relative shadow-2xl">
+                <div className="w-full aspect-square max-w-[190px] rounded-[2.5rem] bg-black/40 flex items-center justify-center mb-6 border-2 border-primary/20 overflow-hidden relative shadow-2xl group-hover:border-primary/50 transition-colors">
                    <Image 
                      src={currentTeam.managerImageUrl} 
                      alt={currentTeam.manager} 
                      fill 
-                     className="object-cover scale-110" 
+                     className="object-cover scale-110 transition-transform duration-700 group-hover:scale-125" 
                      data-ai-hint="portrait manager"
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                   <div className="absolute top-3 right-3">
-                     <Shield className="w-6 h-6 text-primary fill-primary drop-shadow-[0_0_10px_rgba(0,212,255,0.6)]" />
+                   <div className="absolute top-4 right-4">
+                     <Shield className="w-8 h-8 text-primary fill-primary drop-shadow-[0_0_15px_rgba(0,212,255,0.8)] animate-bounce-slow" />
                    </div>
                 </div>
-                <span className="text-[9px] font-black tracking-[0.4em] text-primary uppercase mb-1 drop-shadow-md">MANAGER</span>
-                <span className="text-2xl font-black uppercase italic text-white tracking-tighter text-center leading-none">{currentTeam.manager}</span>
-                <div className="mt-3 flex gap-1">
-                   {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-primary text-primary" />)}
+                <span className="text-[10px] font-black tracking-[0.5em] text-primary uppercase mb-1.5 drop-shadow-md">MANAGER</span>
+                <span className="text-3xl font-black uppercase italic text-white tracking-tighter text-center leading-none">{currentTeam.manager}</span>
+                <div className="mt-4 flex gap-1.5">
+                   {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-primary text-primary drop-shadow-[0_0_8px_rgba(0,212,255,0.5)]" />)}
                 </div>
              </div>
 
-             {/* GK Card */}
-             <div className="flex-1 w-full md:w-auto legendary-card-bg border border-white/10 p-4 rounded-[2rem] flex flex-col items-center transition-all duration-300 shadow-xl relative">
-                <div className="absolute top-4 left-4 z-20">
-                   <div className="bg-secondary/80 px-1.5 py-0.5 rounded-[4px] text-[7px] font-black text-black uppercase tracking-widest shadow-lg">GKP</div>
+             {/* GK Card (Elite Design) */}
+             <div className="flex-1 w-full md:w-auto legendary-card-bg border border-white/10 p-5 rounded-[2.5rem] flex flex-col items-center transition-all duration-300 shadow-2xl relative group overflow-hidden">
+                <div className="absolute top-5 left-5 z-20">
+                   <div className="bg-secondary px-2 py-0.5 rounded-[4px] text-[8px] font-black text-black uppercase tracking-widest shadow-lg">GKP</div>
                 </div>
-                <div className="w-full aspect-square max-w-[130px] rounded-xl bg-black/40 flex items-center justify-center mb-4 border border-white/10 overflow-hidden relative shadow-inner">
+                <div className="w-full aspect-square max-w-[140px] rounded-2xl bg-black/40 flex items-center justify-center mb-5 border border-white/10 overflow-hidden relative shadow-inner group-hover:border-secondary/40 transition-colors">
                    <Image 
                      src={currentTeam.gkImageUrl} 
                      alt={currentTeam.gk} 
                      fill 
-                     className="object-cover" 
+                     className="object-cover transition-transform duration-500 group-hover:scale-110" 
                      data-ai-hint="goalkeeper portrait"
                    />
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 </div>
-                <span className="text-[8px] font-black tracking-[0.3em] text-secondary uppercase mb-1 opacity-80">GOALKEEPER</span>
-                <span className="text-lg font-black uppercase italic text-white tracking-tight text-center">{currentTeam.gk}</span>
+                <span className="text-[9px] font-black tracking-[0.4em] text-secondary uppercase mb-1 opacity-80">GOALKEEPER</span>
+                <span className="text-xl font-black uppercase italic text-white tracking-tight text-center leading-none">{currentTeam.gk}</span>
+                <div className="mt-3 flex gap-0.5">
+                   {[...Array(4)].map((_, i) => <Star key={i} className="w-2.5 h-2.5 fill-secondary text-secondary" />)}
+                </div>
              </div>
 
           </div>
 
-          <div className="mt-16 flex flex-col items-center gap-6">
+          <div className="mt-20 flex flex-col items-center gap-6">
             <Button 
               onClick={handleEnter}
-              className="h-12 px-8 text-[10px] font-black uppercase tracking-[0.3em] rounded-xl bg-white text-black hover:bg-primary hover:text-white transition-all group shadow-2xl"
+              className="h-12 px-10 text-[10px] font-black uppercase tracking-[0.4em] rounded-xl bg-white text-black hover:bg-primary hover:text-white transition-all group shadow-2xl border-none"
             >
               Skip Intro
               <ChevronRight className="ml-2 w-3 h-3 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <div className="flex gap-2.5">
+            <div className="flex gap-3">
               {TEAMS.map((_, i) => (
                 <div 
                   key={i} 
                   className={cn(
-                    "w-1.5 h-1.5 rounded-full transition-all duration-700",
-                    activeTeamIndex === i ? "bg-primary w-8 shadow-[0_0_8px_rgba(0,212,255,0.8)]" : "bg-white/20"
+                    "w-2 h-2 rounded-full transition-all duration-700",
+                    activeTeamIndex === i ? "bg-primary w-10 shadow-[0_0_12px_rgba(0,212,255,1)]" : "bg-white/10"
                   )} 
                 />
               ))}
@@ -155,9 +162,19 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[8px] font-black uppercase tracking-[0.6em] opacity-30 whitespace-nowrap">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-black uppercase tracking-[0.8em] opacity-20 whitespace-nowrap">
            PROCEED TO AUCTION SYSTEM • WELFARE DIIA • 2024
         </div>
+
+        <style jsx global>{`
+          @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+          }
+          .animate-bounce-slow {
+            animation: bounce-slow 3s infinite ease-in-out;
+          }
+        `}</style>
       </div>
     );
   }
@@ -213,3 +230,4 @@ export default function LandingPage() {
     </div>
   );
 }
+
