@@ -26,7 +26,7 @@ export default function EliteDraftAuction() {
   const [teamBudgets, setTeamBudgets] = useState<Record<string, number>>(
     TEAMS.reduce((acc, team) => ({ ...acc, [team.id]: team.budget }), {})
   );
-  const [status, setStatus] = useState<'IDLE' | 'BIDDING' | 'SOLD' | 'FINISHED'>('IDLE');
+  const [status, setStatus] = useState<'IDLE' | 'BIDDING' | 'SOLD' | 'SKIPPED' | 'FINISHED'>('IDLE');
   const [timer, setTimer] = useState(10);
   const [bidAnimating, setBidAnimating] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -47,8 +47,10 @@ export default function EliteDraftAuction() {
   }, [currentPlayerIdx]);
 
   const handleSkip = useCallback(() => {
-    handleNextPlayer();
-  }, [handleNextPlayer]);
+    if (status === 'BIDDING' || status === 'IDLE') {
+      setStatus('SKIPPED');
+    }
+  }, [status]);
 
   const handleBid = useCallback((increment: number) => {
     if (status !== 'BIDDING' && status !== 'IDLE') return;
@@ -96,12 +98,16 @@ export default function EliteDraftAuction() {
       if (e.key === '2') handleBid(50);
       if (e.key === '3') handleBid(100);
       if (e.key === 'Enter') handleSold();
-      if (e.key === 'n' || e.key === 'N') handleNextPlayer();
-      if (e.key === 's' || e.key === 'S') handleSkip();
+      if (e.key === 'n' || e.key === 'N') {
+        if (status === 'SOLD' || status === 'SKIPPED') handleNextPlayer();
+      }
+      if (e.key === 's' || e.key === 'S') {
+        if (status === 'BIDDING' || status === 'IDLE') handleSkip();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleBid, handleSold, handleNextPlayer, handleSkip]);
+  }, [handleBid, handleSold, handleNextPlayer, handleSkip, status]);
 
   useEffect(() => {
     if (status === 'BIDDING' && timer > 0) {
@@ -122,7 +128,6 @@ export default function EliteDraftAuction() {
   return (
     <div className="relative flex h-screen w-full bg-[#000411] text-white p-6 gap-6 font-headline overflow-hidden">
       
-      {/* CINEMATIC BACKGROUND */}
       {bgImage && (
         <div className="absolute inset-0 z-0">
           <Image 
@@ -138,7 +143,6 @@ export default function EliteDraftAuction() {
         </div>
       )}
 
-      {/* LEFT PANEL: Franchises */}
       <div className="w-1/4 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar z-10">
         <div className="flex items-center gap-2 mb-2 px-1">
           <Trophy className="text-primary w-6 h-6 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]" />
@@ -177,7 +181,6 @@ export default function EliteDraftAuction() {
         ))}
       </div>
 
-      {/* CENTER FOCUS: Player Card & Bidding */}
       <div className="flex-1 flex flex-col gap-6 relative z-10">
         <div className="flex justify-between items-end px-4">
           <div className="flex flex-col">
@@ -186,7 +189,8 @@ export default function EliteDraftAuction() {
               <Badge className={cn(
                 "px-5 py-1.5 text-xs font-black uppercase rounded-full tracking-widest",
                 status === 'BIDDING' ? "bg-primary text-black shadow-[0_0_20px_rgba(0,212,255,0.6)]" : 
-                status === 'SOLD' ? "bg-secondary text-black shadow-[0_0_20px_rgba(255,215,0,0.6)]" : "bg-muted text-white/50"
+                status === 'SOLD' ? "bg-secondary text-black shadow-[0_0_20px_rgba(255,215,0,0.6)]" : 
+                status === 'SKIPPED' ? "bg-destructive text-white shadow-[0_0_20px_rgba(220,38,38,0.6)]" : "bg-muted text-white/50"
               )}>
                 {status}
               </Badge>
@@ -204,7 +208,6 @@ export default function EliteDraftAuction() {
         </div>
 
         <div className="flex-1 flex gap-12 items-center justify-center">
-          {/* THE ICONIC CARD */}
           <div className="relative aspect-[3/4.2] w-[360px] legendary-card-bg rounded-[2.2rem] p-1 border-[5px] border-white/10 shadow-2xl flex flex-col transition-all duration-700 hover:scale-[1.03] hover:shadow-primary/20">
             <div className="absolute top-8 left-8 z-20">
               <div className="text-7xl font-black text-[#00ffd0] leading-none drop-shadow-2xl italic tracking-tighter">
@@ -249,9 +252,17 @@ export default function EliteDraftAuction() {
                 </div>
               </div>
             )}
+
+            {status === 'SKIPPED' && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md rounded-[2rem] animate-in fade-in duration-500">
+                <div className="text-center animate-sold">
+                   <div className="text-7xl font-black text-destructive italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)] uppercase">SKIPPED</div>
+                   <div className="text-sm mt-4 font-black text-white/70 uppercase tracking-[0.4em]">Lot Unsold</div>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Bidding Controls Side */}
           <div className="flex-1 flex flex-col justify-center items-center gap-8 max-w-sm">
               <div className="text-center">
                 <div className="text-xs text-muted-foreground uppercase tracking-[0.4em] font-black mb-3 opacity-60">Current Bid</div>
@@ -280,18 +291,19 @@ export default function EliteDraftAuction() {
                 </Button>
 
                 <div className="flex gap-3">
-                  <Button 
-                    variant="outline" 
-                    className="flex-1 h-14 text-xs font-black uppercase tracking-[0.2em] border-white/10 hover:bg-destructive hover:text-white transition-all rounded-xl"
-                    onClick={handleSkip}
-                  >
-                    <SkipForward className="w-4 h-4 mr-2" />
-                    Skip Player (S)
-                  </Button>
-                  {status === 'SOLD' && (
+                  {(status === 'BIDDING' || status === 'IDLE') ? (
+                    <Button 
+                      variant="outline" 
+                      className="flex-1 h-14 text-xs font-black uppercase tracking-[0.2em] border-white/10 hover:bg-destructive hover:text-white transition-all rounded-xl"
+                      onClick={handleSkip}
+                    >
+                      <SkipForward className="w-4 h-4 mr-2" />
+                      Skip Player (S)
+                    </Button>
+                  ) : (status === 'SOLD' || status === 'SKIPPED') && (
                     <Button 
                       variant="ghost" 
-                      className="flex-1 h-14 text-xs font-black uppercase tracking-[0.3em] border border-white/5 backdrop-blur-md hover:bg-white/10 rounded-xl"
+                      className="flex-1 h-14 text-xs font-black uppercase tracking-[0.3em] border border-white/5 backdrop-blur-md hover:bg-white/10 rounded-xl animate-in fade-in slide-in-from-bottom-2"
                       onClick={handleNextPlayer}
                     >
                       Draft Next (N)
@@ -318,7 +330,7 @@ export default function EliteDraftAuction() {
                 </div>
                 <h2 className="text-8xl font-black tracking-tighter mb-6 italic text-white shadow-primary">DRAFT CLOSED</h2>
                 <p className="text-2xl text-muted-foreground mb-16 font-medium tracking-tight">The European elite have been distributed. Final rosters are now locked.</p>
-                <Button variant="primary" size="lg" className="h-24 px-20 text-3xl font-black rounded-3xl uppercase tracking-tighter glow-primary" onClick={() => window.location.reload()}>
+                <Button variant="default" size="lg" className="h-24 px-20 text-3xl font-black rounded-3xl uppercase tracking-tighter glow-primary" onClick={() => window.location.reload()}>
                    Reset Tournament
                 </Button>
               </div>
@@ -326,7 +338,6 @@ export default function EliteDraftAuction() {
         )}
       </div>
 
-      {/* RIGHT PANEL: Draft Records */}
       <div className="w-1/4 flex flex-col gap-4 overflow-hidden z-10">
         <Tabs defaultValue="sold" className="w-full flex flex-col h-full">
           <TabsList className="grid w-full grid-cols-2 h-14 bg-muted/20 backdrop-blur-xl border border-white/5 p-1.5 mb-3 rounded-2xl">
