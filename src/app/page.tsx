@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -306,7 +305,7 @@ export default function EliteDraftAuction() {
               className={cn(
                 "relative aspect-[3/4.2] w-[340px] legendary-card-bg rounded-[2rem] p-1 border-[4px] border-white/10 shadow-2xl flex flex-col transition-all group",
                 lastAction === 'SOLD' 
-                  ? "animate-in fade-in slide-in-from-top-20 duration-1000 fill-mode-forwards" 
+                  ? "animate-card-spin" 
                   : lastAction === 'SKIPPED'
                   ? "animate-in fade-in slide-in-from-right-20 duration-1000 fill-mode-forwards"
                   : "animate-in fade-in zoom-in-95 slide-in-from-bottom-12 duration-1000 fill-mode-forwards"
