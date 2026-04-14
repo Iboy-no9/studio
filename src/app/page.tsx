@@ -20,25 +20,24 @@ const HEADER_TRANSITIONS = [
   "animate-in fade-in zoom-in-50 slide-in-from-left-12 duration-1000 ease-out", // Manchester United
 ];
 
-// Staggered transitions for Captain and GK (start after Manager 1.2s spin)
 const CAPTAIN_TRANSITIONS = [
-  "animate-in fade-in slide-in-from-left-40 duration-700 delay-[1200ms] ease-out", // Real Madrid
-  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms] ease-out",           // FC Barcelona
-  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms] ease-out",  // Arsenal FC
-  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms] ease-out", // Manchester City
-  "animate-in fade-in slide-in-from-left-20 duration-700 delay-[1200ms] ease-out", // Liverpool FC
-  "animate-in fade-in zoom-in-125 duration-700 delay-[1200ms] ease-out",          // Bayern Munich
-  "animate-in fade-in slide-in-from-right-40 duration-700 delay-[1200ms] ease-out", // Manchester United
+  "animate-in fade-in slide-in-from-left-40 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in slide-in-from-left-20 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in zoom-in-125 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in slide-in-from-right-40 duration-700 delay-[1200ms] ease-out",
 ];
 
 const GK_TRANSITIONS = [
-  "animate-in fade-in slide-in-from-right-40 duration-700 delay-[1200ms] ease-out",// Real Madrid
-  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms] ease-out",           // FC Barcelona
-  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms] ease-out",// Arsenal FC
-  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms] ease-out",   // Manchester City
-  "animate-in fade-in slide-in-from-right-20 duration-700 delay-[1200ms] ease-out", // Liverpool FC
-  "animate-in fade-in zoom-in-75 duration-700 delay-[1200ms] ease-out",           // Bayern Munich
-  "animate-in fade-in slide-in-from-left-40 duration-700 delay-[1200ms] ease-out",  // Manchester United
+  "animate-in fade-in slide-in-from-right-40 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in zoom-in-50 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in slide-in-from-bottom-40 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in slide-in-from-top-40 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in slide-in-from-right-20 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in zoom-in-75 duration-700 delay-[1200ms] ease-out",
+  "animate-in fade-in slide-in-from-left-40 duration-700 delay-[1200ms] ease-out",
 ];
 
 export default function LandingPage() {
@@ -117,8 +116,9 @@ export default function LandingPage() {
                    <Image 
                      src={currentTeam.captainImageUrl} 
                      alt={currentTeam.captain} 
-                     fill 
-                     className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                     width={400}
+                     height={500}
+                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                      data-ai-hint="footballer captain"
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -135,7 +135,7 @@ export default function LandingPage() {
                 </div>
              </div>
 
-             {/* Manager Card (Center Highlight - Spins First) */}
+             {/* Manager Card (Center Highlight) */}
              <div 
                key={`manager-${currentTeam.id}`}
                className={cn(
@@ -152,8 +152,9 @@ export default function LandingPage() {
                    <Image 
                      src={currentTeam.managerImageUrl} 
                      alt={currentTeam.manager} 
-                     fill 
-                     className="object-cover scale-110 transition-transform duration-700 group-hover:scale-125" 
+                     width={400}
+                     height={500}
+                     className="w-full h-full object-cover scale-110 transition-transform duration-700 group-hover:scale-125" 
                      data-ai-hint="portrait manager"
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -187,8 +188,9 @@ export default function LandingPage() {
                    <Image 
                      src={currentTeam.gkImageUrl} 
                      alt={currentTeam.gk} 
-                     fill 
-                     className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                     width={400}
+                     height={500}
+                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                      data-ai-hint="goalkeeper portrait"
                    />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
