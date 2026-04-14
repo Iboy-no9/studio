@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Trophy, Star, Play } from 'lucide-react';
+import { Trophy, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -56,11 +56,6 @@ export default function LandingPage() {
               Start Draft
             </Button>
           </Link>
-          
-          <div className="flex items-center gap-2 text-secondary font-black text-sm tracking-widest uppercase bg-white/5 border border-white/10 px-6 py-3 rounded-xl backdrop-blur-md">
-            <Star className="w-4 h-4 fill-current" />
-            <span>Premium Edition v1.0</span>
-          </div>
         </div>
       </div>
 
