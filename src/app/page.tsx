@@ -59,23 +59,24 @@ export default function LandingPage() {
           </div>
 
           <div key={currentTeam.id} className="flex flex-col items-center animate-in fade-in zoom-in duration-700 w-full">
-             <div className="w-40 h-40 bg-white/5 backdrop-blur-3xl rounded-full p-6 border-4 border-primary/20 shadow-[0_0_80px_rgba(0,212,255,0.15)] mb-4 flex items-center justify-center relative overflow-hidden group">
+             <div className="w-32 h-32 bg-white/5 backdrop-blur-3xl rounded-full p-4 border-2 border-primary/20 shadow-[0_0_80px_rgba(0,212,255,0.15)] mb-4 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary/5" />
                 <img 
                   src={currentTeam.logoUrl} 
                   alt={currentTeam.name} 
-                  className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" 
+                  className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" 
                 />
              </div>
-             <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter uppercase text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] mb-10">
+             <h2 className="text-4xl font-black italic tracking-tighter uppercase text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] mb-8">
                {currentTeam.name}
              </h2>
 
-             {/* Three Card Layout for Roles */}
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl items-end">
-                {/* Manager Card */}
-                <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-[2.5rem] flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1">
-                   <div className="w-40 h-40 rounded-3xl bg-primary/10 flex items-center justify-center mb-6 border-2 border-primary/30 group-hover/card:scale-105 transition-transform overflow-hidden relative shadow-2xl">
+             {/* Podium Layout for Roles */}
+             <div className="flex flex-col md:flex-row items-end justify-center gap-6 w-full max-w-6xl px-4">
+                
+                {/* Manager Card (Left) */}
+                <div className="flex-1 w-full md:w-auto bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-[2rem] flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1 mb-4 md:mb-0">
+                   <div className="w-full aspect-[4/5] max-w-[200px] rounded-2xl bg-primary/10 flex items-center justify-center mb-6 border-2 border-primary/30 group-hover/card:scale-105 transition-transform overflow-hidden relative shadow-2xl">
                       <Image 
                         src={currentTeam.managerImageUrl} 
                         alt={currentTeam.manager} 
@@ -84,29 +85,30 @@ export default function LandingPage() {
                         data-ai-hint="portrait manager"
                       />
                    </div>
-                   <span className="text-[10px] font-black tracking-[0.4em] text-primary uppercase mb-1">MANAGER</span>
-                   <span className="text-xl font-black uppercase italic text-white tracking-tight">{currentTeam.manager}</span>
+                   <span className="text-[9px] font-black tracking-[0.4em] text-primary uppercase mb-1">MANAGER</span>
+                   <span className="text-lg font-black uppercase italic text-white tracking-tight text-center">{currentTeam.manager}</span>
                 </div>
 
-                {/* Captain Card */}
-                <div className="bg-primary/10 backdrop-blur-lg border-2 border-primary/40 p-8 rounded-[3rem] flex flex-col items-center transform scale-110 shadow-[0_30px_60px_rgba(0,0,0,0.6)] z-20 hover:scale-[1.12] transition-all duration-300">
-                   <div className="w-56 h-56 rounded-[2.5rem] bg-secondary/10 flex items-center justify-center mb-6 border-2 border-secondary/40 overflow-hidden relative shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+                {/* Captain Card (Center - Elevated) */}
+                <div className="flex-[1.2] w-full md:w-auto bg-[#001246]/60 backdrop-blur-xl border-4 border-primary/40 p-10 rounded-[2.5rem] flex flex-col items-center transform scale-100 md:scale-110 md:-translate-y-8 shadow-[0_40px_80px_rgba(0,0,0,0.8)] z-20 hover:scale-[1.02] md:hover:scale-[1.12] transition-all duration-500">
+                   <div className="w-full aspect-[4/5] max-w-[260px] rounded-[2rem] bg-secondary/10 flex items-center justify-center mb-8 border-4 border-secondary/40 overflow-hidden relative shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
                       <Image 
                         src={currentTeam.captainImageUrl} 
                         alt={currentTeam.captain} 
                         fill 
-                        className="object-cover" 
+                        className="object-cover scale-110" 
                         data-ai-hint="footballer captain"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                    </div>
-                   <span className="text-[10px] font-black tracking-[0.4em] text-secondary uppercase mb-1">CAPTAIN</span>
-                   <span className="text-2xl font-black uppercase italic text-white tracking-tight">{currentTeam.captain}</span>
-                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-secondary text-black px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl border border-white/20">KEY PLAYER</div>
+                   <span className="text-[10px] font-black tracking-[0.5em] text-secondary uppercase mb-2">CAPTAIN</span>
+                   <span className="text-3xl font-black uppercase italic text-white tracking-tight text-center drop-shadow-lg">{currentTeam.captain}</span>
+                   <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-secondary text-black px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl border-2 border-white/20 whitespace-nowrap">FRANCHISE STAR</div>
                 </div>
 
-                {/* GK Card */}
-                <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-[2.5rem] flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1">
-                   <div className="w-40 h-40 rounded-3xl bg-secondary/10 flex items-center justify-center mb-6 border-2 border-secondary/30 group-hover/card:scale-105 transition-transform overflow-hidden relative shadow-2xl">
+                {/* GK Card (Right) */}
+                <div className="flex-1 w-full md:w-auto bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-[2rem] flex flex-col items-center group/card hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1">
+                   <div className="w-full aspect-[4/5] max-w-[200px] rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 border-2 border-secondary/30 group-hover/card:scale-105 transition-transform overflow-hidden relative shadow-2xl">
                       <Image 
                         src={currentTeam.gkImageUrl} 
                         alt={currentTeam.gk} 
@@ -115,13 +117,14 @@ export default function LandingPage() {
                         data-ai-hint="goalkeeper portrait"
                       />
                    </div>
-                   <span className="text-[10px] font-black tracking-[0.4em] text-secondary uppercase mb-1">GOALKEEPER</span>
-                   <span className="text-xl font-black uppercase italic text-white tracking-tight">{currentTeam.gk}</span>
+                   <span className="text-[9px] font-black tracking-[0.4em] text-secondary uppercase mb-1">GOALKEEPER</span>
+                   <span className="text-lg font-black uppercase italic text-white tracking-tight text-center">{currentTeam.gk}</span>
                 </div>
+
              </div>
           </div>
 
-          <div className="mt-14 flex flex-col items-center gap-6">
+          <div className="mt-16 flex flex-col items-center gap-6">
             <Button 
               onClick={handleEnter}
               className="h-14 px-10 text-xs font-black uppercase tracking-[0.3em] rounded-2xl bg-white text-black hover:bg-primary hover:text-white transition-all group shadow-2xl"
