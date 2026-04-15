@@ -55,11 +55,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/1280px-FC_Barcelona_%28crest%29.svg.png', 
     color: '#FCD34D',
     manager: 'Sabeel',
-    managerImageUrl: 'https://picsum.photos/seed/bar_mgr/200/200',
+    managerImageUrl: 'https://i.postimg.cc/GpVp99z3/bar-one-jpg.jpg',
     captain: 'Hashir PP',
-    captainImageUrl: 'https://picsum.photos/seed/bar_cpt/200/200',
+    captainImageUrl: 'https://i.postimg.cc/g2cjTCnF/bar-two-jpg.jpg',
     gk: 'Abdul Bari',
-    gkImageUrl: 'https://picsum.photos/seed/bar_gk/200/200'
+    gkImageUrl: 'https://i.postimg.cc/c1Yvg7p1/abr-three-jpg.jpg'
   },
   { 
     id: 't3', 
