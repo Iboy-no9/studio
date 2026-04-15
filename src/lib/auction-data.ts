@@ -68,11 +68,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/sco/thumb/5/53/Arsenal_FC.svg/1920px-Arsenal_FC.svg.png', 
     color: '#F87171',
     manager: 'Shammas',
-    managerImageUrl: 'https://picsum.photos/seed/ars_mgr/200/200',
+    managerImageUrl: 'https://i.postimg.cc/Y0W7V3Hw/frame-one-copy-jpg-(1).jpg',
     captain: 'Midlaj',
-    captainImageUrl: 'https://picsum.photos/seed/ars_cpt/200/200',
+    captainImageUrl: 'https://i.postimg.cc/dtcDF7SJ/e-jpg.jpg',
     gk: 'Shidil',
-    gkImageUrl: 'https://picsum.photos/seed/ars_gk/200/200'
+    gkImageUrl: 'https://i.postimg.cc/zvZDqM7j/ss-jpg.jpg'
   },
   { 
     id: 't4', 
@@ -81,11 +81,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/1280px-Manchester_City_FC_badge.svg.png', 
     color: '#10B981',
     manager: 'Rinshid',
-    managerImageUrl: 'https://picsum.photos/seed/mci_mgr/200/200',
+    managerImageUrl: 'https://i.postimg.cc/pr1ctbPP/man-one-jpg.jpg',
     captain: 'Shameel C',
-    captainImageUrl: 'https://picsum.photos/seed/mci_cpt/200/200',
+    captainImageUrl: 'https://i.postimg.cc/7YdtskBR/man-thre-jpg.jpg',
     gk: 'Ridhin',
-    gkImageUrl: 'https://picsum.photos/seed/mci_gk/200/200'
+    gkImageUrl: 'https://i.postimg.cc/YSfXCmtX/man-two-jpg.jpg'
   },
   { 
     id: 't5', 
@@ -94,11 +94,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/250px-Liverpool_FC.svg.png', 
     color: '#8B5CF6',
     manager: 'Ashbin',
-    managerImageUrl: 'https://picsum.photos/seed/liv_mgr/200/200',
+    managerImageUrl: 'https://i.postimg.cc/Y9LzmG7r/livb-one-jpg.jpg',
     captain: 'Shibin',
-    captainImageUrl: 'https://picsum.photos/seed/liv_cpt/200/200',
+    captainImageUrl: 'https://i.postimg.cc/cCQ7Xp6g/liv-two-jpg.jpg',
     gk: 'Shanif',
-    gkImageUrl: 'https://picsum.photos/seed/liv_gk/200/200'
+    gkImageUrl: 'https://i.postimg.cc/tRPzqxDd/frame-one-copy-jpg.jpg'
   },
   { 
     id: 't6', 
