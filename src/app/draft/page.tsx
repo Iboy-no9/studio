@@ -20,18 +20,50 @@ interface SoldPlayer {
 }
 
 export default function EliteDraftAuction() {
-  const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(PLAYERS[0].id);
-  const [soldPlayers, setSoldPlayers] = useState<SoldPlayer[]>([]);
-  const [skippedInRoundIds, setSkippedInRoundIds] = useState<string[]>([]);
-  const [everSkippedIds, setEverSkippedIds] = useState<string[]>([]);
-  
   const auctionTeams = useMemo(() => TEAMS.filter(t => !t.isExhibition), []);
+
+  // Initialize state from localStorage if available
+  const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('currentPlayerId') || PLAYERS[0].id;
+    }
+    return PLAYERS[0].id;
+  });
+
+  const [soldPlayers, setSoldPlayers] = useState<SoldPlayer[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('soldPlayers');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+
+  const [skippedInRoundIds, setSkippedInRoundIds] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('skippedInRoundIds');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+
+  const [everSkippedIds, setEverSkippedIds] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('everSkippedIds');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+
+  const [teamBudgets, setTeamBudgets] = useState<Record<string, number>>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('teamBudgets');
+      return saved ? JSON.parse(saved) : auctionTeams.reduce((acc, team) => ({ ...acc, [team.id]: team.budget }), {});
+    }
+    return auctionTeams.reduce((acc, team) => ({ ...acc, [team.id]: team.budget }), {});
+  });
 
   const [currentBid, setCurrentBid] = useState(0);
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
-  const [teamBudgets, setTeamBudgets] = useState<Record<string, number>>(
-    auctionTeams.reduce((acc, team) => ({ ...acc, [team.id]: team.budget }), {})
-  );
   const [status, setStatus] = useState<'IDLE' | 'BIDDING' | 'SOLD' | 'SKIPPED' | 'FINISHED'>('IDLE');
   const [lastAction, setLastAction] = useState<'SOLD' | 'SKIPPED' | 'INITIAL'>('INITIAL');
   const [timer, setTimer] = useState(10);
@@ -44,6 +76,15 @@ export default function EliteDraftAuction() {
   , [currentPlayerId]);
 
   const bgImage = PlaceHolderImages.find(img => img.id === 'ucl_bg');
+
+  // Persistence Effects
+  useEffect(() => {
+    localStorage.setItem('soldPlayers', JSON.stringify(soldPlayers));
+    localStorage.setItem('teamBudgets', JSON.stringify(teamBudgets));
+    localStorage.setItem('skippedInRoundIds', JSON.stringify(skippedInRoundIds));
+    localStorage.setItem('everSkippedIds', JSON.stringify(everSkippedIds));
+    if (currentPlayerId) localStorage.setItem('currentPlayerId', currentPlayerId);
+  }, [soldPlayers, teamBudgets, skippedInRoundIds, everSkippedIds, currentPlayerId]);
 
   const handleNextPlayer = useCallback(() => {
     const triggerAction = status === 'SOLD' ? 'SOLD' : (status === 'SKIPPED' ? 'SKIPPED' : 'INITIAL');
@@ -93,7 +134,6 @@ export default function EliteDraftAuction() {
     const startPrice = currentBid === 0 ? (currentPlayer?.basePrice || 10) : currentBid;
     const newBid = startPrice + increment;
 
-    // Budget check only if team is selected
     if (selectedTeamId && teamBudgets[selectedTeamId] < newBid) {
       setErrorMsg("Budget Exceeded for " + auctionTeams.find(t => t.id === selectedTeamId)?.name);
       return;
@@ -132,6 +172,13 @@ export default function EliteDraftAuction() {
   const handleFinishAuction = useCallback(() => {
     setStatus('FINISHED');
     setShowFinishedOverlay(true);
+  }, []);
+
+  const handleResetAuction = useCallback(() => {
+    if (confirm("Are you sure you want to reset the entire auction? All progress will be lost.")) {
+      localStorage.clear();
+      window.location.reload();
+    }
   }, []);
 
   useEffect(() => {
@@ -177,10 +224,15 @@ export default function EliteDraftAuction() {
 
       {/* Franchises List */}
       <div className="w-1/4 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar z-10">
-        <Link href="/" className="flex items-center gap-2 mb-2 px-1 hover:opacity-80 transition-opacity group">
-          <Trophy className="text-primary w-6 h-6 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)] group-hover:scale-110 transition-transform" />
-          <h2 className="text-xl font-black tracking-tight text-primary">FRANCHISES</h2>
-        </Link>
+        <div className="flex items-center justify-between mb-2 px-1">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity group">
+            <Trophy className="text-primary w-6 h-6 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)] group-hover:scale-110 transition-transform" />
+            <h2 className="text-xl font-black tracking-tight text-primary">FRANCHISES</h2>
+          </Link>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={handleResetAuction} title="Reset Progress">
+            <RotateCcw className="w-4 h-4" />
+          </Button>
+        </div>
         {auctionTeams.map((team) => (
           <div
             key={team.id}
@@ -248,20 +300,15 @@ export default function EliteDraftAuction() {
                 lastAction === 'SOLD' ? "animate-card-spin" : lastAction === 'SKIPPED' ? "animate-in fade-in slide-in-from-right-20 duration-1000" : "animate-in fade-in zoom-in-95 slide-in-from-bottom-12 duration-1000"
               )}
             >
-              {/* Main Player Image (Includes imported background) */}
               <div className="absolute inset-0 z-10 flex items-center justify-center overflow-hidden">
                 <img 
                   src={currentPlayer.imageUrl} 
                   alt={currentPlayer.name} 
                   className="w-full h-full object-cover object-top" 
                 />
-                {/* Bottom subtle blending gradient */}
                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent z-20" />
               </div>
 
-              {/* OVERLAYS: Rating, Position, Nationality, Name, Stars */}
-              
-              {/* 1. Rating and Position Overlay (Top Left) */}
               <div className="absolute top-8 left-8 z-30 flex flex-col items-start select-none pointer-events-none">
                 <div className="flex items-center gap-4">
                   <div className="text-[2rem] font-black text-[#00ffd0] leading-[0.9] drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] italic tracking-tighter">
@@ -274,19 +321,15 @@ export default function EliteDraftAuction() {
                 </div>
               </div>
 
-              {/* 2. Bottom Details Section (Nationality, Name, Stars) */}
               <div className="absolute bottom-10 left-0 right-0 z-30 flex flex-col items-center px-6 select-none pointer-events-none">
-                 {/* Nationality - High visibility cyan, wide tracking */}
                  <div className="text-[12px] font-black text-[#00ffd0] tracking-[0.4em] italic uppercase mb-1 drop-shadow-md">
                    {currentPlayer.nationality}
                  </div>
                  
-                 {/* Name - Impactful, Bold, Italic White */}
                  <h1 className="text-[2rem] font-black text-white uppercase italic tracking-tighter drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)] truncate w-full text-center leading-[1.1]">
                    {currentPlayer.name}
                  </h1>
 
-                 {/* Stars - Premium Gold */}
                  <div className="mt-3 flex gap-1.5">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-[#ffb800] text-[#ffb800] drop-shadow-[0_0_12px_rgba(255,184,0,0.6)]" />
@@ -294,7 +337,6 @@ export default function EliteDraftAuction() {
                  </div>
               </div>
 
-              {/* Action Overlays */}
               {status === 'SOLD' && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm animate-in fade-in duration-300">
                   <div className="text-center animate-sold flex flex-col items-center p-6">
@@ -423,7 +465,7 @@ export default function EliteDraftAuction() {
                 </div>
                 <div className="flex gap-4 mt-6 shrink-0 pb-4">
                   <Button variant="outline" size="lg" className="h-14 px-10 text-xs font-black rounded-xl uppercase tracking-[0.2em] border-white/20 hover:bg-white/10" onClick={() => setShowFinishedOverlay(false)}><X className="w-4 h-4 mr-3" />Close & Review</Button>
-                  <Button variant="default" size="lg" className="h-14 px-14 text-xs font-black rounded-xl uppercase tracking-[0.2em] glow-primary bg-primary text-black hover:scale-105" onClick={() => window.location.reload()}><RotateCcw className="w-5 h-5 mr-3" />Reset Auction</Button>
+                  <Button variant="default" size="lg" className="h-14 px-14 text-xs font-black rounded-xl uppercase tracking-[0.2em] glow-primary bg-primary text-black hover:scale-105" onClick={handleResetAuction}><RotateCcw className="w-5 h-5 mr-3" />Reset Auction</Button>
                 </div>
               </div>
            </div>

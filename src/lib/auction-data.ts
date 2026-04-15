@@ -122,9 +122,9 @@ export const TEAMS: Team[] = [
     manager: 'Shahin USd',
     managerImageUrl: 'https://i.postimg.cc/rz61V0kH/Whats-App-Image-2026-04-15-at-7-19-47-AM.jpg',
     captain: 'Jishar Sir',
-    captainImageUrl: 'https://i.postimg.cc/yxTRHfv5/image.png',
+    captainImageUrl: 'https://i.postimg.cc/Qttw5PWJ/Whats-App-Image-2026-04-15-at-10-54-48-AM.jpg',
     gk: 'Nabhan Sadique USD',
-    gkImageUrl: 'https://i.postimg.cc/RVXtpD3T/image.png',
+    gkImageUrl: 'https://i.postimg.cc/FRH5pzwc/Whats-App-Image-2026-04-15-at-7-19-47-AM-(1).jpg',
     isExhibition: true
   },
 ];
