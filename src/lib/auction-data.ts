@@ -120,11 +120,11 @@ export const TEAMS: Team[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/1280px-Manchester_United_FC_crest.svg.png', 
     color: '#DA291C',
     manager: 'Shahin USd',
-    managerImageUrl: 'https://picsum.photos/seed/mun_mgr/200/200',
+    managerImageUrl: 'https://i.postimg.cc/rz61V0kH/Whats-App-Image-2026-04-15-at-7-19-47-AM.jpg',
     captain: 'Jishar Sir',
-    captainImageUrl: 'https://picsum.photos/seed/mun_cpt/200/200',
+    captainImageUrl: 'https://i.postimg.cc/yxTRHfv5/image.png',
     gk: 'Nabhan Sadique USD',
-    gkImageUrl: 'https://picsum.photos/seed/mun_gk/200/200',
+    gkImageUrl: 'https://i.postimg.cc/RVXtpD3T/image.png',
     isExhibition: true
   },
 ];
