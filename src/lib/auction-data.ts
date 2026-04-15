@@ -9,7 +9,7 @@
 export interface Player {
   id: string;          // A unique string (e.g., "p1", "p2")
   name: string;        // The player's display name
-  position: 'Forward' | 'Midfielder' | 'Defender' | 'Goalkeeper'; // Must be one of these four
+  position: 'Forward' | 'Midfielder' | 'Defender' ; // Must be one of these four
   rating: number;      // A number representing their skill (e.g., 95)
   nationality: string; // A 3-letter country code (e.g., "ARG", "BRA", "ENG")
   basePrice: number;   // The starting price for the auction (e.g., 10)
@@ -163,9 +163,9 @@ export const PLAYERS: Player[] = [
   { id: 'p31', name: 'SHAMEEL', basePrice: 10, position: 'Forward', rating: 88, nationality: 'SWN', imageUrl: 'https://i.postimg.cc/3Rzfrt9C/SHAMEEL.jpg' },
   { id: 'p32', name: 'NAJAD', basePrice: 10, position: 'Forward', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/RZzqzxtr/NAJAD.jpg' },
   { id: 'p33', name: 'SHAMIL V', basePrice: 10, position: 'Defender', rating: 86, nationality: 'MSB', imageUrl: 'https://i.postimg.cc/TwcJncX1/shamil-v-jpg.jpg' },
-{ id: 'p34', name: 'SHADI', basePrice: 10, position: 'DEFENDER', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/XXSXsRWs/SHADI.jpg' },
+{ id: 'p34', name: 'SHADI', basePrice: 10, position: 'Defender', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/XXSXsRWs/SHADI.jpg' },
   { id: 'p35', name: 'ABRAR', basePrice: 10, position: 'Defender', rating: 89, nationality: 'FIR', imageUrl: 'https://i.postimg.cc/W3t3TM7c/FREE-CARD.jpg' },
-  { id: 'p36', name: 'MIDHLAJ', basePrice: 10, position: 'MIDFIELDER', rating: 88, nationality: 'SWM', imageUrl: 'https://i.postimg.cc/PfV09xTF/MIDLAJ.jpg' },
+  { id: 'p36', name: 'MIDHLAJ', basePrice: 10, position: 'Midfielder', rating: 88, nationality: 'SWM', imageUrl: 'https://i.postimg.cc/PfV09xTF/MIDLAJ.jpg' },
   { id: 'p37', name: 'ANSHIF T', basePrice: 10, position: 'Forward', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/bJgJR8hP/ANSHIF-T.jpg' },{ id: 'p38', name: 'MARJAN', basePrice: 10, position: 'MIDFIELDER', rating: 87, nationality: 'SUM', imageUrl: 'https://i.postimg.cc/L60QC0kc/MARJAN.jpg' },
   { id: 'p39', name: 'MIDHLAJ PP', basePrice: 10, position: 'Defender', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/h4HLzbpk/MIDLAJ.jpg' },
   { id: 'p40', name: 'ABRAR', basePrice: 10, position: 'Defender', rating: 86, nationality: 'MSB', imageUrl: 'https://i.postimg.cc/W3t3TM7c/FREE-CARD.jpg' },
@@ -175,17 +175,17 @@ export const PLAYERS: Player[] = [
   { id: 'p44', name: 'HANSHID', basePrice: 10, position: 'Defender', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/Dyv2cRjv/HANSHID.jpg' },
   { id: 'p45', name: 'MUFEED', basePrice: 10, position: 'Defender', rating: 86, nationality: 'MSB', imageUrl: 'https://i.postimg.cc/QtNXdXNL/MUFEED.jpg' },
   { id: 'p46', name: 'ZIYAD', basePrice: 10, position: 'Forward', rating: 88, nationality: 'SWM', imageUrl: 'https://i.postimg.cc/W3t3TM7c/FREE-CARD.jpg' },
-  { id: 'p47', name: 'HADI FARHAN', basePrice: 10, position: 'DEFENDER', rating: 87, nationality: 'SUM', imageUrl: 'https://i.postimg.cc/8PDr814b/HADI-FARHAN.jpg' },
-  { id: 'p48', name: 'JASEEM', basePrice: 10, position: 'DEFENDER', rating: 87, nationality: 'SUM', imageUrl: 'https://i.postimg.cc/x8ZGRBrR/JASEEM.jpg' },
+  { id: 'p47', name: 'HADI FARHAN', basePrice: 10, position: 'Defender', rating: 87, nationality: 'SUM', imageUrl: 'https://i.postimg.cc/8PDr814b/HADI-FARHAN.jpg' },
+  { id: 'p48', name: 'JASEEM', basePrice: 10, position: 'Defender', rating: 87, nationality: 'SUM', imageUrl: 'https://i.postimg.cc/x8ZGRBrR/JASEEM.jpg' },
   { id: 'p49', name: 'JASIL K', basePrice: 10, position: 'Forward', rating: 89, nationality: 'FIR', imageUrl: 'https://i.postimg.cc/Hs0F6tvp/JASIL-K.jpg' },
-  { id: 'p50', name: 'SHAHAL', basePrice: 10, position: 'DEFENDER', rating: 88, nationality: 'SWM', imageUrl: 'https://i.postimg.cc/4N72MRfV/SHAHAL.jpg' },
+  { id: 'p50', name: 'SHAHAL', basePrice: 10, position: 'Defender', rating: 88, nationality: 'SWM', imageUrl: 'https://i.postimg.cc/4N72MRfV/SHAHAL.jpg' },
   { id: 'p51', name: 'AFLAH CP', basePrice: 10, position: 'Forward', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/rw2NbC4T/AFLAH.jpg' },
-  { id: 'p52', name: 'BINBAZ', basePrice: 10, position: 'MIDFIELDER', rating: 89, nationality: 'FIR', imageUrl: 'https://i.postimg.cc/6Q4XbKx7/BINBAZ.jpg' },
+  { id: 'p52', name: 'BINBAZ', basePrice: 10, position: 'Midfielder', rating: 89, nationality: 'FIR', imageUrl: 'https://i.postimg.cc/6Q4XbKx7/BINBAZ.jpg' },
   { id: 'p53', name: 'SYD HISHAM', basePrice: 10, position: 'Forward', rating: 88, nationality: 'SWM', imageUrl: 'https://i.postimg.cc/W3t3TM7c/FREE-CARD.jpg' },
   { id: 'p54', name: 'NOUFAL', basePrice: 10, position: 'Forward', rating: 86, nationality: 'MSB', imageUrl: 'https://i.postimg.cc/B6zrDD9M/NOUFAL.jpg' },
-  { id: 'p55', name: 'NAYEEM', basePrice: 10, position: 'MIDFIELDER', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/qRS6hmmX/NAYEEM.jpg' },
-  { id: 'p56', name: 'ASHRAF ALI', basePrice: 10, position: 'MIDFIELDER', rating: 87, nationality: 'SUM', imageUrl: 'https://i.postimg.cc/2554szzx/ASHRAF.jpg' },
-  { id: 'p57', name: 'MINHAJ PK', basePrice: 10, position: 'MIDFIELDER', rating: 87, nationality: 'SUM', imageUrl: 'https://i.postimg.cc/j5FJ0N8s/MINHAJ-PK.jpg' },
+  { id: 'p55', name: 'NAYEEM', basePrice: 10, position: 'Midfielder', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/qRS6hmmX/NAYEEM.jpg' },
+  { id: 'p56', name: 'ASHRAF ALI', basePrice: 10, position: 'Midfielder', rating: 87, nationality: 'SUM', imageUrl: 'https://i.postimg.cc/2554szzx/ASHRAF.jpg' },
+  { id: 'p57', name: 'MINHAJ PK', basePrice: 10, position: 'Midfielder', rating: 87, nationality: 'SUM', imageUrl: 'https://i.postimg.cc/j5FJ0N8s/MINHAJ-PK.jpg' },
   { id: 'p58', name: 'MISHAB', basePrice: 10, position: 'Forward', rating: 89, nationality: 'FIR', imageUrl: 'https://i.postimg.cc/9FXj5ZjT/MISHAB.jpg' },
   { id: 'p59', name: 'BASITH', basePrice: 10, position: 'Forward', rating: 90, nationality: 'FLH', imageUrl: 'https://i.postimg.cc/L8jZZcnZ/BASITH.jpg' },
 
